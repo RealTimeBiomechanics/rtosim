@@ -1,0 +1,32 @@
+# List source files
+set(Common_HEADERS  
+    rtosim/MarkerData.h
+    rtosim/EndOfData.h
+    rtosim/QueuesSync.h
+    )
+
+set(Common_QUEUES_HEADERS 
+    rtosim/queue/MarkerSetQueue.h
+    rtosim/queue/QueueData.h
+    
+) 
+    
+set(Common_SOURCES 
+	MarkerData.cpp
+    )
+
+set(Common_TEMPLATE_IMPLEMENTATION	)
+
+
+set_source_files_properties( ${Common_TEMPLATE_IMPLEMENTATION} PROPERTIES HEADER_FILE_ONLY TRUE)
+source_group("Headers" FILES ${Common_HEADERS} ${Common_QUEUES_HEADERS})
+source_group("Sources" FILES ${Common_SOURCES} ${Common_TEMPLATE_IMPLEMENTATION} )
+
+# Define target
+add_library(Common STATIC ${Common_SOURCES} ${Common_HEADERS} ${Common_QUEUES_HEADERS} ${Common_TEMPLATE_IMPLEMENTATION})
+set_target_properties(Common PROPERTIES LINKER_LANGUAGE CXX)
+#target_link_libraries(rtosim_common LINK_PRIVATE${OPENSIM_LIBRARIES})
+target_include_directories(Common  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${Concurrency_INCLUDE_DIRS} ${SIMTK_INCLUDE_DIRS} ${OPENSIM_INCLUDE_DIRS})
+
+# Save path to include directory for "internal" usage
+set(rtosim_common_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for library of common files")
