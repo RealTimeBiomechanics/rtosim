@@ -1,7 +1,7 @@
 #ifndef rtosim_MarkerSetQueue_h
 #define rtosim_MarkerSetQueue_h
 
-#include "rtosim/queue/QueueData.h"
+#include "rtosim/QueueData.h"
 #include "rtosim/concurrency/Queue.h"
 #include "rtosim/MarkerData.h"
 #include <vector>

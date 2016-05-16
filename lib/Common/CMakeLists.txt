@@ -1,18 +1,22 @@
 # List source files
 set(Common_HEADERS  
+	rtosim/QueueData.h
     rtosim/MarkerData.h
+    rtosim/GeneralisedCoordinatesData.h
     rtosim/EndOfData.h
     rtosim/QueuesSync.h
+    
     )
 
 set(Common_QUEUES_HEADERS 
     rtosim/queue/MarkerSetQueue.h
-    rtosim/queue/QueueData.h
+    rtosim/queue/GeneralisedCoordinatesQueue.h
     
 ) 
     
 set(Common_SOURCES 
 	MarkerData.cpp
+    GeneralisedCoordinatesData.cpp
     )
 
 set(Common_TEMPLATE_IMPLEMENTATION	)
@@ -29,4 +33,4 @@ set_target_properties(Common PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(Common  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${Concurrency_INCLUDE_DIRS} ${SIMTK_INCLUDE_DIRS} ${OPENSIM_INCLUDE_DIRS})
 
 # Save path to include directory for "internal" usage
-set(rtosim_common_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for library of common files")
+set(rtosim_Common_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for library of common files")

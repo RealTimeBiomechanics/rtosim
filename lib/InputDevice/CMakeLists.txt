@@ -17,7 +17,7 @@ add_library(InputDevice STATIC
 
 target_include_directories(InputDevice PRIVATE
                                  ${rtosim_Concurrency_INCLUDE_DIRS}
-								 ${rtosim_common_INCLUDE_DIRS}
+								 ${rtosim_Common_INCLUDE_DIRS}
 								 ${rtosim_Utilities_INCLUDE_DIRS}
 								
                                  # ${CEINMS_INCLUDE_DIRS}
