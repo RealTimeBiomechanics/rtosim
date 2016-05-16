@@ -11,6 +11,7 @@ set(InverseKinematics_SOURCES
 						)
 
 set(InverseKinematics_HEADERS
+						rtosim/InverseKinematics.h
                         rtosim/IKSequencer.h 
 						rtosim/IKSolverParallel.h 
 						rtosim/IKoutputs.h

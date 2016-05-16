@@ -5,7 +5,8 @@ set(Common_HEADERS
     rtosim/GeneralisedCoordinatesData.h
     rtosim/EndOfData.h
     rtosim/QueuesSync.h
-    
+	rtosim/FlowControl.h
+	rtosim/Common.h
     )
 
 set(Common_QUEUES_HEADERS 
@@ -17,6 +18,7 @@ set(Common_QUEUES_HEADERS
 set(Common_SOURCES 
 	MarkerData.cpp
     GeneralisedCoordinatesData.cpp
+	FlowControl.cpp
     )
 
 set(Common_TEMPLATE_IMPLEMENTATION	)

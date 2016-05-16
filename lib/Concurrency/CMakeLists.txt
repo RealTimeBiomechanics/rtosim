@@ -1,7 +1,8 @@
 #Author: Elena Ceseracciu
 
 set(Concurrency_HEADERS rtosim/concurrency/Latch.h
-                        rtosim/concurrency/Queue.h)
+                        rtosim/concurrency/Queue.h
+						rtosim/concurrency/Concurrency.h)
 
 set(Concurrency_TEMPLATE_IMPLEMENTATIONS rtosim/concurrency/Queue.cpp)
 set_source_files_properties(${Concurrency_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)

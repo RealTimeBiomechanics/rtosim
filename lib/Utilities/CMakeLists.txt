@@ -1,17 +1,21 @@
 # List source files
 set(Utilities_HEADERS  
+	rtosim/Utilities.h
     rtosim/ProgramOptionsParser.h
     rtosim/Mapper.h
     rtosim/ArrayConverter.h
     rtosim/StopWatch.h
     rtosim/FileSystem.h
+    rtosim/OsimUtilities.h
     )
 
 set(Utilities_SOURCES 
     ProgramOptionsParser.cpp
     Mapper.cpp
     StopWatch.cpp
-    FileSystem.cpp)
+    FileSystem.cpp
+    OsimUtilities.cpp
+    )
 
 set(Utilities_TEMPLATE_IMPLEMENTATION	)
 

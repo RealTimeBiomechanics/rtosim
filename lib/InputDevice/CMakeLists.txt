@@ -4,7 +4,8 @@ set(InputDevice_SOURCES
 
 set(InputDevice_HEADERS 
  #   vosl/DataFromNexus.h 
-    rtosim/MarkersFromTrc.h)
+    rtosim/MarkersFromTrc.h
+	rtosim/InputDevice.h)
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
@@ -23,7 +24,7 @@ target_include_directories(InputDevice PRIVATE
                                  # ${CEINMS_INCLUDE_DIRS}
 								  #${SharedData_INCLUDE_DIRS}
                                   
-                                  #${CMAKE_CURRENT_SOURCE_DIR}
+                                  ${CMAKE_CURRENT_SOURCE_DIR}
                                   PUBLIC
                                   ${SIMTK_INCLUDE_DIRS}
                                  # ${ViconSDK_INCLUDE_DIR}
@@ -31,7 +32,7 @@ target_include_directories(InputDevice PRIVATE
 )
 TARGET_LINK_LIBRARIES(InputDevice )#SharedData ${ViconSDK_LIBRARIES})
 # Save path to include directory for "internal" usage
-set(InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
+set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
 
 #install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)

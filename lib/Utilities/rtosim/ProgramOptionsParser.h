@@ -8,7 +8,7 @@ namespace rtosim {
 
     class ProgramOptionsParser {
     public:
-        ProgramOptionsParser(char **argv, int argc);
+        ProgramOptionsParser(int argc, char **argv);
         bool exists(const std::string& option) const;
         //get the parameter that follows the option flag
         template<typename T>

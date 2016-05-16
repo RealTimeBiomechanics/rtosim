@@ -5,7 +5,7 @@
 
 namespace rtosim {
 
-    ProgramOptionsParser::ProgramOptionsParser(char **argv, int argc) {
+    ProgramOptionsParser::ProgramOptionsParser(int argc, char **argv) {
 
         char** it = argv;
         char** end = argv + argc;

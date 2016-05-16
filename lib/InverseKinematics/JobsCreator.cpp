@@ -40,7 +40,6 @@ namespace rtosim {
         bool localRunCondition(true);
         inputMarkerQueue_.subscribe();
         doneWithSubscriptions_.wait();
-        //how to deal with runconditions?
         while (localRunCondition)  {
             MarkerSetFrame currentFrame = inputMarkerQueue_.pop();
             if (rtosim::EndOfData::isEod(currentFrame)) {

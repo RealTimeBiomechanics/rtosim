@@ -32,8 +32,6 @@ namespace rtosim{
         doneWithSubscriptions_.wait();
 
         while (localRunCondition) {
-
-            //      while (Shared::flowControl.getRunCondition() && localRunCondition) {
             double nextTime = inputTimeSequence_.pop();
             if (nextTime != rtosim::EndOfData::get<GeneralisedCoordinatesFrame>().time) {
                 GeneralisedCoordinatesFrame ikFrame = inputGeneralisedCoordinateFrameFromIK_.pop(nextTime);
