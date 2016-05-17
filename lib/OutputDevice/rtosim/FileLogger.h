@@ -13,7 +13,7 @@
 * CEINMS Contributors: C. Pizzolato, M. Reggiani, M. Sartori,                *
 *                      E. Ceseracciu, and D.G. Lloyd                         *
 *                                                                            *
-* Author(s): C. Pizzolato                                                    *
+* Author(s): E. Ceseracciu, C. Pizzolato, M. Reggiani                        *
 *                                                                            *
 * CEINMS is licensed under the Apache License, Version 2.0 (the "License").  *
 * You may not use this file except in compliance with the License. You may   *
@@ -26,32 +26,53 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_QueuesSync_h
-#define rtosim_QueuesSync_h
+#ifndef rtosim_FileLogger_h
+#define rtosim_FileLogger_h
 
-#include "rtosim/EndOfData.h"
-#include <tuple>
-#include <limits>
+//#include "ceinms/ExternalForceData.h"
+//#include "ceinms/queues/MultipleExternalForcesQueue.h"
+#include "rtosim/GeneralisedCoordinatesData.h"
 
-namespace ceinms {
-    namespace QueuesSync {
+#include <vector>
+#include <list>
+#include <memory>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <SimTKcommon.h>
 
-        template<typename T>
-        typename T::type syncToTime(double t, T& queue) {
-
-            typename T::type frame;
-            do {
-                frame = queue.pop();
-            } while (frame.time < t && !EndOfData::isEod(frame));
-            return frame;
-        }
-
-        template<typename A1, typename... Args>
-        auto sync(A1& queue1, Args&... queues) -> decltype(std::make_tuple(queue1.pop(), queues.pop()...)) {
-
-            auto frame1(queue1.pop());
-            return std::make_tuple(frame1, syncToTime(frame1.time, queues)...);
-        }
-    }
+namespace rtosim {
+    template<typename DataType>
+    class FileLogger {
+    public:
+        using FrameType = QueueData < DataType > ;
+        using QueueType = Concurrency::Queue < FrameType > ;
+        FileLogger(
+            const std::vector<std::string>& columnLabels,
+            const std::string& filename,
+            const std::string& outputDir = "./Output/",
+            const std::string& separator = "\t"
+            );
+        void logFrame(const FrameType& frame);
+        void setFilename(const std::string& filename);
+        void setOutputDir(const std::string& outputDir);
+        void setColumnLabels(const std::vector<std::string>& columnLabels);
+        std::string getFilename() { return filename_; }
+        void clearData();
+        bool print();
+        bool printable();
+    private:
+        bool createFile();
+        void initFile();
+        void writeToFile();
+        std::vector<std::string> columnLabels_;
+        std::string outputDir_;
+        std::string sp_;
+        std::string filename_;
+        std::shared_ptr<std::ofstream> outFile_;
+        std::list< FrameType > dataToWrite_;
+    };
 }
+
+#include "FileLogger.cpp"
 #endif

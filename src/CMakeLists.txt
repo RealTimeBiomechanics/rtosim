@@ -5,7 +5,9 @@ include_directories(
     ${rtosim_Common_INCLUDE_DIRS}
     ${rtosim_Concurrency_INCLUDE_DIRS}
     ${rtosim_InputDevice_INCLUDE_DIRS}
+	${rtosim_OutputDevice_INCLUDE_DIRS}
     ${rtosim_InverseKinematics_INCLUDE_DIRS}
+    ${rtosim_SignalProcessing_INCLUDE_DIRS}
 	${rtosim_INCLUDE_DIRS}
 )
     
@@ -20,5 +22,6 @@ target_link_libraries(rtosim_ik
     Concurrency
     InputDevice
     InverseKinematics
+	SignalProcessing
     )
     

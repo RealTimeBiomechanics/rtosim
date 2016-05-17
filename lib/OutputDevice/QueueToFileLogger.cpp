@@ -13,7 +13,7 @@
 * CEINMS Contributors: C. Pizzolato, M. Reggiani, M. Sartori,                *
 *                      E. Ceseracciu, and D.G. Lloyd                         *
 *                                                                            *
-* Author(s): C. Pizzolato                                                    *
+* Author(s): E. Ceseracciu, C. Pizzolato, M. Reggiani                        *
 *                                                                            *
 * CEINMS is licensed under the Apache License, Version 2.0 (the "License").  *
 * You may not use this file except in compliance with the License. You may   *
@@ -26,32 +26,50 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_QueuesSync_h
-#define rtosim_QueuesSync_h
-
 #include "rtosim/EndOfData.h"
-#include <tuple>
-#include <limits>
+#include <iostream>
+#include <vector>
+#include <SimTKcommon.h>
 
-namespace ceinms {
-    namespace QueuesSync {
+namespace rtosim{
 
-        template<typename T>
-        typename T::type syncToTime(double t, T& queue) {
+    template <typename DataType>
+    QueueToFileLogger<DataType>::QueueToFileLogger(
+        QueueType& inputQueue,
+        rtosim::Concurrency::Latch& subscriptionLatch,
+        rtosim::Concurrency::Latch& readyToWriteLatch,
+        const std::vector<std::string>& columnLabels,
+        const std::string& outputDir,
+        const std::string& filename,
+        const std::string& extension) :
+        inputQueue_(inputQueue),
+        subscriptionLatch_(subscriptionLatch),
+        readyToWriteLatch_(readyToWriteLatch),
+        logger_(columnLabels, filename + "." + extension, outputDir)
+    {
 
-            typename T::type frame;
-            do {
-                frame = queue.pop();
-            } while (frame.time < t && !EndOfData::isEod(frame));
-            return frame;
-        }
-
-        template<typename A1, typename... Args>
-        auto sync(A1& queue1, Args&... queues) -> decltype(std::make_tuple(queue1.pop(), queues.pop()...)) {
-
-            auto frame1(queue1.pop());
-            return std::make_tuple(frame1, syncToTime(frame1.time, queues)...);
+        if (!logger_.printable()) {
+            std::cout << std::endl;
+            exit(EXIT_FAILURE);
         }
     }
+
+    template <typename DataType>
+    void QueueToFileLogger<DataType>::operator()() {
+
+        inputQueue_.subscribe();
+        subscriptionLatch_.wait();
+        readyToWriteLatch_.wait();
+
+        bool runCondition(true);
+        while (runCondition) {
+            FrameType currentFrame = inputQueue_.pop();
+            if (EndOfData::isEod(currentFrame)) runCondition = false;
+            if (runCondition) {
+                logger_.logFrame(currentFrame);
+            }
+        }
+
+        logger_.print();
+    }
 }
-#endif

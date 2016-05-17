@@ -13,7 +13,9 @@ target_include_directories(RTosim PRIVATE
                                 ${rtosim_Common_INCLUDE_DIRS}
                                 ${rtosim_Concurrency_INCLUDE_DIRS} 
                                 ${rtosim_InputDevice_INCLUDE_DIRS} 
-                                ${rtosim_InverseKinematics_INCLUDE_DIRS} 
+                                ${rtosim_OutputDevice_INCLUDE_DIRS} 
+                                ${rtosim_InverseKinematics_INCLUDE_DIRS}
+                                ${rtosim_SignalProcessing_INCLUDE_DIRS}
                                 ${rtosim_Utilities_INCLUDE_DIRS} 
                                 ${SIMTK_INCLUDE_DIRS} 
                                 ${OPENSIM_INCLUDE_DIRS})

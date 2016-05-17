@@ -8,6 +8,11 @@ using std::endl;
 using std::string;
 #include <Simbody.h>
 
+string getOpenSimModelFilename() {
+
+    return "";
+}
+
 string getResultDir() {
 
     return "";
@@ -16,6 +21,11 @@ string getResultDir() {
 string getStopWatchResultDir() {
 
     return "";
+}
+
+double getCutoffFrequency() {
+
+    return -1;
 }
 
 void printAuthors() {
@@ -60,75 +70,85 @@ int main(int argc, char* argv[]) {
     rtosim::GeneralisedCoordinatesQueue generalisedCoordinatesQueue, filteredGeneralisedCoordinatesQueue;
     rtosim::Concurrency::Latch doneWithSubscriptions;
     rtosim::Concurrency::Latch doneWithExecution;
-    std::string resultDir(getResultDir());
-    std::string stopWatchResultDir(getStopWatchResultDir());
-    /*
+
+    string resultDir(getResultDir());
+    string stopWatchResultDir(getStopWatchResultDir());
+    string osimModelFilename(getOpenSimModelFilename());
+    string trcTrialFilename(getTrcFilename());
+    double fc(getCutoffFrequency());
+    double solverAccuracy(getSolverAccuracy());
+    unsigned nThreads(getNumberOfThreads());
+
     auto coordNames = getCoordinateNamesFromModel(osimModelFilename);
-    vosl::GeneralisedCoordinatesStateSpace gcFilt(fc, coordNames.size());
+    rtosim::GeneralisedCoordinatesStateSpace gcFilt(fc, coordNames.size());
 
-    vosl::IKFromQueue ikFromQueue(
-    markerSetQueue,
+    rtosim::IKFromQueue ikFromQueue(
+        markerSetQueue,
+        generalisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        osimModelFilename,
+        nThreads, ikTaskFilename, solverAccuracy);
+
+    rtosim::MarkersFromTrc markersFromTrc(
+        markerSetQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        osimModelFilename,
+        trcTrialFilename,
+        false);
+
+    //markersFromTrc.setSpeedFactor(1000);
+
+    rtosim::QueueAdapter <
+        rtosim::GeneralisedCoordinatesQueue,
+        rtosim::GeneralisedCoordinatesQueue,
+        rtosim::GeneralisedCoordinatesStateSpace
+    > gcQueueAdaptor(
     generalisedCoordinatesQueue,
-    doneWithSubscriptions,
-    doneWithExecution,
-    osimModelFilename,
-    nThreads, ikTaskFilename, solverAccuracy);
-
-    vosl::MarkersFromTrc markersFromTrc(
-    markerSetQueue,
-    doneWithSubscriptions,
-    doneWithExecution,
-    osimModelFilename,
-    trcTrialFilename,
-    false);
-    markersFromTrc.setSpeedFactor(1000);
-
-    vosl::QueueAdapter < ceinms::GeneralisedCoordinatesQueue, ceinms::GeneralisedCoordinatesQueue, vosl::GeneralisedCoordinatesStateSpace > gcQueueAdaptor(
-    generalisedCoordinatesQueue, filteredGeneralisedCoordinatesQueue, doneWithSubscriptions, doneWithExecution, gcFilt);
-
-    vosl::QueueLogger< ceinms::GeneralisedCoordinatesQueue> logIK(filteredGeneralisedCoordinatesQueue, doneWithSubscriptions, doneWithExecution);
-
-    ceinms::QueueToFileLogger<ceinms::GeneralisedCoordinatesData> filteredIkLogger(
     filteredGeneralisedCoordinatesQueue,
     doneWithSubscriptions,
     doneWithExecution,
-    getCoordinateNamesFromModel(osimModelFilename),
-    "filtered_ik_from_file", resultDir, "sto");
+    gcFilt);
 
-    ceinms::QueueToFileLogger<ceinms::GeneralisedCoordinatesData> rawIkLogger(
-    generalisedCoordinatesQueue,
-    doneWithSubscriptions,
-    doneWithExecution,
-    getCoordinateNamesFromModel(osimModelFilename),
-    "raw_ik_from_file", resultDir, "sto");
+    rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> filteredIkLogger(
+        filteredGeneralisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        getCoordinateNamesFromModel(osimModelFilename),
+        resultDir, "filtered_ik_from_file", "sto");
 
-    vosl::FrameCounter< ceinms::GeneralisedCoordinatesQueue> ikFrameCounter(filteredGeneralisedCoordinatesQueue, "Filtered_IK_Queue");
+    rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> rawIkLogger(
+        generalisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        getCoordinateNamesFromModel(osimModelFilename),
+        resultDir, "raw_ik_from_file", "sto");
+
+    rtosim::FrameCounter< ceinms::GeneralisedCoordinatesQueue> ikFrameCounter(filteredGeneralisedCoordinatesQueue, "Filtered_IK_Queue");
 
     doneWithSubscriptions.setCount(6);
     doneWithExecution.setCount(6);
 
     vosl::launchThreads(
-    markersFromTrc,
-    ikFromQueue,
-    gcQueueAdaptor,
-    logIK,
-    filteredIkLogger,
-    rawIkLogger,
-    ikFrameCounter
-    );
-
-    logIK.getResult(result);
+        markersFromTrc,
+        ikFromQueue,
+        gcQueueAdaptor,
+        logIK,
+        filteredIkLogger,
+        rawIkLogger,
+        ikFrameCounter
+        );
 
     auto stopWatches = ikFromQueue.getProcessingTimes();
 
-    vosl::StopWatch combinedSW("Combined_IK_solvers");
+    rtosim::StopWatch combinedSW("Combined_IK_solvers");
     for (auto& s : stopWatches)
-    combinedSW += s;
+        combinedSW += s;
     cout << combinedSW << endl;
     vosl::StopWatch ikOutputStopWatch = ikFrameCounter.getProcessingTimes();
     cout << ikOutputStopWatch;
 
     combinedSW.print(stopWatchResultDir);
     ikOutputStopWatch.print(stopWatchResultDir);
-    */
 }

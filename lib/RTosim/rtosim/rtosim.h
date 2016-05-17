@@ -4,7 +4,9 @@
 #include "rtosim/Common.h"
 #include "rtosim/concurrency/Concurrency.h"
 #include "rtosim/InputDevice.h"
+#include "rtosim/OutputDevice.h"
 #include "rtosim/InverseKinematics.h"
 #include "rtosim/Utilities.h"
+#include "rtosim/SignalProcessing.h"
 
 #endif

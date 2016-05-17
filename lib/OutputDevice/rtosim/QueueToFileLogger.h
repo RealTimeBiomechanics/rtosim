@@ -13,7 +13,7 @@
 * CEINMS Contributors: C. Pizzolato, M. Reggiani, M. Sartori,                *
 *                      E. Ceseracciu, and D.G. Lloyd                         *
 *                                                                            *
-* Author(s): C. Pizzolato                                                    *
+* Author(s): E. Ceseracciu, C. Pizzolato, M. Reggiani                        *
 *                                                                            *
 * CEINMS is licensed under the Apache License, Version 2.0 (the "License").  *
 * You may not use this file except in compliance with the License. You may   *
@@ -26,32 +26,43 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_QueuesSync_h
-#define rtosim_QueuesSync_h
+#ifndef rtosim_QueueToFileLogger_h
+#define rtosim_QueueToFileLogger_h
 
-#include "rtosim/EndOfData.h"
-#include <tuple>
-#include <limits>
+#include "rtosim/concurrency/Latch.h"
+#include "rtosim/concurrency/Queue.h"
+#include "rtosim/QueueData.h"
+#include "rtosim/FileLogger.h"
 
-namespace ceinms {
-    namespace QueuesSync {
+namespace rtosim {
 
-        template<typename T>
-        typename T::type syncToTime(double t, T& queue) {
+    template<typename DataType>
+    class QueueToFileLogger {
+    public:
+        using FrameType = QueueData < DataType > ;
+        using QueueType = rtosim::Concurrency::Queue < FrameType > ;
+        QueueToFileLogger() = delete;
+        QueueToFileLogger(const QueueToFileLogger&) = delete;
+        QueueToFileLogger& operator=(const QueueToFileLogger&) = delete;
 
-            typename T::type frame;
-            do {
-                frame = queue.pop();
-            } while (frame.time < t && !EndOfData::isEod(frame));
-            return frame;
-        }
+        QueueToFileLogger(
+            QueueType& inputQueue,
+            rtosim::Concurrency::Latch& subscriptionLatch,
+            rtosim::Concurrency::Latch& readyToWriteLatch,
+            const std::vector<std::string>& columnLabels,
+            const std::string& outputDir,
+            const std::string& filename,
+            const std::string& extension = "sto");
+        ~QueueToFileLogger() = default;
+        void operator()();
 
-        template<typename A1, typename... Args>
-        auto sync(A1& queue1, Args&... queues) -> decltype(std::make_tuple(queue1.pop(), queues.pop()...)) {
-
-            auto frame1(queue1.pop());
-            return std::make_tuple(frame1, syncToTime(frame1.time, queues)...);
-        }
-    }
+    private:
+        QueueType& inputQueue_;
+        rtosim::Concurrency::Latch& subscriptionLatch_;
+        rtosim::Concurrency::Latch& readyToWriteLatch_;
+        FileLogger<DataType> logger_;
+    };
 }
+
+#include "QueueToFileLogger.cpp"
 #endif

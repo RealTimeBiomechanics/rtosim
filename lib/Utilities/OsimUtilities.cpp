@@ -4,13 +4,13 @@
 namespace rtosim {
 
     //you may want to use this to avoid getting the coordinate from a modified model
-    std::vector<std::string> getCoordinateNamesFromModel(std::string modelFilename) {
+    /* std::vector<std::string> getCoordinateNamesFromModel(std::string modelFilename) {
 
-        OpenSim::Model model(modelFilename);
-        auto coordNames(getCoordinateNamesFromModel(model));
-        return coordNames;
-    }
-
+         OpenSim::Model model(modelFilename);
+         auto coordNames(getCoordinateNamesFromModel(model));
+         return coordNames;
+         }
+         */
     std::vector<std::string> getCoordinateNamesFromModel(const OpenSim::Model& model) {
 
         size_t nCoord(model.getNumCoordinates());
@@ -20,14 +20,14 @@ namespace rtosim {
         rtosim::ArrayConverter::toStdVector(coordNamesOS, coordNames);
         return coordNames;
     }
-
+    /*
     std::vector<std::string> getMarkerNamesFromModel(std::string modelFilename) {
 
-        OpenSim::Model model(modelFilename);
-        auto markerNames(getMarkerNamesFromModel(model));
-        return markerNames;
+    OpenSim::Model model(modelFilename);
+    auto markerNames(getMarkerNamesFromModel(model));
+    return markerNames;
     }
-
+    */
     std::vector<std::string> getMarkerNamesFromModel(const OpenSim::Model& model) {
 
         OpenSim::Array<std::string> markerNamesOS;

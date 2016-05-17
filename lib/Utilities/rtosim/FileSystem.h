@@ -7,7 +7,9 @@ namespace rtosim {
 
     namespace FileSystem {
 
-        bool createDirectory(const std::string& directory);
+        bool createDirectory(const std::string& path);
+        bool directoryExists(const std::string& path);
+        std::string concatenatePaths(const std::string& path1, const std::string& path2);
     }
 }
 
