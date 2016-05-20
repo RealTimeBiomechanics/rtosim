@@ -33,7 +33,7 @@
 #include <tuple>
 #include <limits>
 
-namespace ceinms {
+namespace rtosim {
     namespace QueuesSync {
 
         template<typename T>
@@ -51,6 +51,15 @@ namespace ceinms {
 
             auto frame1(queue1.pop());
             return std::make_tuple(frame1, syncToTime(frame1.time, queues)...);
+        }
+
+        template<typename... Args>
+        void launchThreads(Args&... args) {
+
+            auto lst = { std::make_unique<std::thread>(std::ref(args))... };
+            for (auto& l : lst)
+                if (l->joinable())
+                    l->join();
         }
     }
 }

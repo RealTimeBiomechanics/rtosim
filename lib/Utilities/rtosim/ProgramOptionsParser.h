@@ -18,6 +18,18 @@ namespace rtosim {
     private:
         std::vector<std::string> po_;
     };
+
+    template<typename T>
+    T ProgramOptionsParser::getParameter(const std::string& option) const {
+
+        auto it(std::find(po_.begin(), po_.end(), option));
+        T ans{ 0 };
+        if (it != po_.end() && std::next(it) != po_.end()) {
+            std::stringstream ss(*std::next(it));
+            ss >> ans;
+        }
+        return ans;
+    }
 }
 
 #endif

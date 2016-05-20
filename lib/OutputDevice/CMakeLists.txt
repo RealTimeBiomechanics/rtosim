@@ -4,11 +4,14 @@ set(OutputDevice_SOURCES
 set(OutputDevice_HEADERS 
     rtosim/QueueToFileLogger.h
 	rtosim/OutputDevice.h
-    rtosim/FileLogger.h)
+    rtosim/FileLogger.h
+    rtosim/FrameCounter.h
+    )
 
 set(OutputDevice_TEMPLATE_IMPLEMENTATIONS 
     FileLogger.cpp
 	QueueToFileLogger.cpp
+    FrameCounter.cpp
 )    
     
 set_source_files_properties(${OutputDevice_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)
