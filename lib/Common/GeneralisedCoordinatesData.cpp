@@ -6,14 +6,14 @@ namespace rtosim {
         nCoordinates_(0)
     {}
 
-    GeneralisedCoordinatesData::GeneralisedCoordinatesData(size_t nCoordinates) :
+    GeneralisedCoordinatesData::GeneralisedCoordinatesData(std::size_t nCoordinates) :
         nCoordinates_(nCoordinates),
         q_(nCoordinates, .0),
         qd_(nCoordinates, .0),
         qdd_(nCoordinates, .0)
     {}
 
-    size_t GeneralisedCoordinatesData::getNCoordinates() const {
+    std::size_t GeneralisedCoordinatesData::getNCoordinates() const {
 
         return nCoordinates_;
     }

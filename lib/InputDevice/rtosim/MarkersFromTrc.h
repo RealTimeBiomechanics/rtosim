@@ -41,7 +41,7 @@ namespace rtosim{
         rtosim::Concurrency::Latch& doneWithExecution_;
         std::string trcFilename_;
         OpenSim::Model model_;
-        size_t noMarkers_;
+        std::size_t noMarkers_;
         bool loop_;
     };
 }

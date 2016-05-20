@@ -32,6 +32,7 @@
 #include "rtosim/EndOfData.h"
 #include <tuple>
 #include <limits>
+#include <thread>
 
 namespace rtosim {
     namespace QueuesSync {

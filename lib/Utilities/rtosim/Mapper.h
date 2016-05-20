@@ -43,10 +43,10 @@ namespace rtosim {
         void setNames(const std::vector<std::string>& inNames, const std::vector<std::string>& outNames);
         template<typename T>
         std::vector<T> map(const std::vector<T>& in, T defaultValue = T{}) const; //the return object will be copy elided
-        size_t getOutSize() const { return outSize_; }
-        size_t getInSize() const { return inSize_; }
+        std::size_t getOutSize() const { return outSize_; }
+        std::size_t getInSize() const { return inSize_; }
     private:
-        size_t inSize_, outSize_;
+        std::size_t inSize_, outSize_;
         std::vector<int> inToOutMapping_; //using int because in case in > out, we can use -1 as not-map token
         void updateMapping();
     };

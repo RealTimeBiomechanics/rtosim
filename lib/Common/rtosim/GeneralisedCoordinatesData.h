@@ -38,8 +38,8 @@ namespace rtosim {
     public:
 
         GeneralisedCoordinatesData();
-        GeneralisedCoordinatesData(size_t nCoordinates);
-        size_t getNCoordinates() const;
+        GeneralisedCoordinatesData(std::size_t nCoordinates);
+        std::size_t getNCoordinates() const;
         void setQ(const std::vector<double>& q);
         void setQd(const std::vector<double>& qd);
         void setQdd(const std::vector<double>& qdd);
@@ -52,7 +52,7 @@ namespace rtosim {
 
     private:
 
-        size_t nCoordinates_;
+        std::size_t nCoordinates_;
         std::vector<double> q_, qd_, qdd_;
     };
 }

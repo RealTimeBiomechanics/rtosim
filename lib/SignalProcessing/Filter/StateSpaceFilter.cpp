@@ -78,10 +78,10 @@ namespace rtosim {
 
         template<typename T>
         std::ostream & operator<< (std::ostream& os, const StateSpaceFilter<T>& filter) {
-            os << "Current time : " << lastTime_ << std::endl;
-            os << "Current value : " << lasValue_ << std::endl;
-            os << "Current first derivative : " << lastFirstDerivative_ << std::endl;
-            os << "Current second derivative : " << lastSecondDerivative_ << std::endl;
+            os << "Current time : " << filter.lastTime_ << std::endl;
+            os << "Current value : " << filter.lasValue_ << std::endl;
+            os << "Current first derivative : " << filter.lastFirstDerivative_ << std::endl;
+            os << "Current second derivative : " << filter.lastSecondDerivative_ << std::endl;
 
             return os;
         }
