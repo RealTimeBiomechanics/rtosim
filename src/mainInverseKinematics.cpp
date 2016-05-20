@@ -34,6 +34,8 @@ void printHelp() {
     cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
     cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
     cout << "-output             OutputDir        Specify the output directory\n";
+    cout << "-v                                   Show visualiser\n";
+    
 }
 
 int main(int argc, char* argv[]) {
@@ -86,7 +88,11 @@ int main(int argc, char* argv[]) {
     string resultDir("Output");
     if (po.exists("-output"))
         resultDir = po.getParameter("-output");
-
+        
+    bool showVisualiser(false);
+    if (po.exists("-v"))
+        showVisualiser = true;
+        
     string stopWatchResultDir(resultDir);
 
     //define the shared buffer
@@ -159,15 +165,28 @@ int main(int argc, char* argv[]) {
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
-    rtosim::QueuesSync::launchThreads(
-        markersFromTrc,
-        ikFromQueue,
-        gcQueueAdaptor,
-        filteredIkLogger,
-        rawIkLogger,
-        ikFrameCounter
-        );
-
+    if(showVisualiser) {
+        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);     
+        rtosim::QueuesSync::launchThreads(
+            markersFromTrc,
+            ikFromQueue,
+            gcQueueAdaptor,
+            filteredIkLogger,
+            rawIkLogger,
+            ikFrameCounter,
+            visualiser
+            );        
+    }
+    else {
+        rtosim::QueuesSync::launchThreads(
+            markersFromTrc,
+            ikFromQueue,
+            gcQueueAdaptor,
+            filteredIkLogger,
+            rawIkLogger,
+            ikFrameCounter
+            );
+    }
     //multithreaded part is over, all threads are joined
 
     //get execution time info from IK

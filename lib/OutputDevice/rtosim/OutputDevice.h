@@ -3,5 +3,6 @@
 
 #include "rtosim/QueueToFileLogger.h"
 #include "rtosim/FrameCounter.h"
+#include "rtosim/StateVisualiser.h"
 
 #endif

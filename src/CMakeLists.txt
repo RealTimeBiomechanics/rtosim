@@ -23,5 +23,6 @@ target_link_libraries(rtosim_ik
     InputDevice
     InverseKinematics
 	SignalProcessing
+    OutputDevice
     )
     
