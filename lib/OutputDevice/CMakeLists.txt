@@ -1,4 +1,5 @@
 set(OutputDevice_SOURCES 
+	StateVisualiser.cpp
     )
 
 set(OutputDevice_HEADERS 
@@ -6,7 +7,8 @@ set(OutputDevice_HEADERS
 	rtosim/OutputDevice.h
     rtosim/FileLogger.h
     rtosim/FrameCounter.h
-    )
+	rtosim/StateVisualiser.h
+)
 
 set(OutputDevice_TEMPLATE_IMPLEMENTATIONS 
     FileLogger.cpp
