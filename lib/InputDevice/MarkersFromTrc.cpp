@@ -30,7 +30,7 @@ namespace rtosim {
         trcFilename_(trcFilename),
         model_(osimModelFilename),
         loop_(loop),
-        speedFactor_(1),
+        speedFactor_(-1),
         framesToSkip_(0),
         noMarkers_(0){
 
@@ -127,7 +127,8 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         for (auto& frame : frames_) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
+            if (speedFactor_>0)
+                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
             if (skipped == framesToSkip_) {
                 outputMarkerSetQueue_.push(frame);
                 skipped = 0;
