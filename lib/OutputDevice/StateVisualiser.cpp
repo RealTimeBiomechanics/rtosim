@@ -29,6 +29,7 @@ namespace rtosim{
         SimTK::State s(model_.initSystem());
         SimTK::Visualizer &viz = model_.updVisualizer().updSimbodyVisualizer();
         viz.setShowFrameRate(false);
+        viz.setShutdownWhenDestructed(true);
         viz.setMode(SimTK::Visualizer::Mode::Sampling);
         viz.setShutdownWhenDestructed(true);
         viz.setDesiredBufferLengthInSec(5);
@@ -40,7 +41,6 @@ namespace rtosim{
         bool localRunCondition(true);
         while (localRunCondition) {
 
-            //	mV.show(inQueue_.pop().data);
             rtosim::GeneralisedCoordinatesFrame currentCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
             if (rtosim::EndOfData::isEod(currentCoordinatesFrame))
                 localRunCondition = false;
