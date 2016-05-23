@@ -25,3 +25,17 @@ target_link_libraries(rtosim_ik
 	SignalProcessing
     )
     
+
+add_executable(rtosim_id 
+    mainInverseDynamics.cpp
+    )
+
+target_link_libraries(rtosim_id
+    ${OPENSIM_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+	SignalProcessing
+    )
+    

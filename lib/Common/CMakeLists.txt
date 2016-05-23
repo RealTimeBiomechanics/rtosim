@@ -7,17 +7,20 @@ set(Common_HEADERS
     rtosim/QueuesSync.h
 	rtosim/FlowControl.h
 	rtosim/Common.h
+    rtosim/ExternalForceData.h
     )
 
 set(Common_QUEUES_HEADERS 
     rtosim/queue/MarkerSetQueue.h
     rtosim/queue/GeneralisedCoordinatesQueue.h
+    rtosim/queue/MultipleExternalForcesQueue.h
     
 ) 
     
 set(Common_SOURCES 
 	MarkerData.cpp
     GeneralisedCoordinatesData.cpp
+    ExternalForceData.cpp
 	FlowControl.cpp
     )
 
