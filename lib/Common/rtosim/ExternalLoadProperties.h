@@ -25,7 +25,9 @@ namespace rtosim {
         void parseXml(SimTK::Xml::Element elt);
         void parseExternalLoads(SimTK::Xml::Element elt);
         void parseObjects(SimTK::Xml::Element elt);
+        std::string getCorrectFilePath(std::string file) const;
         std::vector < ExternalForceProperties > externalForcesProperties_;
+        std::string xmlFilename_;
         std::string name_;
         std::string datafile_;
         std::string external_loads_model_kinematics_file_;

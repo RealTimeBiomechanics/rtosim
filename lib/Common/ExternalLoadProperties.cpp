@@ -3,10 +3,23 @@ using SimTK::Xml;
 
 namespace rtosim {
 
-    ExternalLoadProperties::ExternalLoadProperties(const std::string& xmlFilename) {
+    ExternalLoadProperties::ExternalLoadProperties(const std::string& xmlFilename)
+        :xmlFilename_(xmlFilename) {
 
-        SimTK::Xml extLoadXml(xmlFilename);
+        SimTK::Xml extLoadXml(xmlFilename_);
         parseXml(extLoadXml.getRootElement());
+        datafile_ = getCorrectFilePath(datafile_);
+        external_loads_model_kinematics_file_ = getCorrectFilePath(external_loads_model_kinematics_file_);
+    }
+
+    std::string ExternalLoadProperties::getCorrectFilePath(std::string file) const {
+
+        if (!SimTK::Pathname::fileExists(file)) {
+            bool isAbsolute(false);
+            std::string currentDir, filename, extension;
+            SimTK::Pathname::deconstructPathname(xmlFilename_, isAbsolute, currentDir, filename, extension);
+            file = SimTK::Pathname::getAbsolutePathname(currentDir + SimTK::Pathname::getPathSeparator() + file);
+        }
     }
 
     void ExternalLoadProperties::parseXml(Xml::Element elt) {
