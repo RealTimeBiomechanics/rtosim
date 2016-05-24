@@ -1,15 +1,20 @@
 set(InputDevice_SOURCES 
 #    DataFromNexus.cpp 
     MarkersFromTrc.cpp
+    ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
-	ExternalForcesFromX.cpp)
+    GeneralisedCoordinatesFromX.cpp
+    GeneralisedCoordinatesFromStorageFile.cpp
+    )
 
 set(InputDevice_HEADERS 
  #   vosl/DataFromNexus.h 
     rtosim/MarkersFromTrc.h
 	rtosim/InputDevice.h
-    rtosim/ExternalForcesFromStorageFile.h
 	rtosim/ExternalForcesFromX.h
+    rtosim/ExternalForcesFromStorageFile.h
+    rtosim/GeneralisedCoordinatesFromX.h
+    rtosim/GeneralisedCoordinatesFromStorageFile.h
 	)
 
 source_group("Headers" FILES ${InputDevice_HEADERS})

@@ -127,7 +127,7 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         for (auto& frame : frames_) {
-            if (speedFactor_>0)
+            if (speedFactor_ > 0)
                 std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
             if (skipped == framesToSkip_) {
                 outputMarkerSetQueue_.push(frame);
@@ -154,5 +154,5 @@ namespace rtosim {
 #ifdef RTOSIM_DEBUG
         cout << "Closing MarkersProducer..." << endl;
 #endif
-}
+    }
 }

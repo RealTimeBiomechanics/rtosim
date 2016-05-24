@@ -20,6 +20,7 @@ namespace rtosim {
             SimTK::Pathname::deconstructPathname(xmlFilename_, isAbsolute, currentDir, filename, extension);
             file = SimTK::Pathname::getAbsolutePathname(currentDir + SimTK::Pathname::getPathSeparator() + file);
         }
+        return file;
     }
 
     void ExternalLoadProperties::parseXml(Xml::Element elt) {

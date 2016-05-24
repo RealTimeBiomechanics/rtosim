@@ -45,10 +45,15 @@ namespace rtosim {
         MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
         Concurrency::Latch& doneWithSubscriptions,
         Concurrency::Latch& doneWithExecution,
-        const std::string& externalLoadsXmlFilename) :
+        const std::string& externalLoadsXmlFilename,
+        double fc) :
         ExternalForcesFromX(outputMultipleExternalForcesQueue, doneWithSubscriptions, doneWithExecution),
         externalLoadProperties_(externalLoadsXmlFilename),
-        externalForcesStorage_(externalLoadProperties_.getDatafile()){
+        externalForcesStorage_(externalLoadProperties_.getDatafile()),
+        speedFactor_(-1),
+        framesToSkip_(0)
+    {
+        filter(fc);
     }
 
     ExternalForcesFromStorageFile::ExternalForcesFromStorageFile(
@@ -56,10 +61,15 @@ namespace rtosim {
         Concurrency::Latch& doneWithSubscriptions,
         Concurrency::Latch& doneWithExecution,
         const std::string& externalLoadsXmlFilename,
-        const std::string& grfFilename) :
+        const std::string& grfFilename,
+        double fc) :
         ExternalForcesFromX(outputMultipleExternalForcesQueue, doneWithSubscriptions, doneWithExecution),
         externalLoadProperties_(externalLoadsXmlFilename),
-        externalForcesStorage_(grfFilename)  {
+        externalForcesStorage_(grfFilename),
+        speedFactor_(-1),
+        framesToSkip_(0)
+    {
+        filter(fc);
     }
 
     SimTK::Vec3 ExternalForcesFromStorageFile::getForce(const std::string& forceName, int timeIndex) const {
@@ -98,21 +108,51 @@ namespace rtosim {
         return point;
     }
 
+    void ExternalForcesFromStorageFile::setOutputFrequency(double frequency) {
+
+        speedFactor_ = frequency / sampleFrequency_;
+    }
+
+    void ExternalForcesFromStorageFile::setSpeedFactor(double speedFactor) {
+
+        speedFactor_ = speedFactor;
+    }
+
+    void ExternalForcesFromStorageFile::setFramesToSkip(unsigned n) {
+
+        framesToSkip_ = n;
+    }
+
+    unsigned ExternalForcesFromStorageFile::getSleepTime() const {
+
+        return static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_)));
+    }
+
+    void ExternalForcesFromStorageFile::filter(double fc) {
+
+        if (fc > 0) {
+            double firstTime(externalForcesStorage_.getFirstTime());
+            double lastTime(externalForcesStorage_.getLastTime());
+            externalForcesStorage_.pad(externalForcesStorage_.getSize() / 2.);
+            externalForcesStorage_.lowpassIIR(fc);
+            externalForcesStorage_.crop(firstTime, lastTime);
+        }
+    }
+
     void ExternalForcesFromStorageFile::operator()() {
+
+        unsigned sleepTimeMilliseconds(getSleepTime());
+        unsigned skipped(0);
 
         OpenSim::Array<string> tempLabels(externalForcesStorage_.getColumnLabels());
         vector<string> labels;
         ArrayConverter::toStdVector(tempLabels, labels);
 
-        unsigned sleepTimeMilliseconds(0);
-        if (pushFrequency_ > 0)
-            sleepTimeMilliseconds = static_cast<unsigned>(std::floor(1000. / (pushFrequency_)));
-
         ExternalForcesFromX::doneWithSubscriptions();
         std::vector<std::string> extForceNames(externalLoadProperties_.getExternalForcesNames());
         for (unsigned tIdx(0); tIdx < externalForcesStorage_.getSize(); ++tIdx) {
 
-            if (pushFrequency_ > 0)
+            if (speedFactor_>0)
                 std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
 
             MultipleExternalForcesFrame externalForcesFrame;
@@ -125,7 +165,13 @@ namespace rtosim {
                 currentExtForce.setSourceName(name);
                 externalForcesFrame.data.push_back(currentExtForce);
             }
-            ExternalForcesFromX::updateExternalForces(externalForcesFrame.data, externalForcesFrame.time);
+
+            if (skipped == framesToSkip_) {
+                ExternalForcesFromX::updateExternalForces(externalForcesFrame.data, externalForcesFrame.time);
+                skipped = 0;
+            }
+            else
+                ++skipped;
         }
         ExternalForcesFromX::sendEndOfData();
         ExternalForcesFromX::doneWithExecution();

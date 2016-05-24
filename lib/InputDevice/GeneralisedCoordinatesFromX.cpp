@@ -26,55 +26,42 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_ExternalForcesFromStorageFile_h
-#define rtosim_ExternalForcesFromStorageFile_h
-
-#include "rtosim/ExternalForcesFromX.h"
-#include "rtosim/queue/MultipleExternalForcesQueue.h"
-#include "rtosim/concurrency/Concurrency.h"
-#include "rtosim/ExternalLoadProperties.h"
-#include <OpenSim/OpenSim.h>
-#include <string>
+#include "rtosim/GeneralisedCoordinatesFromX.h"
+#include "rtosim/GeneralisedCoordinatesData.h"
+#include "rtosim/EndOfData.h"
+#include <vector>
+using std::vector;
 
 namespace rtosim {
 
-    class ExternalForcesFromStorageFile : public ExternalForcesFromX {
-    public:
-        //to parse the external forces easily, I need an opensim model.. otherwise I have to read manually from the storage
-        ExternalForcesFromStorageFile(
-            MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
-            const std::string& externalLoadsXmlFilename,
-            double fc = -1);
+    GeneralisedCoordinatesFromX::GeneralisedCoordinatesFromX(
+        GeneralisedCoordinatesQueue& outputGeneralisedCoordinatesQueue,
+        Concurrency::Latch& doneWithSubscriptions,
+        Concurrency::Latch& doneWithExecution) :
+        outputGeneralisedCoordinatesQueue_(outputGeneralisedCoordinatesQueue),
+        doneWithSubscriptions_(doneWithSubscriptions),
+        doneWithExecution_(doneWithExecution)
 
-        //using this constructor, grfFilename replace the grf in externalLoadsXml
-        ExternalForcesFromStorageFile(
-            MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
-            const std::string& externalLoadsXmlFilename,
-            const std::string& grfFilename,
-            double fc = -1);
+    { }
 
-        void setOutputFrequency(double frequency);
-        void setSpeedFactor(double speedFactor);
-        void setFramesToSkip(unsigned n);
-        void operator()();
+    void GeneralisedCoordinatesFromX::updateGeneralisedCoordinates(const GeneralisedCoordinatesData& currentGeneralisedCoordinatesData, double currentTime) {
 
-    private:
-        void filter(double fc);
-        SimTK::Vec3 getForce(const std::string& forceName, int timeIndex) const;
-        SimTK::Vec3 getTorque(const std::string& forceName, int timeIndex) const;
-        SimTK::Vec3 getApplicationPoint(const std::string& forceName, int timeIndex) const;
-        unsigned getSleepTime() const;
+        GeneralisedCoordinatesFrame frame{ currentTime, currentGeneralisedCoordinatesData };
+        outputGeneralisedCoordinatesQueue_.push(frame);
+    }
 
-        ExternalLoadProperties externalLoadProperties_;
-        OpenSim::Storage externalForcesStorage_;
-        unsigned framesToSkip_;
-        double speedFactor_;
-        unsigned sampleFrequency_;
-    };
+    void GeneralisedCoordinatesFromX::doneWithSubscriptions() {
+
+        doneWithSubscriptions_.wait();
+    }
+
+    void GeneralisedCoordinatesFromX::doneWithExecution() {
+
+        doneWithExecution_.wait();
+    }
+
+    void GeneralisedCoordinatesFromX::sendEndOfData() {
+
+        outputGeneralisedCoordinatesQueue_.push(EndOfData::get<GeneralisedCoordinatesFrame>());
+    }
 }
-
-#endif

@@ -26,54 +26,41 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_ExternalForcesFromStorageFile_h
-#define rtosim_ExternalForcesFromStorageFile_h
+#ifndef rtosim_GeneralisedCoordinatesFromStorageFile_h
+#define rtosim_GeneralisedCoordinatesFromStorageFile_h
 
-#include "rtosim/ExternalForcesFromX.h"
-#include "rtosim/queue/MultipleExternalForcesQueue.h"
-#include "rtosim/concurrency/Concurrency.h"
-#include "rtosim/ExternalLoadProperties.h"
+#include "rtosim/GeneralisedCoordinatesFromX.h"
+#include "rtosim/Mapper.h"
 #include <OpenSim/OpenSim.h>
-#include <string>
 
 namespace rtosim {
-
-    class ExternalForcesFromStorageFile : public ExternalForcesFromX {
+    class GeneralisedCoordinatesFromStorageFile : public GeneralisedCoordinatesFromX {
     public:
-        //to parse the external forces easily, I need an opensim model.. otherwise I have to read manually from the storage
-        ExternalForcesFromStorageFile(
-            MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
+        GeneralisedCoordinatesFromStorageFile(
+            GeneralisedCoordinatesQueue& outputGeneralisedCoordinatesQueue,
             Concurrency::Latch& doneWithSubscriptions,
             Concurrency::Latch& doneWithExecution,
-            const std::string& externalLoadsXmlFilename,
+            const std::string& osimModelFilename,
+            const std::string& kinematicsStorageFilename,
             double fc = -1);
-
-        //using this constructor, grfFilename replace the grf in externalLoadsXml
-        ExternalForcesFromStorageFile(
-            MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
+        GeneralisedCoordinatesFromStorageFile(
+            GeneralisedCoordinatesQueue& outputGeneralisedCoordinatesQueue,
             Concurrency::Latch& doneWithSubscriptions,
             Concurrency::Latch& doneWithExecution,
-            const std::string& externalLoadsXmlFilename,
-            const std::string& grfFilename,
+            const std::string& osimModelFilename,
+            const std::string& kinematicsStorageFilename,
+            const std::vector<std::string>& coordinatesToLog,
             double fc = -1);
-
-        void setOutputFrequency(double frequency);
-        void setSpeedFactor(double speedFactor);
-        void setFramesToSkip(unsigned n);
-        void operator()();
-
+        virtual ~GeneralisedCoordinatesFromStorageFile() override {}
+        virtual void operator()() override;
     private:
-        void filter(double fc);
-        SimTK::Vec3 getForce(const std::string& forceName, int timeIndex) const;
-        SimTK::Vec3 getTorque(const std::string& forceName, int timeIndex) const;
-        SimTK::Vec3 getApplicationPoint(const std::string& forceName, int timeIndex) const;
-        unsigned getSleepTime() const;
-
-        ExternalLoadProperties externalLoadProperties_;
-        OpenSim::Storage externalForcesStorage_;
-        unsigned framesToSkip_;
-        double speedFactor_;
-        unsigned sampleFrequency_;
+        void updateKinematicsSplines(double fc);
+        OpenSim::GCVSplineSet splines_;
+        OpenSim::Model model_;
+        std::string kinematicsStorageFilename_;
+        std::vector<double> timeColumn_;
+        std::vector<std::string> coordinateNamesFromOsimModel_;
+        Mapper mapper_;
     };
 }
 
