@@ -10,5 +10,8 @@
 #include "rtosim/Common.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
+#include "rtosim/ExternalForceData.h"
+#include "rtosim/ExternalForceProperties.h"
+#include "rtosim/ExternalLoadProperties.h"
 
 #endif

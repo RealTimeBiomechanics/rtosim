@@ -162,32 +162,32 @@ namespace rtosim {
         *outFile_ << std::endl;
     }
 
-    /*    template<>
-        void FileLogger<MultipleExternalForcesData>::initFile()
-        {
+    template<>
+    void FileLogger<MultipleExternalForcesData>::initFile()
+    {
         *outFile_ << "CEINMS output" << std::endl;
         *outFile_ << "datacolumns " << dataToWrite_.back().data.size() * 12 + 1 << std::endl;
         *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
-        *outFile_ <<
-        it << "_vx" << sp_ <<
-        it << "_vy" << sp_ <<
-        it << "_vz" << sp_ <<
-        it << "_px" << sp_ <<
-        it << "_py" << sp_ <<
-        it << "_pz" << sp_ <<
-        it << "_mx" << sp_ <<
-        it << "_my" << sp_ <<
-        it << "_mz" << sp_ <<
-        it << "_tx" << sp_ <<
-        it << "_ty" << sp_ <<
-        it << "_tz" << sp_;
+            *outFile_ <<
+            it << "_vx" << sp_ <<
+            it << "_vy" << sp_ <<
+            it << "_vz" << sp_ <<
+            it << "_px" << sp_ <<
+            it << "_py" << sp_ <<
+            it << "_pz" << sp_ <<
+            it << "_mx" << sp_ <<
+            it << "_my" << sp_ <<
+            it << "_mz" << sp_ <<
+            it << "_tx" << sp_ <<
+            it << "_ty" << sp_ <<
+            it << "_tz" << sp_;
         ;
         *outFile_ << std::endl;
-        }
-        */
+    }
+
     template<typename DataType>
     void FileLogger<DataType>::writeToFile() {
 
@@ -230,33 +230,31 @@ namespace rtosim {
         }
     }
 
-    /*
     template<>
     void FileLogger<MultipleExternalForcesData>::writeToFile() {
 
-    for (auto& dataIt : dataToWrite_) {
-    *outFile_ << dataIt.time << sp_;
-    for (auto& v : dataIt.data) {
-    auto f(v.getForce());
-    auto p(v.getApplicationPoint());
-    auto m(v.getMoments());
-    auto t(v.getTorque());
-    *outFile_
-    << f[0] << sp_
-    << f[1] << sp_
-    << f[2] << sp_
-    << p[0] << sp_
-    << p[1] << sp_
-    << p[2] << sp_
-    << m[0] << sp_
-    << m[1] << sp_
-    << m[2] << sp_
-    << t[0] << sp_
-    << t[1] << sp_
-    << t[2] << sp_;
+        for (auto& dataIt : dataToWrite_) {
+            *outFile_ << dataIt.time << sp_;
+            for (auto& v : dataIt.data) {
+                auto f(v.getForce());
+                auto p(v.getApplicationPoint());
+                auto m(v.getMoments());
+                auto t(v.getTorque());
+                *outFile_
+                    << f[0] << sp_
+                    << f[1] << sp_
+                    << f[2] << sp_
+                    << p[0] << sp_
+                    << p[1] << sp_
+                    << p[2] << sp_
+                    << m[0] << sp_
+                    << m[1] << sp_
+                    << m[2] << sp_
+                    << t[0] << sp_
+                    << t[1] << sp_
+                    << t[2] << sp_;
+            }
+            *outFile_ << std::endl;
+        }
     }
-    *outFile_ << std::endl;
-    }
-    }
-    */
 }

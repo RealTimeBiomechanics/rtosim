@@ -26,16 +26,15 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef ceinms_MultipleExternalForcesQueue_h
-#define ceinms_MultipleExternalForcesQueue_h
+#ifndef rtosim_MultipleExternalForcesQueue_h
+#define rtosim_MultipleExternalForcesQueue_h
 
 #include "rtosim/concurrency/Queue.h"
 #include "rtosim/QueueData.h"
+#include "rtosim/ExternalForceData.h"
 #include <vector>
 
 namespace rtosim {
-
-    class ExternalForceData;
 
     using MultipleExternalForcesData = std::vector < ExternalForceData > ;
     using MultipleExternalForcesFrame = QueueData < MultipleExternalForcesData > ;

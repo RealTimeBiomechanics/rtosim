@@ -8,6 +8,8 @@ set(Common_HEADERS
 	rtosim/FlowControl.h
 	rtosim/Common.h
     rtosim/ExternalForceData.h
+    rtosim/ExternalLoadProperties.h
+    rtosim/ExternalForceProperties.h
     )
 
 set(Common_QUEUES_HEADERS 
@@ -22,6 +24,8 @@ set(Common_SOURCES
     GeneralisedCoordinatesData.cpp
     ExternalForceData.cpp
 	FlowControl.cpp
+    ExternalLoadProperties.cpp
+    ExternalForceProperties.cpp
     )
 
 set(Common_TEMPLATE_IMPLEMENTATION	)

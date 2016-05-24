@@ -30,7 +30,7 @@
 #define rtosim_FileLogger_h
 
 //#include "ceinms/ExternalForceData.h"
-//#include "ceinms/queues/MultipleExternalForcesQueue.h"
+#include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/GeneralisedCoordinatesData.h"
 
 #include <vector>

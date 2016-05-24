@@ -13,7 +13,7 @@
 * CEINMS Contributors: C. Pizzolato, M. Reggiani, M. Sartori,                *
 *                      E. Ceseracciu, and D.G. Lloyd                         *
 *                                                                            *
-* Author(s): E. Ceseracciu, C. Pizzolato, M. Reggiani                        *
+* Author(s): C. Pizzolato                                                    *
 *                                                                            *
 * CEINMS is licensed under the Apache License, Version 2.0 (the "License").  *
 * You may not use this file except in compliance with the License. You may   *
@@ -26,43 +26,35 @@
 * limitations under the License.                                             *
 * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_QueueToFileLogger_h
-#define rtosim_QueueToFileLogger_h
+#ifndef rtosim_ExternalForcesFromX_h
+#define rtosim_ExternalForcesFromX_h
 
-#include "rtosim/concurrency/Latch.h"
+#include <string>
+#include <vector>
+#include "rtosim/ExternalForceData.h"
 #include "rtosim/concurrency/Queue.h"
-#include "rtosim/QueueData.h"
-#include "rtosim/FileLogger.h"
+#include "rtosim/concurrency/Latch.h"
+#include "rtosim/queue/MultipleExternalForcesQueue.h"
 
 namespace rtosim {
-
-    template<typename DataType>
-    class QueueToFileLogger {
+    class ExternalForcesFromX
+    {
     public:
-        using FrameType = QueueData < DataType > ;
-        using QueueType = rtosim::Concurrency::Queue < FrameType > ;
-        QueueToFileLogger() = delete;
-        QueueToFileLogger(const QueueToFileLogger<DataType>&) = delete;
-        QueueToFileLogger& operator=(const QueueToFileLogger<DataType>&) = delete;
 
-        QueueToFileLogger(
-            QueueType& inputQueue,
-            rtosim::Concurrency::Latch& subscriptionLatch,
-            rtosim::Concurrency::Latch& readyToWriteLatch,
-            const std::vector<std::string>& columnLabels,
-            const std::string& outputDir,
-            const std::string& filename,
-            const std::string& extension = "sto");
-        ~QueueToFileLogger() = default;
-        void operator()();
-
+        ExternalForcesFromX(
+            MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
+            Concurrency::Latch& doneWithSubscriptions,
+            Concurrency::Latch& doneWithExecution);
+        virtual ~ExternalForcesFromX() {};
+        virtual void operator()() = 0;
+        void updateExternalForces(const MultipleExternalForcesData& currentExternalForceData, double currentTime);
+        void sendEndOfData();
+        void doneWithSubscriptions();
+        void doneWithExecution();
     private:
-        QueueType& inputQueue_;
-        rtosim::Concurrency::Latch& subscriptionLatch_;
-        rtosim::Concurrency::Latch& readyToWriteLatch_;
-        FileLogger<DataType> logger_;
+        MultipleExternalForcesQueue& outputMultipleExternalForcesQueue_;
+        Concurrency::Latch& doneWithSubscriptions_;
+        Concurrency::Latch& doneWithExecution_;
     };
 }
-
-#include "QueueToFileLogger.cpp"
 #endif
