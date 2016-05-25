@@ -16,8 +16,10 @@ set(Common_QUEUES_HEADERS
     rtosim/queue/MarkerSetQueue.h
     rtosim/queue/GeneralisedCoordinatesQueue.h
     rtosim/queue/MultipleExternalForcesQueue.h
-    
-) 
+    rtosim/queue/ExternalTorquesQueue.h
+	rtosim/queue/ScalarVectorQueue.h
+	rtosim/queue/SingleExternalForceQueue.h
+	) 
     
 set(Common_SOURCES 
 	MarkerData.cpp

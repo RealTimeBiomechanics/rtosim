@@ -1,7 +1,7 @@
 //CP
 
-#ifndef rtosim_IKFromQueue_h
-#define rtosim_IKFromQueue_h
+#ifndef rtosim_QueueToInverseKinametics_h
+#define rtosim_QueueToInverseKinametics_h
 
 #include <string>
 #include <memory>
@@ -18,9 +18,9 @@
 
 namespace rtosim {
 
-    class IKFromQueue {
+    class QueueToInverseKinametics {
     public:
-        IKFromQueue(
+        QueueToInverseKinametics(
             MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
             rtosim::Concurrency::Latch& doneWithSubscriptions,
@@ -29,7 +29,7 @@ namespace rtosim {
             unsigned nThreads,
             double solverAccuracy = 1e-9);
 
-        IKFromQueue(
+        QueueToInverseKinametics(
             MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
             rtosim::Concurrency::Latch& doneWithSubscriptions,

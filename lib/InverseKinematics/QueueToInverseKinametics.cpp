@@ -5,12 +5,12 @@ using std::unique_ptr;
 #include <thread>
 using std::thread;
 using std::ref;
-#include "rtosim/IKFromQueue.h"
+#include "rtosim/QueueToInverseKinametics.h"
 #include "rtosim/EndOfData.h"
 
 namespace rtosim {
 
-    IKFromQueue::IKFromQueue(MarkerSetQueue& inputMarkerSetQueue,
+    QueueToInverseKinametics::QueueToInverseKinametics(MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
         rtosim::Concurrency::Latch& doneWithSubscriptions,
         rtosim::Concurrency::Latch& doneWithExecution,
@@ -29,7 +29,7 @@ namespace rtosim {
         if (nThreads_ < 1) nThreads_ = 1;
     }
 
-    IKFromQueue::IKFromQueue(
+    QueueToInverseKinametics::QueueToInverseKinametics(
         MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
         rtosim::Concurrency::Latch& doneWithSubscriptions,
@@ -38,7 +38,7 @@ namespace rtosim {
         unsigned nThreads,
         const std::string& ikTaskSetFilename,
         double solverAccuracy) :
-        IKFromQueue(
+        QueueToInverseKinametics(
         inputMarkerSetQueue,
         outputGeneralisedCoordinateQueue,
         doneWithSubscriptions,
@@ -51,7 +51,7 @@ namespace rtosim {
         useIkTaskSet_ = true;
     }
 
-    void IKFromQueue::operator()() {
+    void QueueToInverseKinametics::operator()() {
 
         ThreadPoolJobs<MarkerSetFrame> threadPoolJobQueue;
         TimeSequence timeSequenceQueue;

@@ -2,23 +2,23 @@
 
 # List source files
 set(InverseKinematics_SOURCES
+                        QueueToInverseKinametics.cpp
                         IKSequencer.cpp 
 						IKSolverParallel.cpp 
                         JobsCreator.cpp 
 						MarkersReferenceFromQueue.cpp 
-                        IKFromQueue.cpp
 						TimeSequence.cpp
 						)
 
 set(InverseKinematics_HEADERS
 						rtosim/InverseKinematics.h
+                        rtosim/QueueToInverseKinametics.h
                         rtosim/IKSequencer.h 
 						rtosim/IKSolverParallel.h 
 						rtosim/IKoutputs.h
                         rtosim/JobsCreator.h 
 						rtosim/MarkersReferenceFromQueue.h 
 						rtosim/ThreadPoolJobs.h
-                        rtosim/IKFromQueue.h
                         rtosim/TimeSequence.h
 						)
 

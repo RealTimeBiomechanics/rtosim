@@ -35,7 +35,6 @@ void printHelp() {
     cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
     cout << "-output             OutputDir        Specify the output directory\n";
     cout << "-v                                   Show visualiser\n";
-    
 }
 
 int main(int argc, char* argv[]) {
@@ -88,11 +87,11 @@ int main(int argc, char* argv[]) {
     string resultDir("Output");
     if (po.exists("-output"))
         resultDir = po.getParameter("-output");
-        
+
     bool showVisualiser(false);
     if (po.exists("-v"))
         showVisualiser = true;
-        
+
     string stopWatchResultDir(resultDir);
 
     //define the shared buffer
@@ -118,7 +117,7 @@ int main(int argc, char* argv[]) {
         false);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
-    rtosim::IKFromQueue ikFromQueue(
+    rtosim::QueueToInverseKinametics inverseKinematics(
         markerSetQueue,
         generalisedCoordinatesQueue,
         doneWithSubscriptions,
@@ -165,22 +164,22 @@ int main(int argc, char* argv[]) {
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
-    if(showVisualiser) {
-        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);     
+    if (showVisualiser) {
+        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);
         rtosim::QueuesSync::launchThreads(
             markersFromTrc,
-            ikFromQueue,
+            inverseKinematics,
             gcQueueAdaptor,
             filteredIkLogger,
             rawIkLogger,
             ikFrameCounter,
             visualiser
-            );        
+            );
     }
     else {
         rtosim::QueuesSync::launchThreads(
             markersFromTrc,
-            ikFromQueue,
+            inverseKinematics,
             gcQueueAdaptor,
             filteredIkLogger,
             rawIkLogger,
@@ -190,7 +189,7 @@ int main(int argc, char* argv[]) {
     //multithreaded part is over, all threads are joined
 
     //get execution time info from IK
-    auto stopWatches = ikFromQueue.getProcessingTimes();
+    auto stopWatches = inverseKinematics.getProcessingTimes();
 
     rtosim::StopWatch combinedSW("Combined_IK_solvers");
     for (auto& s : stopWatches)

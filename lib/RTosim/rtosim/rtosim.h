@@ -8,5 +8,6 @@
 #include "rtosim/InverseKinematics.h"
 #include "rtosim/Utilities.h"
 #include "rtosim/SignalProcessing.h"
+#include "rtosim/InverseDynamics.h"
 
 #endif
