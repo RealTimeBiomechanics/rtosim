@@ -10,7 +10,7 @@ using std::string;
 
 void printAuthors() {
 
-    cout << "Real-time OpenSim inverse kinematics" << endl;
+    cout << "Real-time OpenSim inverse dynamics" << endl;
     cout << "Authors: Claudio Pizzolato <claudio.pizzolato@griffithuni.edu.au>" << endl;
     cout << "         Monica Reggiani <monica.reggiani@unipd.it>" << endl << endl;
 }
@@ -83,7 +83,6 @@ int main(int argc, char* argv[]) {
     ExternalTorquesQueue jointMomentsQueue;
     rtosim::Concurrency::Latch doneWithSubscription, doneWithExecution;
 
-    //prefilter the data
     ExternalForcesFromStorageFile grfProducer(
         grfQueue,
         doneWithSubscription,

@@ -20,10 +20,16 @@ set(SignalProcessing_HEADERS
 	rtosim/SignalProcessingCommon.h
     rtosim/SignalProcessing.h
     rtosim/QueueAdapter.h
+    rtosim/ExternalForceDataFilterStateSpace.h
+    rtosim/MultipleExternalForcesDataFilterStateSpace.h
+    rtosim/AdaptiveCop.h
     )
 
 set(SignalProcessing_SOURCES 
     GeneralisedCoordinatesStateSpace.cpp
+    ExternalForceDataFilterStateSpace.cpp
+    MultipleExternalForcesDataFilterStateSpace.cpp
+    AdaptiveCop.cpp
     )
     
 set(SignalProcessing_TEMPLATE_IMPLEMENTATIONS 
@@ -54,6 +60,7 @@ target_include_directories(SignalProcessing
 	PRIVATE	
 		${rtosim_Common_INCLUDE_DIRS}
 		${rtosim_Concurrency_INCLUDE_DIRS}
+		${rtosim_Utilities_INCLUDE_DIRS}
 		${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC
         ${OPENSIM_INCLUDE_DIRS}

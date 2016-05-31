@@ -35,6 +35,22 @@ target_link_libraries(rtosim_id
 	OutputDevice
     )
     
+ add_executable(rtosim_ik_id 
+    mainInverseKinameticsInverseDynamics.cpp
+    )
+
+target_link_libraries(rtosim_ik_id
+    ${OPENSIM_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+	SignalProcessing
+    InverseKinematics
+	InverseDynamics
+	OutputDevice
+    )   
+    
     
 add_executable(compareStorageFiles
     compareStorageFiles.cpp

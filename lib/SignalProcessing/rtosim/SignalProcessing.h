@@ -7,6 +7,8 @@
 #include "rtosim/Filter/StateSpaceFilter.h"
 #include "rtosim/Filter/TransferFunction.h"
 #include "rtosim/GeneralisedCoordinatesStateSpace.h"
+#include "rtosim/ExternalForceDataFilterStateSpace.h"
+#include "rtosim/MultipleExternalForcesDataFilterStateSpace.h"
 #include "rtosim/SignalProcessingCommon.h"
 #include "rtosim/QueueAdapter.h"
 
