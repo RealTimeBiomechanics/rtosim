@@ -27,50 +27,51 @@ void printHelp() {
     cout << "Option              Argument         Action / Notes\n";
     cout << "------              --------         --------------\n";
     cout << "-h                                   Print the command-line options for " << filename << ".\n";
-    cout << "-model              ModelFilename    Specify the name of the osim model file for the investigation.\n";
-    cout << "-trc                TrcFilename      Specify the name of the trc file to be used.\n";
-    cout << "-task-set           TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
-    cout << "-fc                 CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
+    cout << "--model             ModelFilename    Specify the name of the osim model file for the investigation.\n";
+    cout << "--trc               TrcFilename      Specify the name of the trc file to be used.\n";
+    cout << "--task-set          TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
+    cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
     cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
     cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
-    cout << "-output             OutputDir        Specify the output directory\n";
+    cout << "--output            OutputDir        Specify the output directory\n";
     cout << "-v                                   Show visualiser\n";
 }
 
 int main(int argc, char* argv[]) {
 
     ProgramOptionsParser po(argc, argv);
-    if (po.exists("-h")) {
+    if (po.exists("-h") || po.empty()) {
         printHelp();
+        exit(EXIT_SUCCESS);
     }
 
     string osimModelFilename;
-    if (po.exists("-model"))
-        osimModelFilename = po.getParameter("-model");
+    if (po.exists("--model"))
+        osimModelFilename = po.getParameter("--model");
     else {
         printHelp();
         exit(EXIT_SUCCESS);
     }
 
     string trcTrialFilename;
-    if (po.exists("-trc"))
-        trcTrialFilename = po.getParameter("-trc");
+    if (po.exists("--trc"))
+        trcTrialFilename = po.getParameter("--trc");
     else {
         printHelp();
         exit(EXIT_SUCCESS);
     }
 
     string ikTaskFilename;
-    if (po.exists("-task-set"))
-        ikTaskFilename = po.getParameter("-task-set");
+    if (po.exists("--task-set"))
+        ikTaskFilename = po.getParameter("--task-set");
     else {
         printHelp();
         exit(EXIT_SUCCESS);
     }
 
     double fc(8);
-    if (po.exists("-fc"))
-        fc = po.getParameter<double>("-fc");
+    if (po.exists("--fc"))
+        fc = po.getParameter<double>("--fc");
     else {
         printHelp();
         exit(EXIT_SUCCESS);

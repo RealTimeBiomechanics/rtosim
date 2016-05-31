@@ -6,9 +6,9 @@
 
 namespace rtosim {
 
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
-
     std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
+
+    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
 }
 
 #endif

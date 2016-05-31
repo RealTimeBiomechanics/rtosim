@@ -35,3 +35,13 @@ target_link_libraries(rtosim_id
 	OutputDevice
     )
     
+    
+add_executable(compareStorageFiles
+    compareStorageFiles.cpp
+    )
+    
+target_link_libraries(compareStorageFiles
+    ${OPENSIM_LIBRARIES}
+    )
+ 
+    

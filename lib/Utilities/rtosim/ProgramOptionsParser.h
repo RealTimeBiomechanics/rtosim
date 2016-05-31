@@ -15,6 +15,7 @@ namespace rtosim {
         template<typename T>
         T getParameter(const std::string& option) const;
         std::string getParameter(const std::string& option) const;
+        bool empty() const { return po_.size() < 2; }
 
     private:
         std::vector<std::string> po_;

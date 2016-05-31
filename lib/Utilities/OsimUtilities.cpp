@@ -11,16 +11,7 @@ namespace rtosim {
          return coordNames;
          }
          */
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename) {
 
-        OpenSim::Model model(modelFilename);
-        size_t nCoord(model.getNumCoordinates());
-        OpenSim::Array<std::string> coordNamesOS;
-        model.getCoordinateSet().getNames(coordNamesOS);
-        std::vector<std::string> coordNames;
-        rtosim::ArrayConverter::toStdVector(coordNamesOS, coordNames);
-        return coordNames;
-    }
     /*
     std::vector<std::string> getMarkerNamesFromModel(std::string modelFilename) {
 
@@ -37,5 +28,15 @@ namespace rtosim {
         model.getMarkerSet().getNames(markerNamesOS);
         rtosim::ArrayConverter::toStdVector(markerNamesOS, markerNames);
         return markerNames;
+    }
+
+    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename) {
+
+        OpenSim::Model model(modelFilename);
+        OpenSim::Array<std::string> coordNamesOS;
+        std::vector<std::string> coordNames;
+        model.getCoordinateSet().getNames(coordNamesOS);
+        rtosim::ArrayConverter::toStdVector(coordNamesOS, coordNames);
+        return coordNames;
     }
 }
