@@ -3,6 +3,15 @@
 
 namespace rtosim {
 
+    MultipleExternalForcesDataFilterStateSpace::
+        MultipleExternalForcesDataFilterStateSpace(
+            double fc, 
+            double forceThreshold, 
+            size_t dimension):
+            dim_(dimension),
+            multipleExternalForcesDataFilters_(dimension, { fc, forceThreshold }) 
+            {}
+
     MultipleExternalForcesFrame MultipleExternalForcesDataFilterStateSpace::filter(const MultipleExternalForcesFrame& frame) {
 
         MultipleExternalForcesFrame ans;

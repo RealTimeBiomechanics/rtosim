@@ -156,12 +156,30 @@ int main(int argc, char* argv[]) {
         doneWithExecution,
         externalLoadsXml);
 
-    std::vector<ExternalForceDataSetup> forceDataSetup{ externalForceDataSetup1, externalForceDataSetup2 };
-    using GrfFilter = QueueAdapter < MultipleExternalForcesQueue, MultipleExternalForcesQueue, MultipleExternalForcesDataFilterStateSpace > ;
+    //corrects the value of the COP when the
+    //foot is not in contact with the force plate
+    AdaptiveCop adaptiveCop(
+        markerSetQueue, 
+        grfQueue,
+        adaptedGrfQueue, 
+        doneWithSubscriptions, 
+        doneWithExecution, 
+        osimModelFilename, 
+        externalLoadsXml 
+        );
+    
+    using GrfFilter = QueueAdapter < 
+        MultipleExternalForcesQueue, 
+        MultipleExternalForcesQueue, 
+        MultipleExternalForcesDataFilterStateSpace > ;
     MultipleExternalForcesDataFilterStateSpace multipleExternalForcesDataFilterStateSpace(fc, 40, 2);
-    GrfFilter grfFilter(adaptedGrfQueue, filteredGrfQueue, doneWithSubscriptions, doneWithExecution, multipleExternalForcesDataFilterStateSpace);
+    GrfFilter grfFilter(
+        adaptedGrfQueue, 
+        filteredGrfQueue, 
+        doneWithSubscriptions, 
+        doneWithExecution, 
+        multipleExternalForcesDataFilterStateSpace);
 
-    AdaptiveCop adaptiveCop(markerSetQueue, grfQueue, adaptedGrfQueue, osimModelFilename, forceDataSetup, doneWithSubscriptions, doneWithExecution);
 
     //read from filteredGeneralisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> filteredIkLogger(

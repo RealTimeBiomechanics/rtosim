@@ -11,5 +11,6 @@
 #include "rtosim/MultipleExternalForcesDataFilterStateSpace.h"
 #include "rtosim/SignalProcessingCommon.h"
 #include "rtosim/QueueAdapter.h"
+#include "rtosim/AdaptiveCop.h"
 
 #endif

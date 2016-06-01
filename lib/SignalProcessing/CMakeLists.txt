@@ -1,5 +1,3 @@
-#Author: Elena Ceseracciu
-
 set(Filter_HEADERS 
     rtosim/Filter/Filter.h
     rtosim/Filter/StateSpaceFilter.h

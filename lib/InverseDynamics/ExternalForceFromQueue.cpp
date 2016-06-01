@@ -1,7 +1,7 @@
 #include "rtosim/ExternalForceFromQueue.h"
 #include "rtosim/queue/SingleExternalForceQueue.h"
 #include "rtosim/EndOfData.h"
-#include <String>
+#include <string>
 using std::string;
 
 namespace rtosim {
