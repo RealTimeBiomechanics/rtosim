@@ -38,6 +38,7 @@
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/ExternalTorquesQueue.h"
 #include "rtosim/ExternalForceProperties.h"
+#include "rtosim/StopWatch.h"
 
 namespace rtosim{
 
@@ -64,12 +65,14 @@ namespace rtosim{
 
         virtual void operator()() override;
         virtual ~QueuesToInverseDynamics() override {}
+        StopWatch getProcessingTimes() const { return stopWatch_; }
 
     private:
         void sendEndOfData();
         GeneralisedCoordinatesQueue& inputGeneralisedCoordinatesQueue_;
         ExternalTorquesQueue& outputExternalTorquesQueue_;
         bool onlyLogSubjectDofs_;
+        StopWatch stopWatch_;
     };
 }
 

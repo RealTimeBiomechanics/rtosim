@@ -46,7 +46,8 @@ namespace rtosim {
         osimModelFilename,
         externalLoadsXmlFilename),
         inputGeneralisedCoordinatesQueue_(inputGeneralisedCoordinatesQueue),
-        outputExternalTorquesQueue_(outputExternalTorquesQueue)
+        outputExternalTorquesQueue_(outputExternalTorquesQueue),
+        stopWatch_("inverse_dynamics")
     { }
 
     QueuesToInverseDynamics::QueuesToInverseDynamics(
@@ -63,7 +64,8 @@ namespace rtosim {
         osimModelFilename,
         externalForceDataProperties),
         inputGeneralisedCoordinatesQueue_(inputGeneralisedCoordinatesQueue),
-        outputExternalTorquesQueue_(outputExternalTorquesQueue)
+        outputExternalTorquesQueue_(outputExternalTorquesQueue),
+        stopWatch_("inverse_dynamics")
     {
     }
 
@@ -74,6 +76,7 @@ namespace rtosim {
         QueueToXForces::doneWithSubscriptions();
 
         bool runCondition(true);
+        
         while (runCondition) {
 
             GeneralisedCoordinatesFrame generalisedCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
@@ -81,6 +84,7 @@ namespace rtosim {
             if (EndOfData::isEod(generalisedCoordinatesFrame))
                 runCondition = false;
             if (runCondition) {
+                stopWatch_.init();
                 QueueToXForces::setState(
                     generalisedCoordinatesFrame.time,
                     generalisedCoordinatesFrame.data.getQ(),
@@ -93,7 +97,9 @@ namespace rtosim {
                 QueueToXForces::getResidualMobilityForces(residualMobilityForces);
                 ExternalTorquesFrame externalTorquesFrame{ generalisedCoordinatesFrame.time, residualMobilityForces };
                 outputExternalTorquesQueue_.push(externalTorquesFrame);
+                stopWatch_.log();
             }
+           
         }
         sendEndOfData();
         QueueToXForces::doneWithExecution();

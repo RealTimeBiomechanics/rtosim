@@ -9,6 +9,7 @@ using std::chrono::duration_cast;
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 namespace rtosim {
 
@@ -36,14 +37,15 @@ namespace rtosim {
         std::clock_t c_newTimePoint(std::clock());
 
         //using system clock
-        auto t_duration(duration_cast<std::chrono::nanoseconds>(t_newTimePoint - t_timePoint_).count());
+        Double t_duration(duration_cast<std::chrono::nanoseconds>(t_newTimePoint - t_timePoint_).count());
         t_timePoint_ = t_newTimePoint;
         t_finalTimePoint_ = t_timePoint_;
-        double t_processingTime(t_duration*1e-9);
+        Double t_processingTime(t_duration);
+        std::cout << t_processingTime << std::endl;
         t_frameProcessingTime_.push_back(t_processingTime);
 
         //using cpu clock
-        double c_duration(static_cast<double>(c_newTimePoint - c_timePoint_) / CLOCKS_PER_SEC);
+        Double c_duration(static_cast<Double>(c_newTimePoint - c_timePoint_) / CLOCKS_PER_SEC);
         c_timePoint_ = c_newTimePoint;
         c_finalTimePoint_ = c_timePoint_;
         c_frameProcessingTime_.push_back(c_duration);
@@ -54,67 +56,86 @@ namespace rtosim {
         return t_frameProcessingTime_.size();
     }
 
-    double StopWatch::getMinProcessingTimeWallClock() const {
+    StopWatch::Double StopWatch::getMinProcessingTimeWallClock() const {
 
         auto it = std::min_element(t_frameProcessingTime_.begin(), t_frameProcessingTime_.end());
         return *it;
     }
 
-    double StopWatch::getMinProcessingTimeCpuClock() const {
+    StopWatch::Double StopWatch::getMinProcessingTimeCpuClock() const {
 
         auto it = std::min_element(c_frameProcessingTime_.begin(), c_frameProcessingTime_.end());
         return *it;
     }
 
-    double StopWatch::getMaxProcessingTimeWallClock() const {
+    StopWatch::Double StopWatch::getMaxProcessingTimeWallClock() const {
 
         auto it = std::max_element(t_frameProcessingTime_.cbegin(), t_frameProcessingTime_.cend());
         return *it;
     }
 
-    double StopWatch::getMaxProcessingTimeCpuClock() const {
+    StopWatch::Double StopWatch::getMaxProcessingTimeCpuClock() const {
 
         auto it = std::max_element(c_frameProcessingTime_.cbegin(), c_frameProcessingTime_.cend());
         return *it;
     }
 
-    double StopWatch::getMeanProcessingTimeWallClock() const {
+    StopWatch::Double StopWatch::getMeanProcessingTimeWallClock() const {
 
         return getMean(t_frameProcessingTime_);
     }
 
-    double StopWatch::getMeanProcessingTimeCpuClock() const {
+    StopWatch::Double StopWatch::getMeanProcessingTimeCpuClock() const {
 
         return getMean(c_frameProcessingTime_);
     }
 
-    double StopWatch::getStdProcessingTimeWallClock() const {
+    StopWatch::Double StopWatch::getStdProcessingTimeWallClock() const {
 
         return  getStd(t_frameProcessingTime_);
     }
 
-    double StopWatch::getStdProcessingTimeCpuClock() const {
+    StopWatch::Double StopWatch::getStdProcessingTimeCpuClock() const {
 
         return  getStd(c_frameProcessingTime_);
     }
 
-    double StopWatch::getTotalProcessingTimeWallClock() const {
 
-        double duration(duration_cast<std::chrono::nanoseconds>(t_finalTimePoint_ - t_initialTimePoint_).count());
+    StopWatch::Double StopWatch::getMedian(const std::list<Double>& l) const {
+
+        std::size_t n(l.size() / 2);
+        std::vector<Double> temp(n);
+        std::partial_sort_copy(l.begin(), std::next(l.begin(), n) ,temp.begin(), temp.end());
+        return temp.at(n-1);
+    }
+
+    StopWatch::Double StopWatch::getMedianProcessingTimeWallClock() const {
+
+        return getMedian(t_frameProcessingTime_);
+    }
+
+    StopWatch::Double StopWatch::getMedianProcessingTimeCpuClock() const {
+
+        return getMedian(c_frameProcessingTime_);
+    }
+
+    StopWatch::Double StopWatch::getTotalProcessingTimeWallClock() const {
+
+        Double duration(duration_cast<std::chrono::nanoseconds>(t_finalTimePoint_ - t_initialTimePoint_).count());
         return duration*1e-9;
     }
 
-    double StopWatch::getTotalProcessingTimeCpuClock() const {
+    StopWatch::Double StopWatch::getTotalProcessingTimeCpuClock() const {
 
-        return static_cast<double>(c_finalTimePoint_ - c_initialTimePoint_) / CLOCKS_PER_SEC;
+        return static_cast<Double>(c_finalTimePoint_ - c_initialTimePoint_) / CLOCKS_PER_SEC;
     }
 
-    double StopWatch::getSumProcessingTimesWallClock() const {
+    StopWatch::Double StopWatch::getSumProcessingTimesWallClock() const {
 
         return getMeanProcessingTimeWallClock()*size();
     }
 
-    double StopWatch::getSumProcessingTimesCpuClock() const {
+    StopWatch::Double StopWatch::getSumProcessingTimesCpuClock() const {
 
         return getMeanProcessingTimeCpuClock()*size();
     }
@@ -150,19 +171,21 @@ namespace rtosim {
         os << fs.name_ << " (thread#" << fs.id_ << ")" << std::endl;
         os << "frames: " << fs.size() << std::endl;
         os << "wall clock time\n";
-        os << "-total: " << fs.getTotalProcessingTimeWallClock() << std::endl;
-        os << "-sum:   " << fs.getSumProcessingTimesWallClock() << std::endl;
-        os << "-mean:  " << fs.getMeanProcessingTimeWallClock() << std::endl;
-        os << "-std:   " << fs.getStdProcessingTimeWallClock() << std::endl;
-        os << "-min:   " << fs.getMinProcessingTimeWallClock() << std::endl;
-        os << "-max:   " << fs.getMaxProcessingTimeWallClock() << std::endl;
+        os << "-total:  " << fs.getTotalProcessingTimeWallClock() << std::endl;
+        os << "-sum:    " << fs.getSumProcessingTimesWallClock() << std::endl;
+        os << "-mean:   " << fs.getMeanProcessingTimeWallClock() << std::endl;
+        os << "-std:    " << fs.getStdProcessingTimeWallClock() << std::endl;
+        os << "-min:    " << fs.getMinProcessingTimeWallClock() << std::endl;
+        os << "-max:    " << fs.getMaxProcessingTimeWallClock() << std::endl;
+        os << "-median: " << fs.getMedianProcessingTimeWallClock() << std::endl;
         os << "cpu clock time\n";
-        os << "-total: " << fs.getTotalProcessingTimeCpuClock() << std::endl;
-        os << "-sum:   " << fs.getSumProcessingTimesCpuClock() << std::endl;
-        os << "-mean:  " << fs.getMeanProcessingTimeCpuClock() << std::endl;
-        os << "-std:   " << fs.getStdProcessingTimeCpuClock() << std::endl;
-        os << "-min:   " << fs.getMinProcessingTimeCpuClock() << std::endl;
-        os << "-max:   " << fs.getMaxProcessingTimeCpuClock() << std::endl;
+        os << "-total:  " << fs.getTotalProcessingTimeCpuClock() << std::endl;
+        os << "-sum:    " << fs.getSumProcessingTimesCpuClock() << std::endl;
+        os << "-mean:   " << fs.getMeanProcessingTimeCpuClock() << std::endl;
+        os << "-std:    " << fs.getStdProcessingTimeCpuClock() << std::endl;
+        os << "-min:    " << fs.getMinProcessingTimeCpuClock() << std::endl;
+        os << "-max:    " << fs.getMaxProcessingTimeCpuClock() << std::endl;
+        os << "-median: " << fs.getMedianProcessingTimeCpuClock() << std::endl;
 
         return os;
     }

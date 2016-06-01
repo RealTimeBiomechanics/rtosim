@@ -27,11 +27,11 @@ void printHelp() {
     cout << "Option              Argument         Action / Notes\n";
     cout << "------              --------         --------------\n";
     cout << "-h                                   Print the command-line options for " << filename << ".\n";
-    cout << "--model              ModelFilename    Specify the name of the osim model file for the investigation.\n";
-    cout << "--mot                MotFilename      Specify the name of the mot file containing the results of IK.\n";
-    cout << "--ext-loads          LoadsFilename    Specify the name of the XML ExternalLoads file.\n";
-    cout << "--fc                 CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
-    cout << "--output             OutputDir        Specify the output directory\n";
+    cout << "--model             ModelFilename    Specify the name of the osim model file for the investigation.\n";
+    cout << "--mot               MotFilename      Specify the name of the mot file containing the results of IK.\n";
+    cout << "--ext-loads         LoadsFilename    Specify the name of the XML ExternalLoads file.\n";
+    cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
+    cout << "--output            OutputDir        Specify the output directory\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -125,11 +125,12 @@ int main(int argc, char* argv[]) {
         grfProducer,
         ikProducer,
         inverseDynamicsFromQueue,
-        inverseDynamicsFileLogger,
-        idFrameCounter
+        inverseDynamicsFileLogger
+        //  idFrameCounter
         );
 
-    idFrameCounter.getProcessingTimes().print(stopWatchResultDir);
+    inverseDynamicsFromQueue.getProcessingTimes().print(stopWatchResultDir);
+   // idFrameCounter.getProcessingTimes().print(stopWatchResultDir);
 
     return 0;
 }
