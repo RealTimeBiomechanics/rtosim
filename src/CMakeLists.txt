@@ -1,54 +1,54 @@
 include_directories(
     ${OPENSIM_INCLUDE_DIRS}
     ${SIMTK_INCLUDE_DIRS}
-	${rtosim_INCLUDE_DIRS}
+    ${rtosim_INCLUDE_DIRS}
 )
     
-add_executable(rtosim_ik 
-    mainInverseKinematics.cpp
+add_executable(rtosim_ik_from_file 
+    mainInverseKinematicsFromFile.cpp
     )
 
-target_link_libraries(rtosim_ik
+target_link_libraries(rtosim_ik_from_file 
     ${OPENSIM_LIBRARIES}
     Common
     Utilities
     Concurrency
     InputDevice
     InverseKinematics
-	SignalProcessing
+    SignalProcessing
     OutputDevice
     )
     
 
-add_executable(rtosim_id 
-    mainInverseDynamics.cpp
+add_executable(rtosim_id_from_file 
+    mainInverseDynamicsfromFile.cpp
     )
 
-target_link_libraries(rtosim_id
+target_link_libraries(rtosim_id_from_file 
     ${OPENSIM_LIBRARIES}
     Common
     Utilities
     Concurrency
     InputDevice
-	SignalProcessing
-	InverseDynamics
-	OutputDevice
+    SignalProcessing
+    InverseDynamics
+    OutputDevice
     )
     
- add_executable(rtosim_ik_id 
-    mainInverseKinameticsInverseDynamics.cpp
+ add_executable(rtosim_ik_id_from_file 
+    mainInverseKinameticsInverseDynamicsFromFile.cpp
     )
 
-target_link_libraries(rtosim_ik_id
+target_link_libraries(rtosim_ik_id_from_file 
     ${OPENSIM_LIBRARIES}
     Common
     Utilities
     Concurrency
     InputDevice
-	SignalProcessing
+    SignalProcessing
     InverseKinematics
-	InverseDynamics
-	OutputDevice
+    InverseDynamics
+    OutputDevice
     )   
     
     
