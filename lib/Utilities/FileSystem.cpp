@@ -7,7 +7,7 @@
 #include <direct.h>
 #define CREATE_DIR(path)  _mkdir(path)
 #else
-#define CREATE_DIR(path)  mkdir(#path, 0755)
+#define CREATE_DIR(path)  mkdir(path, 0755)
 #endif
 
 namespace rtosim {
@@ -19,7 +19,7 @@ namespace rtosim {
             auto fullPath(SimTK::Pathname::getAbsoluteDirectoryPathname(path));
             int err = CREATE_DIR(fullPath.c_str());
             //if err is 0, the directory was successfully created
-            return err == 0;
+            return err;
         }
 
         bool directoryExists(const std::string& path) {

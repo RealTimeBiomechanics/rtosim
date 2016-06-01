@@ -40,8 +40,7 @@ namespace rtosim {
         Double t_duration(duration_cast<std::chrono::nanoseconds>(t_newTimePoint - t_timePoint_).count());
         t_timePoint_ = t_newTimePoint;
         t_finalTimePoint_ = t_timePoint_;
-        Double t_processingTime(t_duration);
-        std::cout << t_processingTime << std::endl;
+        Double t_processingTime(t_duration*1e-9);
         t_frameProcessingTime_.push_back(t_processingTime);
 
         //using cpu clock
@@ -104,8 +103,8 @@ namespace rtosim {
     StopWatch::Double StopWatch::getMedian(const std::list<Double>& l) const {
 
         std::size_t n(l.size() / 2);
-        std::vector<Double> temp(n);
-        std::partial_sort_copy(l.begin(), std::next(l.begin(), n) ,temp.begin(), temp.end());
+        std::vector<Double> temp(l.begin(), l.end());
+        std::nth_element(temp.begin(), std::next(temp.begin(), n), temp.end());
         return temp.at(n-1);
     }
 
@@ -167,7 +166,9 @@ namespace rtosim {
     }
 
     std::ostream& operator <<(std::ostream& os, const StopWatch& fs) {
-
+        #ifdef _WIN32
+        os << "WARNING: times may be wrong on Windows" << std::endl;
+        #endif
         os << fs.name_ << " (thread#" << fs.id_ << ")" << std::endl;
         os << "frames: " << fs.size() << std::endl;
         os << "wall clock time\n";
