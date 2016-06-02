@@ -1,5 +1,5 @@
 set(InputDevice_SOURCES 
-#    DataFromNexus.cpp 
+    DataFromNexus.cpp 
     MarkersFromTrc.cpp
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
@@ -8,7 +8,7 @@ set(InputDevice_SOURCES
     )
 
 set(InputDevice_HEADERS 
- #   vosl/DataFromNexus.h 
+    rtosim/DataFromNexus.h 
     rtosim/MarkersFromTrc.h
 	rtosim/InputDevice.h
 	rtosim/ExternalForcesFromX.h
@@ -19,7 +19,7 @@ set(InputDevice_HEADERS
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
-#link_directories(${ViconSDK_LINK_DIR})
+
 # Define target
 add_library(InputDevice STATIC
     ${InputDevice_SOURCES}
@@ -27,20 +27,16 @@ add_library(InputDevice STATIC
 )
 
 target_include_directories(InputDevice PRIVATE
-                                 ${rtosim_Concurrency_INCLUDE_DIRS}
-								 ${rtosim_Common_INCLUDE_DIRS}
-								 ${rtosim_Utilities_INCLUDE_DIRS}
-								
-                                 # ${CEINMS_INCLUDE_DIRS}
-								  #${SharedData_INCLUDE_DIRS}
-                                  
-                                  ${CMAKE_CURRENT_SOURCE_DIR}
-                                  PUBLIC
-                                  ${SIMTK_INCLUDE_DIRS}
-                                 # ${ViconSDK_INCLUDE_DIR}
-                                  ${OPENSIM_INCLUDE_DIRS}
+                                ${rtosim_Concurrency_INCLUDE_DIRS}
+								${rtosim_Common_INCLUDE_DIRS}
+								${rtosim_Utilities_INCLUDE_DIRS} 
+                                ${CMAKE_CURRENT_SOURCE_DIR}
+								PUBLIC
+								${SIMTK_INCLUDE_DIRS}
+								${ViconSDK_INCLUDE_DIRS}
+								${OPENSIM_INCLUDE_DIRS}
 )
-TARGET_LINK_LIBRARIES(InputDevice Common Utilities)#SharedData ${ViconSDK_LIBRARIES})
+TARGET_LINK_LIBRARIES(InputDevice Common Utilities ${ViconSDK_LIBRARIES})
 # Save path to include directory for "internal" usage
 set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
