@@ -180,9 +180,19 @@ int main(int argc, char* argv[]) {
         doneWithExecution, 
         multipleExternalForcesDataFilterStateSpace);
 
+    //read the filtered coordinates from IK and the filtered GRF,
+    //calculated the ID and write the results in jointMomentQueue
+    QueuesToInverseDynamics queueToInverseDynamics(
+        filteredGeneralisedCoordinatesQueue,
+        filteredGrfQueue,
+        jointMomentsQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        osimModelFilename,
+        externalLoadsXml);
 
     //read from filteredGeneralisedCoordinatesQueue and save to file
-    rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> filteredIkLogger(
+    rtosim::QueueToFileLogger<GeneralisedCoordinatesData> filteredIkLogger(
         filteredGeneralisedCoordinatesQueue,
         doneWithSubscriptions,
         doneWithExecution,
@@ -190,57 +200,74 @@ int main(int argc, char* argv[]) {
         resultDir, "filtered_ik_from_file", "sto");
 
     //read from generalisedCoordinatesQueue and save to file
-    rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> rawIkLogger(
+    rtosim::QueueToFileLogger<GeneralisedCoordinatesData> rawIkLogger(
         generalisedCoordinatesQueue,
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
         resultDir, "raw_ik_from_file", "sto");
 
-    //read the frames from generalisedCoordinatesQueue and calculates some stats
-    rtosim::FrameCounter<rtosim::GeneralisedCoordinatesQueue> ikFrameCounter(
-        generalisedCoordinatesQueue,
-        "raw_ik_from_file_timer");
+    //read from generalisedCoordinatesQueue and save to file
+    rtosim::QueueToFileLogger<ExternalTorquesData> idLogger(
+        jointMomentsQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        getCoordinateNamesFromModel(osimModelFilename),
+        resultDir, "id_from_file", "sto");
 
-    doneWithSubscriptions.setCount(5);
-    doneWithExecution.setCount(5);
+    //read the frames from generalisedCoordinatesQueue and calculates some stats
+    rtosim::FrameCounter<GeneralisedCoordinatesQueue> ikFrameCounter(
+        generalisedCoordinatesQueue,
+        "raw_ik_from_file_frame_counter");
+
+    doneWithSubscriptions.setCount(10);
+    doneWithExecution.setCount(10);
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
     if (showVisualiser) {
-        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);
-        rtosim::QueuesSync::launchThreads(
+        StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);
+        QueuesSync::launchThreads(
             markersFromTrc,
             inverseKinematics,
             gcQueueAdaptor,
+            grfProducer,
+            adaptiveCop,
+            grfFilter,
+            queueToInverseDynamics,
             filteredIkLogger,
             rawIkLogger,
+            idLogger,
             ikFrameCounter,
             visualiser
             );
     }
     else {
-        rtosim::QueuesSync::launchThreads(
+        QueuesSync::launchThreads(
             markersFromTrc,
             inverseKinematics,
             gcQueueAdaptor,
+            grfProducer,
+            adaptiveCop,
+            grfFilter,
+            queueToInverseDynamics,
             filteredIkLogger,
             rawIkLogger,
+            idLogger,
             ikFrameCounter
             );
     }
     //multithreaded part is over, all threads are joined
 
-    //get execution time info from IK
+    //get execution time infos
     auto stopWatches = inverseKinematics.getProcessingTimes();
 
-    rtosim::StopWatch combinedSW("Combined_IK_solvers");
+    rtosim::StopWatch combinedSW("Combined_IK_solvers_stopwatch");
     for (auto& s : stopWatches)
         combinedSW += s;
-    cout << combinedSW << endl;
-    rtosim::StopWatch ikOutputStopWatch = ikFrameCounter.getProcessingTimes();
-    cout << ikOutputStopWatch;
 
     combinedSW.print(stopWatchResultDir);
-    ikOutputStopWatch.print(stopWatchResultDir);
+    ikFrameCounter.getProcessingTimes().print(stopWatchResultDir);
+    queueToInverseDynamics.getProcessingTimes().print(stopWatchResultDir);
+    return 0;
 }
