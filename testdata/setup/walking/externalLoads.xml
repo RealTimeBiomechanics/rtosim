@@ -1,0 +1,40 @@
+<OpenSimDocument Version="30000">
+	<ExternalLoads name="Ex2">
+		<objects>
+			<ExternalForce name="left1">
+				
+				<applied_to_body>calcn_l</applied_to_body>
+				
+				<force_expressed_in_body>ground</force_expressed_in_body>
+				
+				<point_expressed_in_body>ground</point_expressed_in_body>
+				
+				<force_identifier>ground_force1_v</force_identifier>
+				
+				<point_identifier>ground_force1_p</point_identifier>
+				
+				<torque_identifier>ground_torque1_</torque_identifier>
+			</ExternalForce>
+			<ExternalForce name="right2">
+				
+				<applied_to_body>calcn_r</applied_to_body>
+				
+				<force_expressed_in_body>ground</force_expressed_in_body>
+				
+				<point_expressed_in_body>ground</point_expressed_in_body>
+				
+				<force_identifier>ground_force2_v</force_identifier>
+				
+				<point_identifier>ground_force2_p</point_identifier>
+				
+				<torque_identifier>ground_torque2_</torque_identifier>
+			</ExternalForce>
+		</objects>
+		
+		<datafile>../../unfilteredRawData/walking/walking.mot</datafile>
+		
+		<external_loads_model_kinematics_file>../../output_osim/walking/inverseKinematics/walking_ik.mot</external_loads_model_kinematics_file>
+		
+		<lowpass_cutoff_frequency_for_load_kinematics>8</lowpass_cutoff_frequency_for_load_kinematics>
+	</ExternalLoads>
+</OpenSimDocument>
