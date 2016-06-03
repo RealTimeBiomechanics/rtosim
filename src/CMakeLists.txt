@@ -36,7 +36,7 @@ target_link_libraries(rtosim_id_from_file
     )
     
  add_executable(rtosim_ik_id_from_file 
-    mainInverseKinameticsInverseDynamicsFromFile.cpp
+    mainInverseKinematicsInverseDynamicsFromFile.cpp
     )
 
 target_link_libraries(rtosim_ik_id_from_file 

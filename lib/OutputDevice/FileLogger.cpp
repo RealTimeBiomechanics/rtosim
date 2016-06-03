@@ -105,10 +105,9 @@ namespace rtosim {
 
         bool success(true);
         if (!FileSystem::directoryExists(outputDir_))
-            success = FileSystem::createDirectory(outputDir_);
+            success = !FileSystem::createDirectory(outputDir_);
         if (!success) {
             std::cout << "Cannot create output directory: " + outputDir_ << std::endl;
-            exit(EXIT_FAILURE);
         }
 
         std::string outFilename = FileSystem::concatenatePaths(outputDir_, filename_);

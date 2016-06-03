@@ -72,10 +72,6 @@ int main(int argc, char* argv[]) {
     double fc(8);
     if (po.exists("--fc"))
         fc = po.getParameter<double>("--fc");
-    else {
-        printHelp();
-        exit(EXIT_SUCCESS);
-    }
 
     unsigned nThreads(1);
     if (po.exists("-j"))
@@ -86,12 +82,14 @@ int main(int argc, char* argv[]) {
         nThreads = po.getParameter<double>("-a");
 
     string resultDir("Output");
-    if (po.exists("-output"))
-        resultDir = po.getParameter("-output");
+    if (po.exists("--output"))
+        resultDir = po.getParameter("--output");
 
     bool showVisualiser(false);
     if (po.exists("-v"))
         showVisualiser = true;
+
+    rtosim::FileSystem::createDirectory(resultDir);
 
     string stopWatchResultDir(resultDir);
 
