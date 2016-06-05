@@ -115,7 +115,7 @@ namespace rtosim {
         outFile_.reset(new std::ofstream(outFilename.c_str()));
 
         if (!(outFile_->is_open()))  {
-            std::cout << "ERROR: " + filename_ + " cannot be opened!\n";
+            std::cout << "ERROR: " + outFilename + " cannot be opened!\n";
             success = false;
         }
         return success;

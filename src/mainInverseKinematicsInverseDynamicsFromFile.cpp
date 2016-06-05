@@ -95,8 +95,8 @@ int main(int argc, char* argv[]) {
         nThreads = po.getParameter<double>("-a");
 
     string resultDir("Output");
-    if (po.exists("-output"))
-        resultDir = po.getParameter("-output");
+    if (po.exists("--output"))
+        resultDir = po.getParameter("--output");
 
     bool showVisualiser(false);
     if (po.exists("-v"))

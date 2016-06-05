@@ -50,7 +50,7 @@ namespace rtosim {
         FileLogger(
             const std::vector<std::string>& columnLabels,
             const std::string& filename,
-            const std::string& outputDir = "./Output/",
+            const std::string& outputDir,
             const std::string& separator = "\t"
             );
         void logFrame(const FrameType& frame);
