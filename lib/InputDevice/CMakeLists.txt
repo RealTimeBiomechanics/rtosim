@@ -10,8 +10,8 @@ set(InputDevice_SOURCES
 set(InputDevice_HEADERS 
     rtosim/DataFromNexus.h 
     rtosim/MarkersFromTrc.h
-	rtosim/InputDevice.h
-	rtosim/ExternalForcesFromX.h
+    rtosim/InputDevice.h
+    rtosim/ExternalForcesFromX.h
     rtosim/ExternalForcesFromStorageFile.h
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
