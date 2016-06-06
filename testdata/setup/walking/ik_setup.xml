@@ -327,7 +327,7 @@
 			</objects>
 			<groups />
 		</IKTaskSet>
-		<marker_file>../../unfilteredRawData/walking/walking.trc</marker_file>
+		<marker_file>../../filteredData8Hz/walking/walking.trc</marker_file>
 		
 		<coordinate_file>Unassigned</coordinate_file>
 		

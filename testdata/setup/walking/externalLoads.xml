@@ -31,7 +31,7 @@
 			</ExternalForce>
 		</objects>
 		
-		<datafile>../../unfilteredRawData/walking/walking.mot</datafile>
+		<datafile>../../filteredData8Hz/walking/walking.mot</datafile>
 		
 		<external_loads_model_kinematics_file>../../output_osim/walking/inverseKinematics/walking_ik.mot</external_loads_model_kinematics_file>
 		
