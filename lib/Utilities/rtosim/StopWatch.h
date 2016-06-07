@@ -34,6 +34,7 @@ namespace rtosim {
         Double getMeanProcessingTimeWallClock() const;
         Double getStdProcessingTimeWallClock() const;
         Double getMedianProcessingTimeWallClock() const;
+        std::list<Double> getAllProcessingTimeWallClock() const;
 
         Double getMinProcessingTimeCpuClock() const;
         Double getMaxProcessingTimeCpuClock() const;
@@ -42,13 +43,14 @@ namespace rtosim {
         Double getMeanProcessingTimeCpuClock() const;
         Double getStdProcessingTimeCpuClock() const;
         Double getMedianProcessingTimeCpuClock() const;
+        std::list<Double> getAllProcessingTimeCpuClock() const;
 
         friend std::ostream& operator <<(std::ostream& os, const StopWatch& fs);
         StopWatch& operator+=(const StopWatch& rhs);
         void print(const std::string& outputDir);
 
     private:
-        Double getMedian(const std::list<Double>& v) const;
+        Double getMedian(const std::list<Double>& v) const; //move it as free function
         std::chrono::system_clock::time_point t_timePoint_, t_initialTimePoint_, t_finalTimePoint_;
         std::list<Double> t_frameProcessingTime_;
 

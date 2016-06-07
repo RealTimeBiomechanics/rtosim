@@ -17,7 +17,7 @@ set(Utilities_SOURCES
     OsimUtilities.cpp
     )
 
-set(Utilities_TEMPLATE_IMPLEMENTATION	)
+set(Utilities_TEMPLATE_IMPLEMENTATION)
 
 
 set_source_files_properties( ${Utilities_TEMPLATE_IMPLEMENTATION} PROPERTIES HEADER_FILE_ONLY TRUE)

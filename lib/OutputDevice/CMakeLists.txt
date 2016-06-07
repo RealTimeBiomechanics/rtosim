@@ -8,12 +8,14 @@ set(OutputDevice_HEADERS
     rtosim/FileLogger.h
     rtosim/FrameCounter.h
 	rtosim/StateVisualiser.h
+    rtosim/TimeProbe.h
 )
 
 set(OutputDevice_TEMPLATE_IMPLEMENTATIONS 
     FileLogger.cpp
 	QueueToFileLogger.cpp
     FrameCounter.cpp
+    TimeProbe.cpp
 )    
     
 set_source_files_properties(${OutputDevice_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)
@@ -39,7 +41,7 @@ target_include_directories(
         ${OPENSIM_INCLUDE_DIRS}
 )
 
-TARGET_LINK_LIBRARIES(OutputDevice )#SharedData ${ViconSDK_LIBRARIES})
+TARGET_LINK_LIBRARIES(OutputDevice Common)#SharedData ${ViconSDK_LIBRARIES})
 # Save path to include directory for "internal" usage
 set(rtosim_OutputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for OutputDevice library")
 # Install
