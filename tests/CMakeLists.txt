@@ -7,6 +7,7 @@ include_directories(
     ${rtosim_SignalProcessing_INCLUDE_DIRS}
 	${rtosim_InputDevice_INCLUDE_DIRS}
 	${rtosim_OutputDevice_INCLUDE_DIRS}
+	${rtosim_INCLUDE_DIRS}
     )
     
 
@@ -59,3 +60,27 @@ target_link_libraries(TestInputDevice
     ${OPENSIM_LIBRARIES}
     ${SIMTK_LIBRARIES}
     )
+    
+add_executable(TestTimeDifference
+    testTimeDifference.cpp)
+    
+target_link_libraries(TestTimeDifference
+	InputDevice
+	OutputDevice
+	Common
+	Concurrency
+	${OPENSIM_LIBRARIES}
+    ${SIMTK_LIBRARIES}
+    )
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+ 
