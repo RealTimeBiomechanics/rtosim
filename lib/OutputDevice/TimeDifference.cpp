@@ -221,15 +221,8 @@ namespace rtosim {
 
         queue_.subscribe();
         barrier_.wait();
-        auto frame(queue_.pop());
+        initialise(); //reset the initial time point
         bool runCondition(true);
-        if (!EndOfData::isEod(frame)) {
-            initialise(); //reset the initial time point
-            logCurrentTime(frame.time); //don't miss the first point
-        }
-        else
-            runCondition = false;
-
         while (runCondition) {
             auto frame(queue_.pop());
             if (!EndOfData::isEod(frame))
