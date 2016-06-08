@@ -9,6 +9,7 @@ using std::chrono::duration_cast;
 #include <iterator>
 #include <list>
 #include <stdexcept>
+#include <fstream>
 
 namespace rtosim {
 
@@ -56,22 +57,37 @@ namespace rtosim {
     }
 
     template<typename T>
+    std::size_t TimeData<T>::size() const {
+
+        return data_.size();
+    }
+
+    template<typename T>
     std::ostream& operator<<(std::ostream& os, const TimeData<T>& rhs) {
 
+        
+        os << "size:   " << rhs.size() << std::endl;
         os << "mean:   " << rhs.getMean() << std::endl;
         os << "std:    " << rhs.getStd() << std::endl;
         os << "median: " << rhs.getMedian() << std::endl;
         os << "min:    " << rhs.getMin() << std::endl;
         os << "max:    " << rhs.getMax() << std::endl;
- 
         
+        /*
         os << "Key\t\tTime" << std::endl;
         for (auto& e : rhs.data_)
             os << std::get<0>(e) << "\t" << std::get<1>(e) << std::endl;
-            
+          */  
         return os;
     }
 
+    template<typename T>
+    void TimeData<T>::print(const std::string& filename) const {
+
+        std::ofstream outF(filename);
+        if (outF.is_open())
+            outF << *this;
+    }
 
     template<typename T>
     void TimeData<T>::setTime(const T& key, double time) {
@@ -155,8 +171,9 @@ namespace rtosim {
 
 
     template<typename Q>
-    TimeProbe<Q>::TimeProbe(Q& queue) :
-        queue_(queue) {
+    TimeProbe<Q>::TimeProbe(Q& queue, Concurrency::Latch& barrier) :
+        queue_(queue),
+        barrier_(barrier){
     
         initialise();
     }
@@ -203,6 +220,7 @@ namespace rtosim {
     void TimeProbe<Q>::operator()() {
 
         queue_.subscribe();
+        barrier_.wait();
         auto frame(queue_.pop());
         bool runCondition(true);
         if (!EndOfData::isEod(frame)) {
@@ -224,23 +242,35 @@ namespace rtosim {
 
 
     template<typename Qin, typename Qout>
-    TimeDifference<Qin, Qout>::TimeDifference(Qin& queueIn, Qout& queueOut) :
+    TimeDifference<Qin, Qout>::TimeDifference(
+        Qin& queueIn,
+        Qout& queueOut,
+        Concurrency::Latch& doneWithSubscriptions,
+        Concurrency::Latch& doneWithExecutions) :
         queueIn_(queueIn),
-        queueOut_(queueOut) {
+        queueOut_(queueOut),
+        doneWithSubscriptions_(doneWithSubscriptions),
+        doneWithExecutions_(doneWithExecutions)
+        {
     }
 
 
     template<typename Qin, typename Qout>
     void TimeDifference<Qin, Qout>::operator()() {
 
-        TimeProbe<Qin> pIn(queueIn_);
-        TimeProbe<Qout>  pOut(queueOut_);
+        Concurrency::Latch internalLatch(3);
 
-        QueuesSync::launchThreads(pIn, pOut);
-        
+        TimeProbe<Qin> pIn(queueIn_, internalLatch);
+        TimeProbe<Qout>  pOut(queueOut_, internalLatch);
+        std::thread thrIn(std::ref(pIn));
+        std::thread thrOut(std::ref(pOut));
+        internalLatch.wait();
+        doneWithSubscriptions_.wait();
+        thrIn.join(); thrOut.join();
+        doneWithExecutions_.wait();
+     
         wallClockDifference_ = pOut.getWallClockTimes() - pIn.getWallClockTimes();
         cpuClockDifference_ = pOut.getCpuClockTimes() - pIn.getCpuClockTimes();
-
      }
 
 

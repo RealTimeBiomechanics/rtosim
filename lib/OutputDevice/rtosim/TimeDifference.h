@@ -39,6 +39,7 @@ namespace rtosim {
     public:
         TimeData();
         void setTime(const T& key, double measuredTime);
+        std::size_t size() const;
         std::vector<double> getTimes() const;
         std::vector<T> getKeys() const;
         double getTime(const T& key) const;
@@ -49,6 +50,7 @@ namespace rtosim {
         double getMax() const;
         TimeData<T>& operator-=(const TimeData<T>& rhs);
         friend std::ostream& operator << <>(std::ostream& os, const TimeData<T>& fs);
+        void print(const std::string& filename) const;
     private:
 
         using TimeDataValues = std::vector < std::tuple<T, double>>;
@@ -58,7 +60,7 @@ namespace rtosim {
     template<typename Q>
     class TimeProbe {
     public:
-        TimeProbe(Q& queue);
+        TimeProbe(Q& queue, Concurrency::Latch& barrier);
         void operator()();
         TimeData<double> getWallClockTimes() const;
         TimeData<double> getCpuClockTimes() const;
@@ -74,6 +76,8 @@ namespace rtosim {
 
         std::clock_t c_initialTimePoint_;
         TimeData<double> c_frameProcessingTimes_;
+        Concurrency::Latch& barrier_;
+
 
     };
 
@@ -82,7 +86,11 @@ namespace rtosim {
     public:
         TimeDifference() = delete;
         TimeDifference(const TimeDifference<Qin, Qout>&) = delete;
-        TimeDifference(Qin& queueIn, Qout& queueOut);
+        TimeDifference(
+            Qin& queueIn, 
+            Qout& queueOut, 
+            Concurrency::Latch& doneWithSubscriptions, 
+            Concurrency::Latch& doneWithExecutions);
         void operator()();
         TimeData<double> getWallClockDifference() const;
         TimeData<double> getCpuClockDifference() const;
@@ -90,6 +98,8 @@ namespace rtosim {
     private:
         Qin& queueIn_;
         Qout& queueOut_;
+        Concurrency::Latch& doneWithSubscriptions_;
+        Concurrency::Latch& doneWithExecutions_;
         TimeData<double> wallClockDifference_, cpuClockDifference_;
     };
 

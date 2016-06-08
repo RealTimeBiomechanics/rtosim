@@ -19,11 +19,11 @@ struct Delay {
 
 int main() {
 
-    rtosim::Concurrency::Latch l1(2), l2(2);
+    rtosim::Concurrency::Latch l1(3), l2(3);
     ScalarVectorQueue q1, q2;
     Delay introduceDelay;
     QueueAdapter<ScalarVectorQueue, ScalarVectorQueue, Delay> delayer(q1, q2, l1, l2, introduceDelay);
-    TimeDifference<ScalarVectorQueue, ScalarVectorQueue> timeDifference(q1, q2);
+    TimeDifference<ScalarVectorQueue, ScalarVectorQueue> timeDifference(q1, q2, l1, l2);
 
     auto dataPush([&](){  
         l1.wait();
@@ -35,8 +35,9 @@ int main() {
     });
 
     QueuesSync::launchThreads(delayer, timeDifference, dataPush);
-    auto wallClock(timeDifference.getWallClockDifference());
+    auto wallClock(timeDifference.getWallClockDifference()); 
     std::cout << wallClock;
+    wallClock.print("timeDifference.txt");
     return 0;
     
 }
