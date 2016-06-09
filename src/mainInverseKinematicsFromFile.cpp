@@ -33,8 +33,9 @@ void printHelp() {
     cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
     cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
     cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
-    cout << "--output            OutputDir        Specify the output directory\n";
-    cout << "-v                                   Show visualiser\n";
+    cout << "--output            OutputDir        Specify the output directory.\n";
+    cout << "--push-frequency    PushFrequency    Specify the frequency to which the trajectories are read from the storage file.\n";
+    cout << "-v                                   Show visualiser.\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -85,12 +86,16 @@ int main(int argc, char* argv[]) {
     if (po.exists("--output"))
         resultDir = po.getParameter("--output");
 
+    double pushFrequency(-1);
+    if (po.exists("--push-frequency"))
+        pushFrequency = po.getParameter<double>("--push-frequency");
+
     bool showVisualiser(false);
     if (po.exists("-v"))
         showVisualiser = true;
 
+    resultDir = rtosim::FileSystem::getAbsolutePath(resultDir);
     rtosim::FileSystem::createDirectory(resultDir);
-
     string stopWatchResultDir(resultDir);
 
     //define the shared buffer
@@ -114,6 +119,8 @@ int main(int argc, char* argv[]) {
         osimModelFilename,
         trcTrialFilename,
         false);
+
+    markersFromTrc.setOutputFrequency(pushFrequency);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
     rtosim::QueueToInverseKinametics inverseKinematics(
@@ -153,13 +160,30 @@ int main(int argc, char* argv[]) {
         getCoordinateNamesFromModel(osimModelFilename),
         resultDir, "raw_ik_from_file", "sto");
 
-    //read the frames from generalisedCoordinatesQueue and calculates some stats
+    //calculate the ik throughput time
     rtosim::FrameCounter<rtosim::GeneralisedCoordinatesQueue> ikFrameCounter(
         generalisedCoordinatesQueue,
-        "raw_ik_from_file_timer");
+        "time-ik-throughput");
 
-    doneWithSubscriptions.setCount(5);
-    doneWithExecution.setCount(5);
+    //measures the time that takes every single frame to appear in two different queues
+    rtosim::TimeDifference<
+        rtosim::GeneralisedCoordinatesQueue,
+        rtosim::GeneralisedCoordinatesQueue> gcQueueAdaptorTimeDifference(
+        generalisedCoordinatesQueue,
+        filteredGeneralisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+    rtosim::TimeDifference<
+        rtosim::MarkerSetQueue,
+        rtosim::GeneralisedCoordinatesQueue> ikTimeDifference(
+        markerSetQueue,
+        generalisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+    doneWithSubscriptions.setCount(7);
+    doneWithExecution.setCount(7);
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
@@ -170,6 +194,8 @@ int main(int argc, char* argv[]) {
             inverseKinematics,
             gcQueueAdaptor,
             filteredIkLogger,
+            gcQueueAdaptorTimeDifference,
+            ikTimeDifference,
             rawIkLogger,
             ikFrameCounter,
             visualiser
@@ -181,22 +207,21 @@ int main(int argc, char* argv[]) {
             inverseKinematics,
             gcQueueAdaptor,
             filteredIkLogger,
+            gcQueueAdaptorTimeDifference,
+            ikTimeDifference,
             rawIkLogger,
             ikFrameCounter
             );
     }
     //multithreaded part is over, all threads are joined
 
-    //get execution time info from IK
     auto stopWatches = inverseKinematics.getProcessingTimes();
-
-    rtosim::StopWatch combinedSW("Combined_IK_solvers");
+    rtosim::StopWatch combinedSW("time-ikparallel-processing");
     for (auto& s : stopWatches)
         combinedSW += s;
-    cout << combinedSW << endl;
-    rtosim::StopWatch ikOutputStopWatch = ikFrameCounter.getProcessingTimes();
-    cout << ikOutputStopWatch;
-
     combinedSW.print(stopWatchResultDir);
-    ikOutputStopWatch.print(stopWatchResultDir);
+    ikFrameCounter.getProcessingTimes().print(stopWatchResultDir);
+    ikTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markerqueue-to-jointangles.txt");
+    gcQueueAdaptorTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-jointangles-to-filteredjointangles.txt");
+    return 0;
 }

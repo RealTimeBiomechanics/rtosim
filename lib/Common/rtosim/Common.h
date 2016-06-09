@@ -13,5 +13,6 @@
 #include "rtosim/ExternalForceData.h"
 #include "rtosim/ExternalForceProperties.h"
 #include "rtosim/ExternalLoadProperties.h"
+#include "rtosim/TimeDifference.h"
 
 #endif

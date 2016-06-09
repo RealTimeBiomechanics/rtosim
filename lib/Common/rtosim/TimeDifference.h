@@ -1,6 +1,7 @@
 #ifndef rtosim_TimeProbe_h
 #define rtosim_TimeProbe_h
 
+#include "rtosim/concurrency/Latch.h"
 #include <ctime>
 #include <chrono>
 #include <list>

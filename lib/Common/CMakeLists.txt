@@ -10,6 +10,7 @@ set(Common_HEADERS
     rtosim/ExternalForceData.h
     rtosim/ExternalLoadProperties.h
     rtosim/ExternalForceProperties.h
+    rtosim/TimeDifference.h
     )
 
 set(Common_QUEUES_HEADERS 
@@ -30,7 +31,8 @@ set(Common_SOURCES
     ExternalForceProperties.cpp
     )
 
-set(Common_TEMPLATE_IMPLEMENTATION	)
+set(Common_TEMPLATE_IMPLEMENTATION	
+    TimeDifference.cpp)
 
 
 set_source_files_properties( ${Common_TEMPLATE_IMPLEMENTATION} PROPERTIES HEADER_FILE_ONLY TRUE)

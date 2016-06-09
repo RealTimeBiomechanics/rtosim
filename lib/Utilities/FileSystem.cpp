@@ -22,6 +22,11 @@ namespace rtosim {
             return err;
         }
 
+        std::string getAbsolutePath(const std::string& path) {
+
+            return SimTK::Pathname::getAbsolutePathname(path);
+        }
+
         bool directoryExists(const std::string& path) {
 
             struct stat info;

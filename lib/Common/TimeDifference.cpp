@@ -66,12 +66,12 @@ namespace rtosim {
     std::ostream& operator<<(std::ostream& os, const TimeData<T>& rhs) {
 
         
-        os << "size:   " << rhs.size() << std::endl;
-        os << "mean:   " << rhs.getMean() << std::endl;
-        os << "std:    " << rhs.getStd() << std::endl;
-        os << "median: " << rhs.getMedian() << std::endl;
-        os << "min:    " << rhs.getMin() << std::endl;
-        os << "max:    " << rhs.getMax() << std::endl;
+        os << "#frames    : " << rhs.size() << std::endl;
+        os << "mean (s)   : " << rhs.getMean() << std::endl;
+        os << "std (s)    : " << rhs.getStd()  << std::endl;
+        os << "median (s) : " << rhs.getMedian()  << std::endl;
+        os << "min (s)    : " << rhs.getMin() << std::endl;
+        os << "max (s)    : " << rhs.getMax()  << std::endl;
         
         /*
         os << "Key\t\tTime" << std::endl;

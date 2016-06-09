@@ -24,18 +24,20 @@ void printHelp() {
     string dir, filename, ext;
     SimTK::Pathname::deconstructPathname(progName, isAbsolute, dir, filename, ext);
 
-    cout << "Option              Argument         Action / Notes\n";
-    cout << "------              --------         --------------\n";
-    cout << "-h                                   Print the command-line options for " << filename << ".\n";
-    cout << "--model             ModelFilename    Specify the name of the osim model file for the investigation.\n";
-    cout << "--trc               TrcFilename      Specify the name of the trc file to be used.\n";
-    cout << "--task-set          TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
-    cout << "--ext-loads         LoadsFilename    Specify the name of the XML ExternalLoads file.\n";
-    cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK and GRF data.\n";
-    cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
-    cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
-    cout << "--output            OutputDir        Specify the output directory\n";
-    cout << "-v                                   Show visualiser\n";
+    cout << "Option                Argument         Action / Notes\n";
+    cout << "------                --------         --------------\n";
+    cout << "-h                                     Print the command-line options for " << filename << ".\n";
+    cout << "--model               ModelFilename    Specify the name of the osim model file for the investigation.\n";
+    cout << "--trc                 TrcFilename      Specify the name of the trc file to be used.\n";
+    cout << "--task-set            TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
+    cout << "--ext-loads           LoadsFilename    Specify the name of the XML ExternalLoads file.\n";
+    cout << "--fc                  CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK and GRF data.\n";
+    cout << "-j                    IK threads       Specify the number of IK threads to be used.\n";
+    cout << "-a                    Accuracy         Specify the IK solver accuracy.\n";
+    cout << "--output              OutputDir        Specify the output directory.\n";
+    cout << "--push-frequency-trc  PushFrequencyTrc Specify the frequency to which the trajectories are read from the storage file.\n";
+    cout << "--push-frequency-grf  PushFrequencyGrf Specify the frequency to which the grf are read from the storage file.\n";
+    cout << "-v                                     Show visualiser.\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -81,10 +83,7 @@ int main(int argc, char* argv[]) {
     double fc(8);
     if (po.exists("--fc"))
         fc = po.getParameter<double>("--fc");
-    else {
-        printHelp();
-        exit(EXIT_SUCCESS);
-    }
+
 
     unsigned nThreads(1);
     if (po.exists("-j"))
@@ -98,10 +97,20 @@ int main(int argc, char* argv[]) {
     if (po.exists("--output"))
         resultDir = po.getParameter("--output");
 
+    double pushFrequencyTrc(-1);
+    if (po.exists("--push-frequency-trc"))
+        pushFrequencyTrc = po.getParameter<double>("--push-frequency-trc");
+
+    double pushFrequencyGrf(-1);
+    if (po.exists("--push-frequency-grf"))
+        pushFrequencyGrf = po.getParameter<double>("--push-frequency-grf");
+
     bool showVisualiser(false);
     if (po.exists("-v"))
         showVisualiser = true;
 
+    resultDir = rtosim::FileSystem::getAbsolutePath(resultDir);
+    rtosim::FileSystem::createDirectory(resultDir);
     string stopWatchResultDir(resultDir);
 
     //define the shared buffers
@@ -127,6 +136,7 @@ int main(int argc, char* argv[]) {
         osimModelFilename,
         trcTrialFilename,
         false);
+    markersFromTrc.setOutputFrequency(pushFrequencyTrc);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
     QueueToInverseKinametics inverseKinematics(
@@ -155,6 +165,8 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         externalLoadsXml);
+
+    grfProducer.setOutputFrequency(pushFrequencyGrf);
 
     //corrects the value of the COP when the
     //foot is not in contact with the force plate
@@ -218,10 +230,36 @@ int main(int argc, char* argv[]) {
     //read the frames from generalisedCoordinatesQueue and calculates some stats
     rtosim::FrameCounter<GeneralisedCoordinatesQueue> ikFrameCounter(
         generalisedCoordinatesQueue,
-        "raw_ik_from_file_frame_counter");
+        "time-ik-throughput");
 
-    doneWithSubscriptions.setCount(10);
-    doneWithExecution.setCount(10);
+
+    //measures the time that takes every single frame to appear in two different queues
+    rtosim::TimeDifference<
+        GeneralisedCoordinatesQueue,
+        GeneralisedCoordinatesQueue> gcQueueAdaptorTimeDifference(
+        generalisedCoordinatesQueue,
+        filteredGeneralisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+    rtosim::TimeDifference<
+        MarkerSetQueue,
+        GeneralisedCoordinatesQueue> ikTimeDifference(
+        markerSetQueue,
+        generalisedCoordinatesQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+    rtosim::TimeDifference<
+        MultipleExternalForcesQueue,
+        MultipleExternalForcesQueue> grfFilterTimeDifference (
+        grfQueue,
+        filteredGrfQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+    doneWithSubscriptions.setCount(13);
+    doneWithExecution.setCount(13);
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
@@ -238,6 +276,9 @@ int main(int argc, char* argv[]) {
             filteredIkLogger,
             rawIkLogger,
             idLogger,
+            gcQueueAdaptorTimeDifference,
+            ikTimeDifference,
+            grfFilterTimeDifference,
             ikFrameCounter,
             visualiser
             );
@@ -254,6 +295,9 @@ int main(int argc, char* argv[]) {
             filteredIkLogger,
             rawIkLogger,
             idLogger,
+            gcQueueAdaptorTimeDifference,
+            ikTimeDifference,
+            grfFilterTimeDifference,
             ikFrameCounter
             );
     }
@@ -262,12 +306,17 @@ int main(int argc, char* argv[]) {
     //get execution time infos
     auto stopWatches = inverseKinematics.getProcessingTimes();
 
-    rtosim::StopWatch combinedSW("Combined_IK_solvers_stopwatch");
+    rtosim::StopWatch combinedSW("time-ikparallel-processing");
     for (auto& s : stopWatches)
         combinedSW += s;
 
     combinedSW.print(stopWatchResultDir);
     ikFrameCounter.getProcessingTimes().print(stopWatchResultDir);
     queueToInverseDynamics.getProcessingTimes().print(stopWatchResultDir);
+
+    ikTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markerqueue-to-jointangles.txt");
+    gcQueueAdaptorTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-jointangles-to-filteredjointangles.txt");
+    grfFilterTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-grf-to-filteredgrf.txt");
+
     return 0;
 }

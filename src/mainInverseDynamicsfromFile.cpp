@@ -31,7 +31,8 @@ void printHelp() {
     cout << "--mot               MotFilename      Specify the name of the mot file containing the results of IK.\n";
     cout << "--ext-loads         LoadsFilename    Specify the name of the XML ExternalLoads file.\n";
     cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
-    cout << "--output            OutputDir        Specify the output directory\n";
+    cout << "--output            OutputDir        Specify the output directory.\n";
+    cout << "--push-frequency    PushFrequency    Specify the frequency to which the GRF are read from the storage file.\n";
 }
 
 int main(int argc, char* argv[]) {
@@ -73,8 +74,13 @@ int main(int argc, char* argv[]) {
     string resultDir("Output");
     if (po.exists("--output"))
         resultDir = po.getParameter("--output");
-    FileSystem::createDirectory(resultDir);
 
+    double pushFrequency(-1);
+    if (po.exists("--push-frequency"))
+        pushFrequency = po.getParameter<double>("--push-frequency");
+
+    resultDir = rtosim::FileSystem::getAbsolutePath(resultDir);
+    FileSystem::createDirectory(resultDir);
     string stopWatchResultDir(resultDir);
     std::vector<string> dofLabels(getCoordinateNamesFromModel(osimModelFilename));
 
@@ -89,6 +95,7 @@ int main(int argc, char* argv[]) {
         doneWithExecution,
         externalLoadsXml);
 
+    grfProducer.setOutputFrequency(pushFrequency);
     //prefilter the data
     GeneralisedCoordinatesFromStorageFile ikProducer(
         coordinatesQueue,
@@ -116,7 +123,7 @@ int main(int argc, char* argv[]) {
         "id",
         "sto");
 
-    FrameCounter<ExternalTorquesQueue> idFrameCounter(jointMomentsQueue, "joint_moments_frame_counter");
+    FrameCounter<ExternalTorquesQueue> idFrameCounter(jointMomentsQueue, "time-id-throughput");
 
     doneWithSubscription.setCount(4);
     doneWithExecution.setCount(4);
@@ -125,12 +132,11 @@ int main(int argc, char* argv[]) {
         grfProducer,
         ikProducer,
         inverseDynamicsFromQueue,
-        inverseDynamicsFileLogger
-        //  idFrameCounter
+        inverseDynamicsFileLogger,
+        idFrameCounter
         );
 
     inverseDynamicsFromQueue.getProcessingTimes().print(stopWatchResultDir);
-   // idFrameCounter.getProcessingTimes().print(stopWatchResultDir);
 
     return 0;
 }
