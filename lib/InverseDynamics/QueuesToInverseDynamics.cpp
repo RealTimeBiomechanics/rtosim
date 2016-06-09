@@ -47,7 +47,7 @@ namespace rtosim {
         externalLoadsXmlFilename),
         inputGeneralisedCoordinatesQueue_(inputGeneralisedCoordinatesQueue),
         outputExternalTorquesQueue_(outputExternalTorquesQueue),
-        stopWatch_("inverse_dynamics_execution_time")
+        stopWatch_("time-id-processing")
     { }
 
     QueuesToInverseDynamics::QueuesToInverseDynamics(

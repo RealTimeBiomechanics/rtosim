@@ -232,6 +232,11 @@ int main(int argc, char* argv[]) {
         generalisedCoordinatesQueue,
         "time-ik-throughput");
 
+    //read the frames from generalisedCoordinatesQueue and calculates some stats
+    rtosim::FrameCounter<ExternalTorquesQueue> idFrameCounter(
+        jointMomentsQueue,
+        "time-id-throughput");
+
 
     //measures the time that takes every single frame to appear in two different queues
     rtosim::TimeDifference<
@@ -280,6 +285,7 @@ int main(int argc, char* argv[]) {
             ikTimeDifference,
             grfFilterTimeDifference,
             ikFrameCounter,
+            idFrameCounter,
             visualiser
             );
     }
@@ -298,7 +304,8 @@ int main(int argc, char* argv[]) {
             gcQueueAdaptorTimeDifference,
             ikTimeDifference,
             grfFilterTimeDifference,
-            ikFrameCounter
+            ikFrameCounter,
+            idFrameCounter
             );
     }
     //multithreaded part is over, all threads are joined
@@ -312,6 +319,7 @@ int main(int argc, char* argv[]) {
 
     combinedSW.print(stopWatchResultDir);
     ikFrameCounter.getProcessingTimes().print(stopWatchResultDir);
+    idFrameCounter.getProcessingTimes().print(stopWatchResultDir);
     queueToInverseDynamics.getProcessingTimes().print(stopWatchResultDir);
 
     ikTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markerqueue-to-jointangles.txt");

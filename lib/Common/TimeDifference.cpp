@@ -158,14 +158,14 @@ namespace rtosim {
     template<typename T>
     double TimeData<T>::getMin() const {
 
-        auto it(std::min_element(std::begin(data_), std::end(data_), TupleCompare<0>()));
+        auto it(std::min_element(std::begin(data_), std::end(data_), TupleCompare<1>()));
         return std::get<1>(*it);
     }
 
     template<typename T>
     double TimeData<T>::getMax() const {
 
-        auto it(std::max_element(std::begin(data_), std::end(data_), TupleCompare<0>()));
+        auto it(std::max_element(std::begin(data_), std::end(data_), TupleCompare<1>()));
         return std::get<1>(*it);
     }
 
