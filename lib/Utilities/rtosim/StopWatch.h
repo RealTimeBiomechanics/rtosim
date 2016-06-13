@@ -6,6 +6,7 @@
 #include <string>
 #include <ctime>
 #include <numeric>
+#include <algorithm>
 
 namespace rtosim {
 

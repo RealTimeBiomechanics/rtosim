@@ -119,7 +119,7 @@ namespace rtosim {
     template<typename T>
     double TimeData<T>::getTime(const T& key) const {
     
-        auto it(std::find_if(std::begin(data_), std::end(data_), key, TupleCompare<0, std::equal_to>)());
+        auto it(std::find_if(std::begin(data_), std::end(data_), key, TupleCompare<0, std::equal_to>()));
         if (it == std::end(data_))
             throw std::invalid_argument("key " + std::to_string(key) + " not found");
         return *it;
@@ -276,7 +276,7 @@ namespace rtosim {
     template<typename Qin, typename Qout>
     TimeData<double> TimeDifference<Qin, Qout>::getCpuClockDifference() const {
 
-        return wallCpuDifference_;
+        return cpuClockDifference_;
     }
 
 }
