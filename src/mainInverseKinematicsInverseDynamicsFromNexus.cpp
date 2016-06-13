@@ -242,6 +242,15 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution);
 
+    rtosim::TimeDifference<
+        MarkerSetQueue,
+        ExternalTorquesQueue> fromMarkersToIdTimeDifference(
+        markerSetQueue,
+        jointMomentsQueue,
+        doneWithSubscriptions,
+        doneWithExecution);
+
+
     auto trigger([&runCondition](){
         std::string cmd;
         bool run(true);
@@ -250,8 +259,8 @@ int main(int argc, char* argv[]) {
     });
 
 
-    doneWithSubscriptions.setCount(12);
-    doneWithExecution.setCount(12);
+    doneWithSubscriptions.setCount(13);
+    doneWithExecution.setCount(13);
 
     //launch, execute, and join all the threads
     //all the multithreading is in this function
@@ -270,6 +279,7 @@ int main(int argc, char* argv[]) {
             gcQueueAdaptorTimeDifference,
             ikTimeDifference,
             grfFilterTimeDifference,
+            fromMarkersToIdTimeDifference,
             ikFrameCounter,
             idFrameCounter,
             trigger,
@@ -290,6 +300,7 @@ int main(int argc, char* argv[]) {
             gcQueueAdaptorTimeDifference,
             ikTimeDifference,
             grfFilterTimeDifference,
+            fromMarkersToIdTimeDifference,
             ikFrameCounter,
             idFrameCounter,
             trigger
@@ -312,6 +323,7 @@ int main(int argc, char* argv[]) {
     ikTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markerqueue-to-jointangles.txt");
     gcQueueAdaptorTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-jointangles-to-filteredjointangles.txt");
     grfFilterTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-grf-to-filteredgrf.txt");
+    fromMarkersToIdTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markers-to-jointmoments.txt");
     dataFromNexus.printLatencyData(stopWatchResultDir + "/time-latency-nexus.txt");
 
     return 0;

@@ -157,11 +157,13 @@ namespace rtosim{
         unsigned ct = 0;
         //     auto start = std::chrono::system_clock::now();
         //init the stats, so we can start measuring the frame processing time correctly
-        stopWatch_.init();
+
         while (localRunCondition) {
             if (!markerReference->isEndOfData()){
                 try{
+                    stopWatch_.init();
                     ikSolver.track(s);
+                    stopWatch_.log();
                     if (!isWithinRom(s))
                         s = defaultState;
                 }
@@ -176,7 +178,6 @@ namespace rtosim{
                 pushState(s);
                 defaultState = s;
                 ++ct;
-                stopWatch_.log();
             }
             else {
                 localRunCondition = false;
