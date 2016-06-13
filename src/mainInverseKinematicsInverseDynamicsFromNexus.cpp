@@ -188,7 +188,7 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "filtered_ik_from_file", "sto");
+        resultDir, "filtered_ik_from_nexus", "sto");
 
     //read from generalisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<GeneralisedCoordinatesData> rawIkLogger(
@@ -196,7 +196,7 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "raw_ik_from_file", "sto");
+        resultDir, "raw_ik_from_nexus", "sto");
 
     //read from generalisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<ExternalTorquesData> idLogger(
@@ -204,7 +204,7 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "id_from_file", "sto");
+        resultDir, "id_from_nexus", "sto");
 
     //read the frames from generalisedCoordinatesQueue and calculates some stats
     rtosim::FrameCounter<GeneralisedCoordinatesQueue> ikFrameCounter(
