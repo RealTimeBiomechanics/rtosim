@@ -10,6 +10,7 @@ namespace rtosim {
     class FlowControl {
     public:
         FlowControl();
+        FlowControl(bool value);
         FlowControl(FlowControl&) = delete;
         bool getRunCondition() const;
         void setRunCondition(bool run);

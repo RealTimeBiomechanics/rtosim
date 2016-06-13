@@ -5,12 +5,14 @@
 #include <thread>
 #include <memory>
 #include <OpenSim/OpenSim.h>
+#include <map>
 #include <Client.h> //from ViconSDK
 #include "rtosim/Mapper.h"
 #include "rtosim/concurrency/Concurrency.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/FlowControl.h"
+
 
 namespace VDS = ViconDataStreamSDK::CPP;
 namespace rtosim {
@@ -53,6 +55,8 @@ namespace rtosim {
         virtual ~DataFromNexus();
         void operator()();
 
+        void printLatencyData(const std::string& filename) const;
+
     private:
         
         std::vector<SimTK::Vec3> getForcePlatePosition() const;
@@ -65,6 +69,9 @@ namespace rtosim {
         void getFrame(VDS::Client& client);
         void pushMarkerData(VDS::Client& client);
         void pushForcePlateData(VDS::Client& client);
+        void pushEndOfData(VDS::Client& client);
+        void updateLatency(VDS::Client& client);
+        void pushToLatency(const std::string& key, double value);
         MarkerSetQueue* outputMarkerSetQueue_;
         MultipleExternalForcesQueue* outputGrfQueue_;
         Concurrency::Latch& doneWithSubscriptions_;
@@ -79,6 +86,7 @@ namespace rtosim {
         unsigned forcePlateCount_;
         bool increaseFrameNumbers_;
         unsigned previousFrameNumber_, frameNumber_, lastFrameNumberOfTheLoop_;
+        std::map<std::string, std::vector<double>> latencyData_;
     };
 }
 

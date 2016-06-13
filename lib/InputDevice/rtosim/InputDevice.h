@@ -4,5 +4,6 @@
 #include "rtosim/MarkersFromTrc.h"
 #include "rtosim/ExternalForcesFromStorageFile.h"
 #include "rtosim/GeneralisedCoordinatesFromStorageFile.h"
+#include "rtosim/DataFromNexus.h"
 
 #endif

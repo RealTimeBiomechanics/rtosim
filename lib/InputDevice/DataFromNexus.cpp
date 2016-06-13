@@ -1,5 +1,8 @@
 #include "rtosim/DataFromNexus.h"
 #include "rtosim/ArrayConverter.h"
+#include "rtosim/StopWatch.h"
+#include "rtosim/QueuesSync.h"
+
 #include <algorithm>
 #include <chrono>
 #include <thread>
@@ -186,7 +189,7 @@ namespace rtosim {
     }
 
 
-    void  DataFromNexus::getFrame(VDS::Client& client) {
+    void DataFromNexus::getFrame(VDS::Client& client) {
 
         while (!(client.GetFrame().Result == VDS::Result::Success))
             cout << ".";
@@ -199,6 +202,39 @@ namespace rtosim {
         }
 
         previousFrameNumber_ = frameNumber_;
+    }
+
+    void DataFromNexus::pushToLatency(const std::string& key, double value) {
+
+        auto it(latencyData_.find(key));
+        if (it == latencyData_.end()) {
+            latencyData_.insert(latencyData_.begin(), std::make_pair(key, std::vector<double>{}));
+            it = latencyData_.find(key);
+        }
+        it->second.push_back(value);
+    }
+
+    void DataFromNexus::updateLatency(VDS::Client& client) {
+
+        pushToLatency("Total", client.GetLatencyTotal().Total);
+        for (unsigned i(0); i < client.GetLatencySampleCount().Count; ++i)
+        {
+            std::string name = client.GetLatencySampleName(i).Name;
+            double value = client.GetLatencySampleValue(name).Value;
+            pushToLatency(name, value);
+        }
+    }
+
+    void DataFromNexus::printLatencyData(const std::string& filename) const {
+
+        std::ofstream outF(filename);
+        for (auto& e : latencyData_) {
+            outF << "Name     : " << e.first << endl;
+            outF << "#frames  : " << e.second.size() << std::endl;
+            outF << "mean (s) : " << getMean(e.second) << std::endl;
+            outF << "std (s)  : " << getStd(e.second) << std::endl;
+        }
+        outF.close();
     }
 
     void DataFromNexus::pushMarkerData(VDS::Client& client) {
@@ -237,6 +273,14 @@ namespace rtosim {
             outputMarkerSetQueue_->push(currentFrame);
          
         } //end subjectCount else
+    }
+
+    void DataFromNexus::pushEndOfData(VDS::Client& client) {
+
+        if (useMarkerData_)
+            outputMarkerSetQueue_->push(EndOfData::get<MarkerSetFrame>());
+        if (useGrfData_)
+            outputGrfQueue_->push(EndOfData::get<MultipleExternalForcesFrame>());
     }
 
     //this is a correction required to calculate the force plane moments 
@@ -343,12 +387,14 @@ namespace rtosim {
         while (runCondition_.getRunCondition()) {
 
             getFrame(client);
+            updateLatency(client);
             if (useMarkerData_)
                 pushMarkerData(client);
             if (useGrfData_)
                 pushForcePlateData(client);
         }
 
+        pushEndOfData(client);
         client.DisableMarkerData();
         client.DisableDeviceData();
         cout << "Disconnecting from Nexus..." << std::endl;

@@ -5,7 +5,6 @@
 using std::chrono::system_clock;
 using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
-#include <numeric>
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -191,22 +190,4 @@ namespace rtosim {
         return os;
     }
 
-    template<typename T>
-    typename T::value_type getMean(const T& values) {
-
-        typename T::value_type sum(std::accumulate(values.cbegin(), values.cend(), typename T::value_type{ 0 }));
-        return (sum / static_cast<typename T::value_type>(values.size()));
-    }
-
-    template<typename T>
-    typename T::value_type getStd(const T& values) {
-
-        auto mean(getMean(values));
-
-        typename T::value_type e(0);
-        for (auto v : values)
-            e += (v - mean)*(v - mean);
-        e /= values.size();
-        return std::sqrt(e);
-    }
 }

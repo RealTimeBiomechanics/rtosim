@@ -7,6 +7,11 @@ namespace rtosim {
         runCondition_.store(true);
     }
 
+    FlowControl::FlowControl(bool value) {
+        //initialisation from constructor gives some probles, so it's in the body
+        runCondition_.store(value);
+    }
+
     bool FlowControl::getRunCondition() const {
         return runCondition_.load();
     }
