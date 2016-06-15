@@ -99,11 +99,13 @@ namespace rtosim {
             noMarkers_ = frames_.front().data.size();
         doneWithSubscriptions_.wait();
 
+        std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
         //todo, fix shared variables
         while (1) {
-
             //        while (Shared::flowControl.getRunCondition()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
+            timeOutTime += std::chrono::milliseconds(sleepTimeMilliseconds);
+            std::this_thread::sleep_until(timeOutTime);
+
             if (skipped == framesToSkip_) {
                 auto frameToPush(frames_.at(count % noFrames));
                 outputMarkerSetQueue_.push(frameToPush);
@@ -126,9 +128,13 @@ namespace rtosim {
             noMarkers_ = frames_.front().data.size();
         doneWithSubscriptions_.wait();
 
+        std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
+
         for (auto& frame : frames_) {
-            if (speedFactor_ > 0)
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
+            if (speedFactor_ > 0) {
+                timeOutTime += std::chrono::milliseconds(sleepTimeMilliseconds);
+                std::this_thread::sleep_until(timeOutTime);
+            }
             if (skipped == framesToSkip_) {
                 outputMarkerSetQueue_.push(frame);
                 skipped = 0;

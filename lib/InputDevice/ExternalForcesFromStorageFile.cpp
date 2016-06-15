@@ -150,11 +150,14 @@ namespace rtosim {
 
         ExternalForcesFromX::doneWithSubscriptions();
         std::vector<std::string> extForceNames(externalLoadProperties_.getExternalForcesNames());
+
+        std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
         for (unsigned tIdx(0); tIdx < externalForcesStorage_.getSize(); ++tIdx) {
 
-            if (speedFactor_>0)
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
-
+            if (speedFactor_>0) {
+                timeOutTime += std::chrono::milliseconds(sleepTimeMilliseconds);
+                std::this_thread::sleep_until(timeOutTime);
+            }
             MultipleExternalForcesFrame externalForcesFrame;
             externalForcesStorage_.getTime(tIdx, externalForcesFrame.time);
             for (auto& name : extForceNames) {
