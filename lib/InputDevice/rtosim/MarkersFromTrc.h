@@ -30,8 +30,6 @@ namespace rtosim{
     private:
         void sendEndOfData();
         unsigned getSleepTime() const;
-        void runLoop();
-        void run();
         unsigned framesToSkip_;
         double speedFactor_;
         unsigned sampleFrequency_;
