@@ -67,7 +67,7 @@ namespace rtosim {
         SimTK::Vec3 getForce(const std::string& forceName, int timeIndex) const;
         SimTK::Vec3 getTorque(const std::string& forceName, int timeIndex) const;
         SimTK::Vec3 getApplicationPoint(const std::string& forceName, int timeIndex) const;
-        unsigned getSleepTime() const;
+        std::chrono::milliseconds getSleepTime() const;
 
         ExternalLoadProperties externalLoadProperties_;
         OpenSim::Storage externalForcesStorage_;

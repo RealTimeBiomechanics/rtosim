@@ -78,7 +78,7 @@ namespace rtosim {
     }
 
     void MarkersFromTrc::operator()(){
-        unsigned sleepTimeMilliseconds(getSleepTime());
+        const std::chrono::milliseconds sleepTimeMilliseconds(getSleepTime());
         unsigned skipped(0);
 //        unsigned count(0);
 
@@ -92,7 +92,7 @@ namespace rtosim {
         do {
             for(auto& frame : frames_) {
                 if (speedFactor_ > 0) {
-                    timeOutTime += std::chrono::milliseconds(sleepTimeMilliseconds);
+                    timeOutTime += sleepTimeMilliseconds;
                     std::this_thread::sleep_until(timeOutTime);
                 }
                 if (skipped == framesToSkip_) {
@@ -109,9 +109,9 @@ namespace rtosim {
 
     }
 
-    unsigned MarkersFromTrc::getSleepTime() const {
+    std::chrono::milliseconds MarkersFromTrc::getSleepTime() const {
 
-        return static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_)));
+        return std::chrono::milliseconds(static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_))));
     }
 
 
