@@ -59,7 +59,8 @@ add_executable(compareStorageFiles
 target_link_libraries(compareStorageFiles
     ${OPENSIM_LIBRARIES}
     )
- 
+
+IF(${VICONSDK_FOUND}) 
      add_executable(rtosim_ik_id_from_nexus 
     mainInverseKinematicsInverseDynamicsFromNexus.cpp
     )
@@ -75,4 +76,4 @@ target_link_libraries(rtosim_ik_id_from_nexus
     InverseDynamics
     OutputDevice
     )   
-    
+ENDIF(${VICONSDK_FOUND})
