@@ -16,9 +16,9 @@ set(ViconSDK_LIBRARIES
     ${ViconDataStreamSDK_CPP} )
     
 MESSAGE( STATUS "ViconSDK libraries: ${ViconSDK_LIBRARIES}")
-
-include(FindPackageHandleStandardArgs)
-# handle the QUIETLY and REQUIRED arguments and set OPENSIM_FOUND to TRUE
+ 
+ 
+# handle the QUIETLY and REQUIRED arguments and set VICONSDK_FOUND to TRUE
 # if all listed variables are TRUE
 # DEFAULT_MSG is predefined... change only if you need a custom msg
 find_package_handle_standard_args(ViconSDK DEFAULT_MSG

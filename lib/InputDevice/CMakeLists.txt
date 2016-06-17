@@ -1,5 +1,4 @@
 set(InputDevice_SOURCES 
-    DataFromNexus.cpp 
     MarkersFromTrc.cpp
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
@@ -8,7 +7,6 @@ set(InputDevice_SOURCES
     )
 
 set(InputDevice_HEADERS 
-    rtosim/DataFromNexus.h 
     rtosim/MarkersFromTrc.h
     rtosim/InputDevice.h
     rtosim/ExternalForcesFromX.h
@@ -16,6 +14,18 @@ set(InputDevice_HEADERS
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
 	)
+
+SET(InputDevice_Nexus_SOURCES
+	    DataFromNexus.cpp )
+
+set(InputDevice_Nexus_HEADERS 
+		rtosim/DataFromNexus.h )
+	 
+IF(${VICONSDK_FOUND})
+	MESSAGE( STATUS "Using ViconSDK in InputDevice")
+	SET(InputDevice_HEADERS ${InputDevice_HEADERS} ${InputDevice_Nexus_HEADERS})
+	SET(InputDevice_SOURCES ${InputDevice_SOURCES} ${InputDevice_Nexus_SOURCES})
+ENDIF(${VICONSDK_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
