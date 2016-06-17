@@ -16,7 +16,8 @@ namespace rtosim {
         rtosim::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         unsigned nThreads,
-        double solverAccuracy) :
+        double solverAccuracy,
+        double contraintWeight) :
         inputMarkerSetQueue_(inputMarkerSetQueue),
         outputGeneralisedCoordinateQueue_(outputGeneralisedCoordinateQueue),
         doneWithExecution_(doneWithExecution),
@@ -24,7 +25,8 @@ namespace rtosim {
         osimModelFilename_(osimModelFilename),
         nThreads_(nThreads),
         useIkTaskSet_(false),
-        solverAccuracy_(solverAccuracy){
+        solverAccuracy_(solverAccuracy),
+        contraintWeight_(contraintWeight){
 
         if (nThreads_ < 1) nThreads_ = 1;
     }
@@ -37,7 +39,8 @@ namespace rtosim {
         const std::string& osimModelFilename,
         unsigned nThreads,
         const std::string& ikTaskSetFilename,
-        double solverAccuracy) :
+        double solverAccuracy,
+        double contraintWeight) :
         QueueToInverseKinametics(
         inputMarkerSetQueue,
         outputGeneralisedCoordinateQueue,
@@ -45,7 +48,8 @@ namespace rtosim {
         doneWithExecution,
         osimModelFilename,
         nThreads,
-        solverAccuracy) {
+        solverAccuracy,
+        contraintWeight) {
 
         ikTaskSetFilename_ = ikTaskSetFilename;
         useIkTaskSet_ = true;
@@ -62,7 +66,14 @@ namespace rtosim {
         JobsCreator jobCreator(inputMarkerSetQueue_, threadPoolJobQueue, timeSequenceQueue, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);
         vector<unique_ptr<IKSolverParallel>> ikSolvers;
         for (unsigned i(0); i < nThreads_; ++i)
-            ikSolvers.emplace_back(new IKSolverParallel(threadPoolJobQueue, ikOutputQueue, internalDoneWithSubscriptions, internalDoneWithexecution, osimModelFilename_, solverAccuracy_));
+            ikSolvers.emplace_back(new IKSolverParallel(
+                threadPoolJobQueue, 
+                ikOutputQueue, 
+                internalDoneWithSubscriptions, 
+                internalDoneWithexecution, 
+                osimModelFilename_, 
+                solverAccuracy_, 
+                contraintWeight_));
 
         if (useIkTaskSet_) {
             for (auto& it : ikSolvers)

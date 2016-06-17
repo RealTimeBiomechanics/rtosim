@@ -42,7 +42,8 @@ namespace rtosim{
         rtosim::Concurrency::Latch& doneWithSubscriptions,
         rtosim::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
-        double solverAccuracy
+        double solverAccuracy,
+        double contraintWeight
         ) :
         inputThreadPoolJobs_(inputThreadPoolJobs),
         outputGeneralisedCoordinatesQueue_(outputGeneralisedCoordinatesQueue),
@@ -50,7 +51,8 @@ namespace rtosim{
         doneWithExecution_(doneWithExecution),
         osimModelFilename_(osimModelFilename),
         model_(osimModelFilename),
-        sovlerAccuracy_(solverAccuracy){
+        sovlerAccuracy_(solverAccuracy),
+        contraintWeight_(contraintWeight) {
 
         OpenSim::Array<std::string> markerNamesArray, coordinateNamesArray;
         const_cast<OpenSim::MarkerSet&>(model_.getMarkerSet()).getMarkerNames(markerNamesArray);
@@ -132,7 +134,7 @@ namespace rtosim{
 
         double previousTime(0.);
         double currentTime(0.);
-        OpenSim::InverseKinematicsSolver ikSolver(model_, *markerReference, coordinateRefs, 10000);
+        OpenSim::InverseKinematicsSolver ikSolver(model_, *markerReference, coordinateRefs, contraintWeight_);
         ikSolver.setAccuracy(sovlerAccuracy_);
         doneWithSubscriptions_.wait();
         bool isAssembled(false);

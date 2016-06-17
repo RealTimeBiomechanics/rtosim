@@ -34,7 +34,8 @@ namespace rtosim{
             rtosim::Concurrency::Latch& doneWithSubscriptions,
             rtosim::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
-            double solverAccuracy = 1e-8
+            double solverAccuracy = 1e-8,
+            double contraintWeight = SimTK::Infinity
             );
         void setInverseKinematicsTaskSet(const std::string& ikTaskSetFilename);
         virtual ~IKSolverParallel();
@@ -55,6 +56,7 @@ namespace rtosim{
         std::map<std::string, double> markerWeights_;
         rtosim::GeneralisedCoordinatesData defaultPose_;
         double sovlerAccuracy_;
+        double contraintWeight_;
         StopWatch stopWatch_;
     };
 }

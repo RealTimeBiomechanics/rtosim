@@ -5,6 +5,7 @@
 
 #include <string>
 #include <memory>
+#include <Simbody.h>
 
 #include "rtosim/ThreadPoolJobs.h"
 #include "rtosim/JobsCreator.h"
@@ -27,7 +28,8 @@ namespace rtosim {
             rtosim::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
-            double solverAccuracy = 1e-9);
+            double solverAccuracy = 1e-9,
+            double contraintWeight = SimTK::Infinity);
 
         QueueToInverseKinametics(
             MarkerSetQueue& inputMarkerSetQueue,
@@ -37,7 +39,8 @@ namespace rtosim {
             const std::string& osimModelFilename,
             unsigned nThreads,
             const std::string& ikTaskSetFilename,
-            double solverAccuracy = 1e-9);
+            double solverAccuracy = 1e-9,
+            double contraintWeight = SimTK::Infinity);
         void operator()();
 
         std::vector < StopWatch > getProcessingTimes() { return stopWatch_; }
@@ -51,6 +54,7 @@ namespace rtosim {
         std::string ikTaskSetFilename_;
         bool useIkTaskSet_;
         double solverAccuracy_;
+        double contraintWeight_;
         std::vector < StopWatch > stopWatch_;
     };
 }
