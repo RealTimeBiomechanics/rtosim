@@ -78,67 +78,42 @@ namespace rtosim {
     }
 
     void MarkersFromTrc::operator()(){
-
-        if (loop_) runLoop();
-        else run();
-    }
-
-    unsigned MarkersFromTrc::getSleepTime() const {
-
-        return static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_)));
-    }
-
-    void MarkersFromTrc::runLoop() {
-
-        unsigned sleepTimeMilliseconds(getSleepTime());
+        const std::chrono::milliseconds sleepTimeMilliseconds(getSleepTime());
         unsigned skipped(0);
-        unsigned count(0);
+//        unsigned count(0);
 
         size_t noFrames(frames_.size());
         if (noFrames > 0)
             noMarkers_ = frames_.front().data.size();
         doneWithSubscriptions_.wait();
 
+        std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
         //todo, fix shared variables
-        while (1) {
-
-            //        while (Shared::flowControl.getRunCondition()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
-            if (skipped == framesToSkip_) {
-                auto frameToPush(frames_.at(count % noFrames));
-                outputMarkerSetQueue_.push(frameToPush);
-                skipped = 0;
+        do {
+            for(auto& frame : frames_) {
+                if (speedFactor_ > 0) {
+                    timeOutTime += sleepTimeMilliseconds;
+                    std::this_thread::sleep_until(timeOutTime);
+                }
+                if (skipped == framesToSkip_) {
+                    outputMarkerSetQueue_.push(frame);
+                    skipped = 0;
+                }
+                else
+                    ++skipped;
             }
-            else
-                ++skipped;
-            ++count;
-        }
+
+        } while(loop_);
         sendEndOfData();
         doneWithExecution_.wait();
+
     }
 
-    void MarkersFromTrc::run() {
+    std::chrono::milliseconds MarkersFromTrc::getSleepTime() const {
 
-        unsigned sleepTimeMilliseconds(getSleepTime());
-        unsigned skipped(0);
-        size_t noFrames(frames_.size());
-        if (noFrames > 0)
-            noMarkers_ = frames_.front().data.size();
-        doneWithSubscriptions_.wait();
-
-        for (auto& frame : frames_) {
-            if (speedFactor_ > 0)
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
-            if (skipped == framesToSkip_) {
-                outputMarkerSetQueue_.push(frame);
-                skipped = 0;
-            }
-            else
-                ++skipped;
-        }
-        sendEndOfData();
-        doneWithExecution_.wait();
+        return std::chrono::milliseconds(static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_))));
     }
+
 
     void MarkersFromTrc::sendEndOfData() {
 

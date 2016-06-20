@@ -123,9 +123,9 @@ namespace rtosim {
         framesToSkip_ = n;
     }
 
-    unsigned ExternalForcesFromStorageFile::getSleepTime() const {
+    std::chrono::milliseconds ExternalForcesFromStorageFile::getSleepTime() const {
 
-        return static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_)));
+        return std::chrono::milliseconds(static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_))));
     }
 
     void ExternalForcesFromStorageFile::filter(double fc) {
@@ -141,7 +141,7 @@ namespace rtosim {
 
     void ExternalForcesFromStorageFile::operator()() {
 
-        unsigned sleepTimeMilliseconds(getSleepTime());
+        const std::chrono::milliseconds sleepTimeMilliseconds(getSleepTime());
         unsigned skipped(0);
 
         OpenSim::Array<string> tempLabels(externalForcesStorage_.getColumnLabels());
@@ -150,11 +150,14 @@ namespace rtosim {
 
         ExternalForcesFromX::doneWithSubscriptions();
         std::vector<std::string> extForceNames(externalLoadProperties_.getExternalForcesNames());
+
+        std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
         for (unsigned tIdx(0); tIdx < externalForcesStorage_.getSize(); ++tIdx) {
 
-            if (speedFactor_>0)
-                std::this_thread::sleep_for(std::chrono::milliseconds(sleepTimeMilliseconds));
-
+            if (speedFactor_>0) {
+                timeOutTime += sleepTimeMilliseconds;
+                std::this_thread::sleep_until(timeOutTime);
+            }
             MultipleExternalForcesFrame externalForcesFrame;
             externalForcesStorage_.getTime(tIdx, externalForcesFrame.time);
             for (auto& name : extForceNames) {

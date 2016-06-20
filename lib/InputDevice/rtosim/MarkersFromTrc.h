@@ -29,9 +29,7 @@ namespace rtosim{
 
     private:
         void sendEndOfData();
-        unsigned getSleepTime() const;
-        void runLoop();
-        void run();
+        std::chrono::milliseconds getSleepTime() const;
         unsigned framesToSkip_;
         double speedFactor_;
         unsigned sampleFrequency_;
