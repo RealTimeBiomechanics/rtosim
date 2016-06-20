@@ -22,7 +22,7 @@ RTOSIM depends on the following
     * [Simbody](https://github.com/simbody/simbody/tree/Simbody-3.5.3) versions 3.5.1 to 3.5.3
     * [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) versions 3.2 or 3.3
 * Optional external libraries: 
-   * [Vicon DataStream SDK](http://www.vicon.com/downloads) version 1.5+
+    * [Vicon DataStream SDK](http://www.vicon.com/downloads) version 1.5+
 
 
 Install
