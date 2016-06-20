@@ -44,6 +44,11 @@ Patch Simbody
 -------------
 
 
+Test Data
+---------
+
+Get the [test data](https://drive.google.com/open?id=0BzMAK5L0QV2PUXk4SW9qcV9jSVU)
+
 Adapt the software for your gait laboratory
 -------------------------------------------
 
