@@ -5,10 +5,6 @@ RTOSIM is a set of efficient and extensible C++ libraries to connect OpenSim wit
 
 Read more about RTOSIM at the [RTOSIM project page](https://simtk.org/home/rtosim)
 
-Quick Start
------------
-Test data and examples
-
 Dependencies
 ------------
 RTOSIM depends on the following 
@@ -27,9 +23,7 @@ RTOSIM depends on the following
 
 Install
 -------
-RTOSIM works on Windows, Mac, and Linux. Binary packages are available for Windows.
-
-[RTOSIM Win32 installer](https://simtk.org/frs/download.php?file_id=4494) (does not require any external library).
+RTOSIM works on Windows, Mac, and Linux. Binary packages will be available for Windows.
 
 Build
 -----
