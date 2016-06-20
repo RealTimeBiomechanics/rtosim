@@ -67,13 +67,6 @@ target_link_libraries(rtosim_ik_id_from_file
     )   
     
     
-add_executable(compareStorageFiles
-    compareStorageFiles.cpp
-    )
-    
-target_link_libraries(compareStorageFiles
-    ${OPENSIM_LIBRARIES}
-    )
 
 IF(${VICONSDK_FOUND}) 
      add_executable(rtosim_ik_id_from_nexus 
