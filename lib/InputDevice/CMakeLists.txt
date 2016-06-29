@@ -40,6 +40,7 @@ IF(${VICONSDK_FOUND})
 	MESSAGE( STATUS "Using ViconSDK in InputDevice")
 	SET(InputDevice_HEADERS ${InputDevice_HEADERS} ${InputDevice_Nexus_HEADERS})
 	SET(InputDevice_SOURCES ${InputDevice_SOURCES} ${InputDevice_Nexus_SOURCES})
+	add_definitions(INCLUDEVICONSDK)
 ENDIF(${VICONSDK_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
@@ -58,10 +59,18 @@ target_include_directories(InputDevice PRIVATE
                                 ${CMAKE_CURRENT_SOURCE_DIR}
 								PUBLIC
 								${SIMTK_INCLUDE_DIRS}
-								${ViconSDK_INCLUDE_DIRS}
 								${OPENSIM_INCLUDE_DIRS}
 )
-TARGET_LINK_LIBRARIES(InputDevice Common Utilities ${ViconSDK_LIBRARIES})
+
+TARGET_LINK_LIBRARIES(InputDevice Common Utilities)
+IF(${VICONSDK_FOUND})
+	target_include_directories(InputDevice PUBLIC
+								${ViconSDK_INCLUDE_DIRS}
+	)
+	TARGET_LINK_LIBRARIES(InputDevice ${ViconSDK_LIBRARIES})
+ENDIF(${VICONSDK_FOUND})
+
+
 # Save path to include directory for "internal" usage
 set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
