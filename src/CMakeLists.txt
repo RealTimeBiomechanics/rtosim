@@ -17,6 +17,7 @@ include_directories(
     ${OPENSIM_INCLUDE_DIRS}
     ${SIMTK_INCLUDE_DIRS}
     ${rtosim_INCLUDE_DIRS}
+    ${Osens_INCLUDE_DIRS}
 )
     
 add_executable(rtosim_ik_from_file 
@@ -85,3 +86,20 @@ target_link_libraries(rtosim_ik_id_from_nexus
     OutputDevice
     )   
 ENDIF(${VICONSDK_FOUND})
+
+add_executable(rtosim_ik_osens_from_file 
+    mainInverseKinematicsOsensFromFile.cpp
+    )
+
+target_link_libraries(rtosim_ik_osens_from_file 
+    ${OPENSIM_LIBRARIES}
+    ${Osens_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+    InverseKinematics
+    SignalProcessing
+    OutputDevice
+    )
+    

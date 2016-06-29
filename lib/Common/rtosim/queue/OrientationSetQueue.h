@@ -13,22 +13,20 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_Common_h
-#define rtosim_Common_h
+#ifndef rtosim_OrientationSetQueue_h
+#define rtosim_OrientationSetQueue_h
 
 #include "rtosim/QueueData.h"
-#include "rtosim/MarkerData.h"
-#include "rtosim/GeneralisedCoordinatesData.h"
-#include "rtosim/EndOfData.h"
-#include "rtosim/QueuesSync.h"
-#include "rtosim/FlowControl.h"
-#include "rtosim/Common.h"
-#include "rtosim/queue/MarkerSetQueue.h"
-#include "rtosim/queue/OrientationSetQueue.h"
-#include "rtosim/queue/GeneralisedCoordinatesQueue.h"
-#include "rtosim/ExternalForceData.h"
-#include "rtosim/ExternalForceProperties.h"
-#include "rtosim/ExternalLoadProperties.h"
-#include "rtosim/TimeDifference.h"
+#include "rtosim/concurrency/Queue.h"
+#include <OpenSim/Common/OrientationSensorFrame.h>
+#include <vector>
+
+
+namespace rtosim {
+    
+    using OrientationSetData  = std::vector<OpenSim::OrientationSensorFrame>;
+    using OrientationSetFrame = QueueData < OrientationSetData > ;
+    using OrientationSetQueue = Concurrency::Queue < OrientationSetFrame > ;
+}
 
 #endif

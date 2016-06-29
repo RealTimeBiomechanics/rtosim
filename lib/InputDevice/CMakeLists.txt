@@ -15,6 +15,7 @@
 
 set(InputDevice_SOURCES 
     MarkersFromTrc.cpp
+    OrientationsFromMot.cpp
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
     GeneralisedCoordinatesFromX.cpp
@@ -23,6 +24,7 @@ set(InputDevice_SOURCES
 
 set(InputDevice_HEADERS 
     rtosim/MarkersFromTrc.h
+    rtosim/OrientationsFromMot.h
     rtosim/InputDevice.h
     rtosim/ExternalForcesFromX.h
     rtosim/ExternalForcesFromStorageFile.h
