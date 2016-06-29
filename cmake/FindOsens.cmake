@@ -17,9 +17,9 @@ set(Osens_POSSIBLE_DIRECTORIES
 	~/testlibs
 	)
 
-find_path(Osens_INCLUDE_DIRS OrientationSensor.h
-          PATHS ${Osens_POSSIBLE_DIRECTORIES}
-          PATH_SUFFIXES include )
+find_path(Osens_INCLUDE_DIRS OpenSim/Common/OrientationSensorData.h
+          PATHS ${Osens_POSSIBLE_DIRECTORIES})
+
 
 MESSAGE( STATUS "Osens Include path: ${Osens_INCLUDE_DIRS}")
 

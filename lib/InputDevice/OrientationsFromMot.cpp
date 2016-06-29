@@ -13,12 +13,15 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#include "rtosim/MarkersFromTrc.h"
+#include "rtosim/OrientationsFromMot.h"
 #include "rtosim/EndOfData.h"
 #include "rtosim/Mapper.h"
 #include "rtosim/ArrayConverter.h"
-
+#include <OpenSim/Common/OrientationSensorData.h>
+#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
+#include <OpenSim/Simulation/Model/OrientationSensor.h>
 #include <OpenSim/OpenSim.h>
+#include <OpenSim/Simulation/Model/ComponentSet.h>
 #include <chrono>
 #include <thread>
 #include <string>
@@ -31,78 +34,87 @@ using std::endl;
 
 namespace rtosim {
 
-    MarkersFromTrc::MarkersFromTrc(
-        MarkerSetQueue& outputMarkerSetQueue,
+    OrientationsFromMot::OrientationsFromMot(
+        OrientationSetQueue& outputOrientationSetQueue,
         rtosim::Concurrency::Latch& doneWithSubscriptions,
         rtosim::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
-        const std::string& trcFilename,
+        const std::string& motFilename,
         bool loop) :
-        outputMarkerSetQueue_(outputMarkerSetQueue),
+        outputOrientationSetQueue_(outputOrientationSetQueue),
         doneWithSubscriptions_(doneWithSubscriptions),
         doneWithExecution_(doneWithExecution),
-        trcFilename_(trcFilename),
+        motFilename_(motFilename),
         model_(osimModelFilename),
         loop_(loop),
         speedFactor_(-1),
         framesToSkip_(0),
-        noMarkers_(0){
+        noSensors_(0){
 
         model_.initSystem();
 
-        OpenSim::Array<std::string> markerNamesArray;
-        std::vector<std::string> markerNamesFromModel;
-        const_cast<OpenSim::MarkerSet&>(model_.getMarkerSet()).getMarkerNames(markerNamesArray);
-        rtosim::ArrayConverter::toStdVector(markerNamesArray, markerNamesFromModel);
 
-        OpenSim::MarkerData trcFile(trcFilename_);
-        sampleFrequency_ = static_cast<unsigned>(trcFile.getCameraRate());
-        trcFile.convertToUnits(model_.getLengthUnits());
-        std::vector<std::string> markerNamesFromFile;
-        rtosim::ArrayConverter::toStdVector(trcFile.getMarkerNames(), markerNamesFromFile);
+	const OpenSim::ComponentSet& componentSet(model_.getMiscModelComponentSet());
+	OpenSim::OrientationSensorSet orientationSensorSet;
+	for(unsigned i(0); i < componentSet.getSize(); ++i) {
+	  OpenSim::OrientationSensor* sensor(dynamic_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
+	  if(sensor != nullptr)
+	    orientationSensorSet.cloneAndAppend(*sensor);
+	}
+	
+        OpenSim::Array<std::string> sensorsNamesArray;
+	orientationSensorSet.getOSensorNames(sensorsNamesArray);
+        std::vector<std::string> sensorsNamesFromModel;
+        rtosim::ArrayConverter::toStdVector(sensorsNamesArray, sensorsNamesFromModel);
 
-        rtosim::Mapper markersMapper(markerNamesFromFile, markerNamesFromModel);
+        OpenSim::OrientationSensorData motFile(motFilename_);
+        sampleFrequency_ = static_cast<unsigned>(motFile.getDataRate());
+        std::vector<std::string> sensorsNamesFromFile;
+        rtosim::ArrayConverter::toStdVector(motFile.getOrientationSensorNames(), sensorsNamesFromFile);
 
-        for (size_t i(0); i < static_cast<size_t>(trcFile.getNumFrames()); ++i) {
-            auto markersFromTrcArr(trcFile.getFrame(i).getMarkers());
-            MarkerSetData markersFromTrc;
-            for (unsigned j(0); j < markersFromTrcArr.size(); ++j)
-                markersFromTrc.push_back(markersFromTrcArr[j]);
+        rtosim::Mapper markersMapper(sensorsNamesFromFile, sensorsNamesFromModel);
 
-            MarkerSetFrame currentFrame;
-            currentFrame.time = trcFile.getFrame(i).getFrameTime();
-            currentFrame.data = markersMapper.map(markersFromTrc);
+        for (size_t i(0); i < static_cast<size_t>(motFile.getNumFrames()); ++i) {
+            auto frame(motFile.getFrame(i));
+            OrientationSetData orientationsFromMot;
+            for (unsigned j(0); j < frame.getOrientationSensors().size(); ++j)
+                orientationsFromMot.emplace_back(frame.getOrientationSensor(j));
+
+            OrientationSetFrame currentFrame;
+            currentFrame.time = frame.getFrameTime();
+            currentFrame.data = markersMapper.map(orientationsFromMot);
             frames_.push_back(currentFrame);
         }
     }
 
-    void MarkersFromTrc::setOutputFrequency(double frequency) {
+    void OrientationsFromMot::setOutputFrequency(double frequency) {
 
         speedFactor_ = frequency / sampleFrequency_;
     }
 
-    void MarkersFromTrc::setSpeedFactor(double speedFactor) {
+    void OrientationsFromMot::setSpeedFactor(double speedFactor) {
 
         speedFactor_ = speedFactor;
     }
 
-    void MarkersFromTrc::setFramesToSkip(unsigned n) {
+    void OrientationsFromMot::setFramesToSkip(unsigned n) {
 
         framesToSkip_ = n;
     }
 
-    void MarkersFromTrc::operator()(){
+    void OrientationsFromMot::operator()(){
         const std::chrono::milliseconds sleepTimeMilliseconds(getSleepTime());
         unsigned skipped(0);
 //        unsigned count(0);
 
         size_t noFrames(frames_.size());
         if (noFrames > 0)
-            noMarkers_ = frames_.front().data.size();
+            noSensors_ = frames_.front().data.size();
         doneWithSubscriptions_.wait();
 
         std::chrono::steady_clock::time_point timeOutTime = std::chrono::steady_clock::now();
         //todo, fix shared variables
+	unsigned i(0);
         do {
             for(auto& frame : frames_) {
                 if (speedFactor_ > 0) {
@@ -110,7 +122,8 @@ namespace rtosim {
                     std::this_thread::sleep_until(timeOutTime);
                 }
                 if (skipped == framesToSkip_) {
-                    outputMarkerSetQueue_.push(frame);
+		    std::cout << "Pushing frame " << i++ << std::endl;
+                    outputOrientationSetQueue_.push(frame);
                     skipped = 0;
                 }
                 else
@@ -123,25 +136,25 @@ namespace rtosim {
 
     }
 
-    std::chrono::milliseconds MarkersFromTrc::getSleepTime() const {
+    std::chrono::milliseconds OrientationsFromMot::getSleepTime() const {
 
         return std::chrono::milliseconds(static_cast<unsigned>(std::floor(1000. / (sampleFrequency_*speedFactor_))));
     }
 
 
-    void MarkersFromTrc::sendEndOfData() {
+    void OrientationsFromMot::sendEndOfData() {
 
-        auto eodFrame(rtosim::EndOfData::get<MarkerSetFrame>());
-        eodFrame.data.resize(noMarkers_);
-        outputMarkerSetQueue_.push(eodFrame);
+        auto eodFrame(rtosim::EndOfData::get<OrientationSetFrame>());
+        eodFrame.data.resize(noSensors_);
+        outputOrientationSetQueue_.push(eodFrame);
 #ifdef RTOSIM_DEBUG
-        cout << "MarkersFromTrc waiting\n";
+        cout << "OrientationsFromMot waiting\n";
 #endif
     }
 
-    MarkersFromTrc::~MarkersFromTrc() {
+    OrientationsFromMot::~OrientationsFromMot() {
 #ifdef RTOSIM_DEBUG
-        cout << "Closing MarkersProducer..." << endl;
+        cout << "Closing OrientationsFromMot..." << endl;
 #endif
     }
 }

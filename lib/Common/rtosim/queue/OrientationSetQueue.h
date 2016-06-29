@@ -24,7 +24,7 @@
 
 namespace rtosim {
     
-    using OrientationSetData  = std::vector<OpenSim::OrientationSensorFrame>;
+    using OrientationSetData  = std::vector<SimTK::Quaternion>;
     using OrientationSetFrame = QueueData < OrientationSetData > ;
     using OrientationSetQueue = Concurrency::Queue < OrientationSetFrame > ;
 }

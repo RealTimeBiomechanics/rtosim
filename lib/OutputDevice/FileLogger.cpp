@@ -175,6 +175,25 @@ namespace rtosim {
         *outFile_ << std::endl;
     }
 
+    
+     template<>
+    void FileLogger<OrientationSetData>::initFile()
+    {
+        *outFile_ << "rtosim output" << std::endl;
+        *outFile_ << "datacolumns " << dataToWrite_.back().data.size() * 4 + 1 << std::endl;
+        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
+        *outFile_ << "endheader" << std::endl;
+        *outFile_ << "time" + sp_;
+        for (auto& it : columnLabels_)
+            *outFile_ <<
+            it << ".W" << sp_ <<
+            it << ".X" << sp_ <<
+            it << ".Y" << sp_ <<
+            it << ".Z" << sp_;
+        ;
+        *outFile_ << std::endl;
+    }
+    
     template<typename DataType>
     void FileLogger<DataType>::writeToFile() {
 
@@ -242,6 +261,23 @@ namespace rtosim {
                     << t[2] << sp_;
             }
             *outFile_ << std::endl;
+        }
+    }
+    
+    template<>
+    void FileLogger<OrientationSetData>::writeToFile() {
+
+        for (auto& dataIt : dataToWrite_) {
+            *outFile_ << dataIt.time << sp_;
+            for (auto& q : dataIt.data) {
+                *outFile_
+                    << q[0] << sp_
+                    << q[1] << sp_
+                    << q[2] << sp_
+                    << q[3] << sp_;
+            }
+            *outFile_ << std::endl;
+	    
         }
     }
 }

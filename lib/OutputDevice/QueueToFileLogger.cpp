@@ -48,6 +48,7 @@ namespace rtosim{
         subscriptionLatch_.wait();
         readyToWriteLatch_.wait();
 
+	std::cout << "Ready to log\n";
         bool runCondition(true);
         while (runCondition) {
             FrameType currentFrame = inputQueue_.pop();

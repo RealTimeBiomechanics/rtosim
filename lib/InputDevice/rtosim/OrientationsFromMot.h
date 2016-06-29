@@ -28,14 +28,14 @@ namespace rtosim{
 
     public:
         OrientationsFromMot() = delete;
-        OrientationsFromMot(OrientationsFromTrc&) = delete;
+        OrientationsFromMot(OrientationsFromMot&) = delete;
         OrientationsFromMot(
             OrientationSetQueue& outputOrientationSetQueue,
             rtosim::Concurrency::Latch& doneWithSubscriptions,
             rtosim::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& motFilename,
-            bool loop = true);
+            bool loop = false);
         void setOutputFrequency(double frequency);
         void setSpeedFactor(double speedFactor);
         void setFramesToSkip(unsigned n);
@@ -48,13 +48,13 @@ namespace rtosim{
         unsigned framesToSkip_;
         double speedFactor_;
         unsigned sampleFrequency_;
-        std::vector<MarkerSetFrame> frames_;
-        MarkerSetQueue& outputMarkerSetQueue_;
+        std::vector<OrientationSetFrame> frames_;
+        OrientationSetQueue& outputOrientationSetQueue_;
         rtosim::Concurrency::Latch& doneWithSubscriptions_;
         rtosim::Concurrency::Latch& doneWithExecution_;
-        std::string trcFilename_;
+        std::string motFilename_;
         OpenSim::Model model_;
-        std::size_t noMarkers_;
+        std::size_t noSensors_;
         bool loop_;
     };
 }

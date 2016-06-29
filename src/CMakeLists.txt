@@ -103,3 +103,18 @@ target_link_libraries(rtosim_ik_osens_from_file
     OutputDevice
     )
     
+add_executable(test_osens 
+    mainTestOsens.cpp
+    )
+
+target_link_libraries(test_osens
+    ${OPENSIM_LIBRARIES}
+    ${Osens_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+    InverseKinematics
+    SignalProcessing
+    OutputDevice
+    )
