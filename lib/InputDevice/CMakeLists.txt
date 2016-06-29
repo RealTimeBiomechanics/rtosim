@@ -40,7 +40,6 @@ IF(${VICONSDK_FOUND})
 	MESSAGE( STATUS "Using ViconSDK in InputDevice")
 	SET(InputDevice_HEADERS ${InputDevice_HEADERS} ${InputDevice_Nexus_HEADERS})
 	SET(InputDevice_SOURCES ${InputDevice_SOURCES} ${InputDevice_Nexus_SOURCES})
-	add_definitions(INCLUDEVICONSDK)
 ENDIF(${VICONSDK_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
