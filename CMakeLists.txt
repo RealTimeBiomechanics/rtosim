@@ -37,6 +37,9 @@ set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(OpenSim REQUIRED)
 find_package(ViconSDK QUIET)
+if(${VICONSDK_FOUND})
+    add_definitions(-DINCLUDEVICONSDK)
+endif()
 
 
 # Choose common build locations for executables and libraries
