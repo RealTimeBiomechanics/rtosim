@@ -56,6 +56,7 @@ namespace rtosim {
         void pushEndOfData();
         double evaluateTimestamp(std::string& data);
         SimTK::Quaternion evaluateOrientations(std::string& data);
+        OrientationSetFrame getOrientationFrame(unsigned long long sock);
         SimTK::Rotation globalToOsim_;
         OrientationSetQueue& outputOrientationSetQueue_;
         Concurrency::Latch& doneWithSubscriptions_;

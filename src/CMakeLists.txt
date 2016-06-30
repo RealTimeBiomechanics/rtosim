@@ -138,11 +138,11 @@ if(WIN32)
     target_link_libraries(test_osens_from_mobile ws2_32)
 endif()
 
-add_executable(test_osens_from_mobile_to_queque
-    mainTestOsensFromMobileToQueque.cpp
+add_executable(test_osens_from_mobile_to_queue
+    mainTestOsensFromMobileToQueue.cpp
     )
 
-target_link_libraries(test_osens_from_mobile_to_queque
+target_link_libraries(test_osens_from_mobile_to_queue
     ${OPENSIM_LIBRARIES}
     ${Osens_LIBRARIES}
     Common
@@ -154,5 +154,5 @@ target_link_libraries(test_osens_from_mobile_to_queque
     OutputDevice
     )
 if(WIN32)
-    target_link_libraries(test_osens_from_mobile_to_queque ws2_32)
+    target_link_libraries(test_osens_from_mobile_to_queue ws2_32)
 endif()
