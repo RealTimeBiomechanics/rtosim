@@ -118,3 +118,41 @@ target_link_libraries(test_osens
     SignalProcessing
     OutputDevice
     )
+    
+add_executable(test_osens_from_mobile 
+    mainRTOsensFromMobile.cpp
+    )
+
+target_link_libraries(test_osens_from_mobile
+    ${OPENSIM_LIBRARIES}
+    ${Osens_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+    InverseKinematics
+    SignalProcessing
+    OutputDevice
+    )
+if(WIN32)
+    target_link_libraries(test_osens_from_mobile ws2_32)
+endif()
+
+add_executable(test_osens_from_mobile_to_queque
+    mainTestOsensFromMobileToQueque.cpp
+    )
+
+target_link_libraries(test_osens_from_mobile_to_queque
+    ${OPENSIM_LIBRARIES}
+    ${Osens_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+    InverseKinematics
+    SignalProcessing
+    OutputDevice
+    )
+if(WIN32)
+    target_link_libraries(test_osens_from_mobile_to_queque ws2_32)
+endif()
