@@ -60,10 +60,18 @@ target_include_directories(InputDevice PRIVATE
                                 ${CMAKE_CURRENT_SOURCE_DIR}
 								PUBLIC
 								${SIMTK_INCLUDE_DIRS}
-								${ViconSDK_INCLUDE_DIRS}
 								${OPENSIM_INCLUDE_DIRS}
 )
-TARGET_LINK_LIBRARIES(InputDevice Common Utilities ${ViconSDK_LIBRARIES})
+
+TARGET_LINK_LIBRARIES(InputDevice Common Utilities)
+IF(${VICONSDK_FOUND})
+	target_include_directories(InputDevice PUBLIC
+								${ViconSDK_INCLUDE_DIRS}
+	)
+	TARGET_LINK_LIBRARIES(InputDevice ${ViconSDK_LIBRARIES})
+ENDIF(${VICONSDK_FOUND})
+
+
 # Save path to include directory for "internal" usage
 set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
