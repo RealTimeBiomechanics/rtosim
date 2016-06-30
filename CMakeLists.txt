@@ -38,6 +38,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(OpenSim REQUIRED)
 find_package(Osens REQUIRED)
 find_package(ViconSDK QUIET)
+if(${VICONSDK_FOUND})
+	add_definitions(-DINCLUDEVICONSDK)
+endif()
 
 include_directories(${Osens_INCLUDE_DIRS})
 # Choose common build locations for executables and libraries
