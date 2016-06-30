@@ -13,28 +13,27 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_OsimUtilities_h
-#define rtosim_OsimUtilities_h
+#include "rtosim/TimeSequence.h"
 
-#include <vector>
-#include <OpenSim/OpenSim.h>
-#include <OpenSim/Simulation/Model/ComponentSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensor.h>
+namespace rtosim{
 
-namespace rtosim {
-  
-    void attachOsensToModel(OpenSim::Model& model);
+    double TimeSequence::pop() {
 
-    std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename);
-    
-    std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
+        std::unique_lock<std::mutex> mlock(mutex_);
+        while (queue_.empty())
+        {
+            cond_.wait(mlock);
+        }
+        auto val = queue_.front();
+        queue_.pop();
+        return val;
+    }
 
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
-
-    std::vector<std::string> getMarkerNamesOnBody(const OpenSim::Body& body);
-
-    std::string getMostPosteriorMarker(const std::vector<std::string>& markerNames, OpenSim::Model& model);
+    void TimeSequence::push(const double& item)
+    {
+        std::unique_lock<std::mutex> mlock(mutex_);
+        queue_.push(item);
+        mlock.unlock();
+        cond_.notify_one();
+    }
 }
-
-#endif

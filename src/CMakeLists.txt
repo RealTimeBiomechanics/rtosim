@@ -18,6 +18,7 @@ include_directories(
     ${SIMTK_INCLUDE_DIRS}
     ${rtosim_INCLUDE_DIRS}
     ${Osens_INCLUDE_DIRS}
+    ${rtosim_InverseKinematicsOsens_INCLUDE_DIRS}
 )
     
 add_executable(rtosim_ik_from_file 
@@ -98,7 +99,7 @@ target_link_libraries(rtosim_ik_osens_from_file
     Utilities
     Concurrency
     InputDevice
-    InverseKinematics
+    InverseKinematicsOsens
     SignalProcessing
     OutputDevice
     )
@@ -114,7 +115,7 @@ target_link_libraries(test_osens
     Utilities
     Concurrency
     InputDevice
-    InverseKinematics
+    InverseKinematicsOsens
     SignalProcessing
     OutputDevice
     )

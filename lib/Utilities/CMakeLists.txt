@@ -41,8 +41,8 @@ source_group("Sources" FILES ${Utilities_SOURCES} ${Utilities_TEMPLATE_IMPLEMENT
 
 # Define target
 add_library(Utilities STATIC ${Utilities_SOURCES} ${Utilities_HEADERS} ${Utilities_TEMPLATE_IMPLEMENTATION})
-target_link_libraries(Utilities LINK_PUBLIC ${OPENSIM_LIBRARIES})
-target_include_directories(Utilities PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${SIMTK_INCLUDE_DIRS} ${OPENSIM_INCLUDE_DIRS})
+target_link_libraries(Utilities LINK_PUBLIC ${OPENSIM_LIBRARIES} ${Osens_LIBRARIES})
+target_include_directories(Utilities PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${Osens_INCLUDE_DIRS} ${SIMTK_INCLUDE_DIRS} ${OPENSIM_INCLUDE_DIRS})
 
 # Save path to include directory for "internal" usage
 set(rtosim_Utilities_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for SignalProcessing files")

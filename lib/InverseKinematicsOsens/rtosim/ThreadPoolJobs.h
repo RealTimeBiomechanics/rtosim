@@ -13,28 +13,36 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_OsimUtilities_h
-#define rtosim_OsimUtilities_h
+#ifndef rtosim_ThreadPoolJobs_h
+#define rtosim_ThreadPoolJobs_h
 
-#include <vector>
-#include <OpenSim/OpenSim.h>
-#include <OpenSim/Simulation/Model/ComponentSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensor.h>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 namespace rtosim {
-  
-    void attachOsensToModel(OpenSim::Model& model);
 
-    std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename);
-    
-    std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
+    template <typename T>
+    class ThreadPoolJobs
+    {
+    public:
+        ThreadPoolJobs() = default;
+        ThreadPoolJobs(const ThreadPoolJobs&) = delete;            // disable copying
+        ThreadPoolJobs& operator=(const ThreadPoolJobs&) = delete; // disable assignment
+        T pop();
+        size_t size();
+        void pop(T& item);
+        T front();
+        void front(T& item);
+        void push(const T& item);
 
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
-
-    std::vector<std::string> getMarkerNamesOnBody(const OpenSim::Body& body);
-
-    std::string getMostPosteriorMarker(const std::vector<std::string>& markerNames, OpenSim::Model& model);
+    private:
+        std::queue<T> queue_;
+        std::mutex mutex_;
+        std::condition_variable cond_;
+    };
 }
 
+#include "ThreadPoolJobs.cpp"
 #endif

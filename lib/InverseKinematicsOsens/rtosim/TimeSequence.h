@@ -13,28 +13,30 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_OsimUtilities_h
-#define rtosim_OsimUtilities_h
+#ifndef rtosim_TimeSequence
+#define rtosim_TimeSequence
 
-#include <vector>
-#include <OpenSim/OpenSim.h>
-#include <OpenSim/Simulation/Model/ComponentSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensor.h>
+#include "rtosim/concurrency/Queue.h"
+#include <string>
+#include <thread>
+#include <queue>
 
-namespace rtosim {
-  
-    void attachOsensToModel(OpenSim::Model& model);
+namespace rtosim{
 
-    std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename);
-    
-    std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
+    class TimeSequence
+    {
+    public:
+        TimeSequence() = default;
+        TimeSequence(const TimeSequence&) = delete;            // disable copying
+        TimeSequence& operator=(const TimeSequence&) = delete; // disable assignment
+        double pop();
+        void push(const double& item);
 
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
-
-    std::vector<std::string> getMarkerNamesOnBody(const OpenSim::Body& body);
-
-    std::string getMostPosteriorMarker(const std::vector<std::string>& markerNames, OpenSim::Model& model);
+    private:
+        std::queue<double> queue_;
+        std::mutex mutex_;
+        std::condition_variable cond_;
+    };
 }
 
 #endif

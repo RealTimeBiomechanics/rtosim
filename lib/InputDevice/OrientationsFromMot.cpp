@@ -122,7 +122,7 @@ namespace rtosim {
                     std::this_thread::sleep_until(timeOutTime);
                 }
                 if (skipped == framesToSkip_) {
-		    std::cout << "Pushing frame " << i++ << std::endl;
+//		    std::cout << "Pushing frame " << i++ << std::endl;
                     outputOrientationSetQueue_.push(frame);
                     skipped = 0;
                 }
