@@ -53,9 +53,10 @@ namespace rtosim {
         //void initialiseSensorNames();
         unsigned long long connect() const;
         std::string getFrame(unsigned long long sock);
+	void initialiseOffset(unsigned long long sock);
         void pushEndOfData();
         double evaluateTimestamp(std::string& data);
-        SimTK::Quaternion evaluateOrientations(std::string& data);
+        SimTK::Rotation evaluateOrientations(std::string& data);
         OrientationSetFrame getOrientationFrame(unsigned long long sock);
         SimTK::Rotation globalToOsim_;
         OrientationSetQueue& outputOrientationSetQueue_;
@@ -65,11 +66,11 @@ namespace rtosim {
         short devicePort_;
         double firstTime_;
         std::vector<std::string> sensorNamesFromModel_;
-        SimTK::Vec3 globalFrameRotations_;
         //OpenSim::Model model_;
         bool useOSensorData_;
         bool increaseFrameNumbers_;
         unsigned previousFrameNumber_, frameNumber_, lastFrameNumberOfTheLoop_;
+	SimTK::Rotation initialOffset_;
     };
 }
 

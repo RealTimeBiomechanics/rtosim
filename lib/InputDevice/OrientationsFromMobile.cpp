@@ -74,13 +74,15 @@ namespace rtosim {
         doneWithExecution_(doneWithExecution),
         runCondition_(runCondition),
         devicePort_(std::stoi(devicePort)),
-        globalFrameRotations_(globalFrameRotations),
         lastFrameNumberOfTheLoop_(0),
-        previousFrameNumber_(0)//,
+        previousFrameNumber_(0)
+       
         //model_(osimFilename)
     {
 //        initialiseSensorNames();
-        globalToOsim_.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::SpaceRotationSequence, globalFrameRotations_[0], SimTK::XAxis, globalFrameRotations_[1], SimTK::YAxis, globalFrameRotations_[2], SimTK::ZAxis);
+        initialOffset_.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::SpaceRotationSequence, 0, SimTK::XAxis, 0, SimTK::YAxis, 0, SimTK::ZAxis);
+
+      globalToOsim_.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::SpaceRotationSequence, globalFrameRotations[0], SimTK::XAxis, globalFrameRotations[1], SimTK::YAxis, globalFrameRotations[2], SimTK::ZAxis);
     }
 
     //void OrientationsFromMobile::initialiseSensorNames() {
@@ -119,6 +121,21 @@ namespace rtosim {
         return sock;
     }
 
+    void OrientationsFromMobile::initialiseOffset(unsigned long long sock){
+      
+        std::string data;
+        bool waitingForFrame = true;
+        while (waitingForFrame){
+            try {
+                data = getFrame(sock);
+                initialOffset_ = evaluateOrientations(data);
+                waitingForFrame = false;
+            }
+            catch (...){ std::cout << "..."; };
+        }
+    }
+    
+    
     OrientationSetFrame OrientationsFromMobile::getOrientationFrame(unsigned long long sock){
         std::string data;
         OrientationSetFrame frame;
@@ -127,10 +144,10 @@ namespace rtosim {
             try {
                 data = getFrame(sock);
                 frame.time = evaluateTimestamp(data);
-                evaluateOrientations(data);
-                waitingForFrame = false;
-                OrientationSetData currData{ evaluateOrientations(data) };
-                frame.data = currData;
+                SimTK::Rotation currData{ evaluateOrientations(data) };
+		waitingForFrame = false;
+		currData = initialOffset_.transpose()*currData;
+                frame.data.push_back(currData.convertRotationToQuaternion());
             }
             catch (...){ std::cout << "..."; };
         }
@@ -156,7 +173,7 @@ namespace rtosim {
         return timestamp;
     }
 
-    SimTK::Quaternion OrientationsFromMobile::evaluateOrientations(std::string& data){
+    SimTK::Rotation OrientationsFromMobile::evaluateOrientations(std::string& data){
         std::regex regex_orientations{ ", 81, +( *-?[0-9.]+),+( *-?[0-9.]+),+( *-?[0-9.]+)" };
         std::smatch result_orientations{};
         if (!std::regex_search(data, result_orientations, regex_orientations))
@@ -165,9 +182,11 @@ namespace rtosim {
         SimTK::Real yAngle{ SimTK::convertDegreesToRadians(std::stod(result_orientations[2])) };
         SimTK::Real zAngle{ SimTK::convertDegreesToRadians(std::stod(result_orientations[3])) };
         SimTK::Rotation rot;
-        rot.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::BodyRotationSequence, xAngle, SimTK::XAxis, yAngle, SimTK::YAxis, zAngle, SimTK::ZAxis);
-        SimTK::Rotation currRotation = rot*globalToOsim_;
-        return currRotation.convertRotationToQuaternion();
+        rot.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::SpaceRotationSequence, xAngle, SimTK::XAxis, yAngle, SimTK::YAxis, zAngle, SimTK::ZAxis);
+       // SimTK::Rotation initialOffset{initialOffset_};
+//	SimTK::Rotation currRotation = rot*globalToOsim_*initialOffset.transpose();
+  	SimTK::Rotation currRotation = (globalToOsim_*rot).transpose();
+	return currRotation;
     }
 
     void OrientationsFromMobile::pushEndOfData() {
@@ -185,10 +204,11 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         auto start = std::chrono::system_clock::now();
-
+	initialiseOffset(sock);
         OrientationSetFrame frame = getOrientationFrame(sock);
         firstTime_ = frame.time;
         frame.time = frame.time - firstTime_;
+	
         while (runCondition_.getRunCondition()) {
             frame = getOrientationFrame(sock);
             frame.time = frame.time - firstTime_;
