@@ -119,14 +119,31 @@ namespace rtosim {
         return sock;
     }
 
+    OrientationSetFrame OrientationsFromMobile::getOrientationFrame(unsigned long long sock){
+        std::string data;
+        OrientationSetFrame frame;
+        bool waitingForFrame = true;
+        while (waitingForFrame){
+            try {
+                data = getFrame(sock);
+                frame.time = evaluateTimestamp(data);
+                evaluateOrientations(data);
+                waitingForFrame = false;
+                OrientationSetData currData{ evaluateOrientations(data) };
+                frame.data = currData;
+            }
+            catch (...){ std::cout << "..."; };
+        }
+        return frame;
+    }
+
     std::string OrientationsFromMobile::getFrame(unsigned long long sock) {
         char buffer[500];
         int bytes = -1;
         do{
             bytes = recvfrom(sock, buffer, 500, 0, 0, 0);
-        } while (bytes <= 0);
+        } while (bytes<=0);
         std::string data{buffer};
-        std::cout << data << std::flush;
         return data;
     }
 
@@ -140,15 +157,15 @@ namespace rtosim {
     }
 
     SimTK::Quaternion OrientationsFromMobile::evaluateOrientations(std::string& data){
-        std::regex regex_orientations{ ", 5, +( *-?[0-9.]+),+( *-?[0-9.]+),+( *-?[0-9.]+)" };
+        std::regex regex_orientations{ ", 81, +( *-?[0-9.]+),+( *-?[0-9.]+),+( *-?[0-9.]+)" };
         std::smatch result_orientations{};
         if (!std::regex_search(data, result_orientations, regex_orientations))
             throw std::runtime_error{ "No orientations in data stream." };
-        SimTK::Real xAngle{ std::stod(result_orientations[1]) };
-        SimTK::Real yAngle{ std::stod(result_orientations[2]) };
-        SimTK::Real zAngle{ std::stod(result_orientations[3]) };
+        SimTK::Real xAngle{ SimTK::convertDegreesToRadians(std::stod(result_orientations[1])) };
+        SimTK::Real yAngle{ SimTK::convertDegreesToRadians(std::stod(result_orientations[2])) };
+        SimTK::Real zAngle{ SimTK::convertDegreesToRadians(std::stod(result_orientations[3])) };
         SimTK::Rotation rot;
-        rot.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::SpaceRotationSequence, xAngle, SimTK::XAxis, yAngle, SimTK::YAxis, zAngle, SimTK::ZAxis);
+        rot.setRotationFromThreeAnglesThreeAxes(SimTK::BodyOrSpaceType::BodyRotationSequence, xAngle, SimTK::XAxis, yAngle, SimTK::YAxis, zAngle, SimTK::ZAxis);
         SimTK::Rotation currRotation = rot*globalToOsim_;
         return currRotation.convertRotationToQuaternion();
     }
@@ -168,24 +185,14 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         auto start = std::chrono::system_clock::now();
-	string frame;
-        int i(100);
-	while(i-- >0) {
-	  frame = getFrame(sock);
-	}
-        firstTime_ = evaluateTimestamp(frame);
-        OrientationSetData firstData{ evaluateOrientations(frame) };
-        OrientationSetFrame firstFrame;
-        firstFrame.time = firstTime_ - firstTime_;
-        firstFrame.data = firstData;
-        outputOrientationSetQueue_.push(firstFrame);
+
+        OrientationSetFrame frame = getOrientationFrame(sock);
+        firstTime_ = frame.time;
+        frame.time = frame.time - firstTime_;
         while (runCondition_.getRunCondition()) {
-            frame = getFrame(sock);
-            OrientationSetData currData{ evaluateOrientations(frame) };
-            OrientationSetFrame currFrame;
-            currFrame.time = evaluateTimestamp(frame) - firstTime_;
-            currFrame.data = currData;
-            outputOrientationSetQueue_.push(currFrame);
+            frame = getOrientationFrame(sock);
+            frame.time = frame.time - firstTime_;
+            outputOrientationSetQueue_.push(frame);
         }
 
         pushEndOfData();

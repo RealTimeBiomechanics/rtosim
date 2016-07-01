@@ -22,7 +22,7 @@ int main() {
   //OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
 
   OrientationSetQueue orientationSetQueue;
-  rtosim::Concurrency::Latch doneWithSubscriptions(2), doneWithExecution(2);
+  rtosim::Concurrency::Latch doneWithSubscriptions(1), doneWithExecution(1);
   std::vector<std::string> columnLabels{ "Imu_1" };
   std::string modelFileName("");
   FlowControl runCondition(true);
@@ -53,7 +53,8 @@ int main() {
     SimTK::MultibodySystem system;
     SimTK::SimbodyMatterSubsystem matter(system);
     SimTK::Body::Rigid candyBarBody;
-    candyBarBody.addDecoration(SimTK::Transform(), SimTK::DecorativeBrick(SimTK::Real(1,0.1,0.3)).setColor(SimTK::Red));
+    candyBarBody.addDecoration(SimTK::Transform(), 
+			       SimTK::DecorativeBrick({1,2,3}).setColor(SimTK::Red));
     SimTK::MobilizedBody::Free freeCandyBar(matter.updGround(), candyBarBody);
     SimTK::Visualizer viz(system);
     viz.setShowFrameRate(true);
@@ -64,7 +65,7 @@ int main() {
     viz.setDesiredBufferLengthInSec(1);
     system.realizeTopology();
     SimTK::State state = system.getDefaultState();
-    freeCandyBar.setQ(state, SimTK::Vec7(0, 0, 0, 1, 1, 1, 0));
+    freeCandyBar.setQ(state, SimTK::Vec7(0, 0, 0, 0, 0, 0, 0));
     system.realize(state);
     viz.report(state);
     
@@ -74,7 +75,7 @@ int main() {
       auto frame = orientationSetQueue.pop();
       localRunCondition = !rtosim::EndOfData::isEod(frame);
       if(localRunCondition) {
-	freeCandyBar.setQToFitRotation(state, frame.data);
+	freeCandyBar.setQToFitRotation(state, SimTK::Rotation(frame.data.at(0)));
 	viz.report(state);
       }
     }
@@ -89,7 +90,7 @@ int main() {
       runCondition.setRunCondition(false);
   });
 
- QueuesSync::launchThreads(orientationsFromMobile,trigger, logger);
+ QueuesSync::launchThreads(orientationsFromMobile,trigger, candyBar);
   
   return 0;
 }
