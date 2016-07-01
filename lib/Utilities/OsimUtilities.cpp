@@ -18,6 +18,44 @@
 
 namespace rtosim {
 
+  std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename) {
+
+    OpenSim::Model model(osimModelFilename);
+    const OpenSim::ComponentSet& componentSet(model.getMiscModelComponentSet());
+    OpenSim::OrientationSensorSet orientationSensorSet;
+	for(unsigned i(0); i < componentSet.getSize(); ++i) {
+	  std::cout << "Component " << i << std::endl;
+	  OpenSim::OrientationSensor* sensor(dynamic_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
+	  if(sensor != nullptr) {
+	    orientationSensorSet.cloneAndAppend(*sensor);
+	    std::cout << "Adding component\n";
+	  }
+	}
+        OpenSim::Array<std::string> sensorsNamesArray;
+	orientationSensorSet.getOSensorNames(sensorsNamesArray);
+        std::vector<std::string> sensorsNamesFromModel;
+	ArrayConverter::toStdVector(sensorsNamesArray, sensorsNamesFromModel);
+    return sensorsNamesFromModel;
+  
+}
+  
+  void attachOsensToModel(OpenSim::Model& model) {
+   
+    const OpenSim::ComponentSet& componentSet(model.getMiscModelComponentSet());
+    OpenSim::OrientationSensorSet orientationSensorSet;
+    for(unsigned i(0); i < componentSet.getSize(); ++i) {
+	  std::cout << "Component " << i << std::endl;
+	  OpenSim::OrientationSensor* sensor(dynamic_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
+	  if(sensor != nullptr) {
+	    sensor->connectOSensorToModel(model);
+	    std::string nameSens = sensor->getName();
+	    std::string nameBody = sensor->getBody().getName();
+	    std::cout << "Name: " << nameSens << " Body" << nameBody << std::endl;
+	  }
+    
+    }    
+  }
+  
     std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename) {
 
         OpenSim::Model model(modelFilename);

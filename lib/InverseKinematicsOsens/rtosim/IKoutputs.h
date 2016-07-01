@@ -13,28 +13,42 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_OsimUtilities_h
-#define rtosim_OsimUtilities_h
+#ifndef rtosim_IKoutputs_h
+#define rtosim_IKoutputs_h
 
+#include <iostream>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 #include <vector>
-#include <OpenSim/OpenSim.h>
-#include <OpenSim/Simulation/Model/ComponentSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensor.h>
 
 namespace rtosim {
-  
-    void attachOsensToModel(OpenSim::Model& model);
 
-    std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename);
-    
-    std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
+    template <typename T>
+    class IKoutputs
+    {
+    public:
+        IKoutputs() = default;
+        IKoutputs(const IKoutputs&) = delete;            // disable copying
+        IKoutputs& operator=(const IKoutputs&) = delete; // disable assignment
+        T pop(double currentTime);
+        T pop();
+        void pop(T& item);
+        void push(const T& item);
 
-    std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
+    private:
 
-    std::vector<std::string> getMarkerNamesOnBody(const OpenSim::Body& body);
+        struct OrderByTime
+        {
+            bool operator() (T const &a, T const &b) { return a.time > b.time; }
+        };
 
-    std::string getMostPosteriorMarker(const std::vector<std::string>& markerNames, OpenSim::Model& model);
+        std::priority_queue<T, std::vector<T>, OrderByTime > queue_;
+        std::mutex mutex_;
+        std::condition_variable cond_;
+    };
 }
 
+#include "IKoutputs.cpp"
 #endif

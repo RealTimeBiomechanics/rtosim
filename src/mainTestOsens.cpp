@@ -11,7 +11,7 @@ using namespace OpenSim;
 using namespace SimTK;
 using namespace rtosim;
 using namespace std;
-
+/*
 vector<string> getOsensNamesFromModel(const string& osimModelFilename) {
 
     Model model(osimModelFilename);
@@ -30,7 +30,7 @@ vector<string> getOsensNamesFromModel(const string& osimModelFilename) {
     return sensorsNamesFromModel;
   
 }
-
+*/
 int main() {
     
   OpenSim::Object::registerType(OpenSim::OrientationSensor());
