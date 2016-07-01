@@ -168,7 +168,11 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         auto start = std::chrono::system_clock::now();
-        std::string frame = getFrame(sock);
+	string frame;
+        int i(100);
+	while(i-- >0) {
+	  frame = getFrame(sock);
+	}
         firstTime_ = evaluateTimestamp(frame);
         OrientationSetData firstData{ evaluateOrientations(frame) };
         OrientationSetFrame firstFrame;

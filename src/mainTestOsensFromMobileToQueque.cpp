@@ -1,4 +1,5 @@
 #include "rtosim/rtosim.h"
+#include <OpenSim/OpenSim.h>
 #include <OpenSim/Simulation/Model/OrientationSensor.h>
 #include <OpenSim/Simulation/Model/OrientationSensorSet.h>
 #include <OpenSim/Tools/InverseKinematicsExtendedTool.h>
@@ -35,6 +36,7 @@ int main() {
       SimTK::Vec3{0,0,0}
   );
   
+  
   QueueToFileLogger<OrientationSetData> logger(
      orientationSetQueue,
      doneWithSubscriptions,
@@ -44,6 +46,42 @@ int main() {
       "outputFile"
   );
 
+  
+  auto candyBar([&orientationSetQueue](){
+    
+    orientationSetQueue.subscribe();    
+    SimTK::MultibodySystem system;
+    SimTK::SimbodyMatterSubsystem matter(system);
+    SimTK::Body::Rigid candyBarBody;
+    candyBarBody.addDecoration(SimTK::Transform(), SimTK::DecorativeBrick(SimTK::Real(1,0.1,0.3)).setColor(SimTK::Red));
+    SimTK::MobilizedBody::Free freeCandyBar(matter.updGround(), candyBarBody);
+    SimTK::Visualizer viz(system);
+    viz.setShowFrameRate(true);
+    viz.setBackgroundType(SimTK::Visualizer::BackgroundType::SolidColor);
+    viz.setBackgroundColor(SimTK::Black);
+    viz.setMode(SimTK::Visualizer::Mode::Sampling);
+    viz.setShutdownWhenDestructed(true);
+    viz.setDesiredBufferLengthInSec(1);
+    system.realizeTopology();
+    SimTK::State state = system.getDefaultState();
+    freeCandyBar.setQ(state, SimTK::Vec7(0, 0, 0, 1, 1, 1, 0));
+    system.realize(state);
+    viz.report(state);
+    
+    bool localRunCondition = true;
+    while(localRunCondition) {
+      
+      auto frame = orientationSetQueue.pop();
+      localRunCondition = !rtosim::EndOfData::isEod(frame);
+      if(localRunCondition) {
+	freeCandyBar.setQToFitRotation(state, frame.data);
+	viz.report(state);
+      }
+    }
+
+    
+  });
+  
   auto trigger([&runCondition](){
       std::string cmd;
       bool run(true);
