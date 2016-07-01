@@ -156,3 +156,21 @@ target_link_libraries(test_osens_from_mobile_to_queue
 if(WIN32)
     target_link_libraries(test_osens_from_mobile_to_queue ws2_32)
 endif()
+
+add_executable(rtosim_osens_ik_from_mobile
+    mainInverseKinematicsOsensFromMobile.cpp
+    )
+
+target_link_libraries(rtosim_osens_ik_from_mobile
+    ${OPENSIM_LIBRARIES}
+    ${Osens_LIBRARIES}
+    Common
+    Utilities
+    Concurrency
+    InputDevice
+    InverseKinematics
+    SignalProcessing
+    OutputDevice
+    )
+
+
