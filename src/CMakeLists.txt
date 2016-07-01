@@ -169,7 +169,7 @@ target_link_libraries(rtosim_osens_ik_from_mobile
     Utilities
     Concurrency
     InputDevice
-    InverseKinematics
+    InverseKinematicsOsens
     SignalProcessing
     OutputDevice
     )
