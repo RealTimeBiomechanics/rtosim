@@ -17,7 +17,6 @@
 #include "rtosim/QueuesSync.h"
 #include <chrono>
 using std::chrono::system_clock;
-using std::chrono::high_resolution_clock;
 using std::chrono::duration_cast;
 #include <algorithm>
 #include <numeric>
@@ -197,14 +196,14 @@ namespace rtosim {
     template<typename Q>
     void TimeProbe<Q>::initialise() {
 
-        t_initialTimePoint_ = high_resolution_clock::now();
+        t_initialTimePoint_ = system_clock::now();
         c_initialTimePoint_ = std::clock();
     }
 
     template<typename Q>
     void TimeProbe<Q>::logCurrentTime(double frameTime) {
 
-        system_clock::time_point t_newTimePoint(high_resolution_clock::now());
+        system_clock::time_point t_newTimePoint(system_clock::now());
         std::clock_t c_newTimePoint(std::clock());
 
         //using system clock
