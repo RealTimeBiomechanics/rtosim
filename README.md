@@ -117,8 +117,9 @@ Publications
 
 If you are using rtosim or part of it please cite:
 
-Pizzolato, C., Reggiani, M., Modenese, L., Lloyd, D.G.. 
-Real-time inverse kinematics and inverse dynamics for lower limb applications using OpenSim.(under review). _Computer methods in biomechanics and biomedical engineering_.
+C. Pizzolato, M. Reggiani, L. Modenese & D. G. Lloyd (2016): Real-time inverse kinematics and inverse dynamics for lower limb applications using OpenSim, _Computer Methods in Biomechanics and Biomedical Engineering_, DOI:
+10.1080/10255842.2016.1240789
+To link to this article: http://dx.doi.org/10.1080/10255842.2016.1240789
 
 Acknowledgments
 ---------------
