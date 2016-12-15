@@ -8,6 +8,7 @@
 #include <OpenSim/Common/OrientationSensorData.h>
 #include <string>
 #include <vector>
+
 using namespace OpenSim;
 using namespace SimTK;
 using namespace rtosim;

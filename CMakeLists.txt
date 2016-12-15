@@ -35,14 +35,15 @@ endif(UNIX)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 find_package(OpenSim REQUIRED)
-find_package(Osens REQUIRED)
+find_package(IKExtended REQUIRED)
 find_package(ViconSDK QUIET)
 if(${VICONSDK_FOUND})
 	add_definitions(-DINCLUDEVICONSDK)
 endif()
 
-include_directories(${Osens_INCLUDE_DIRS})
+include_directories(${IKExtended_HEADERS})
 # Choose common build locations for executables and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

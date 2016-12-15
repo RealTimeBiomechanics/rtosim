@@ -61,7 +61,7 @@ target_include_directories(InverseKinematicsOsens PRIVATE
 		PUBLIC
 		${OPENSIM_INCLUDE_DIRS}
              ${SIMTK_INCLUDE_DIRS}
-		${Osens_INCLUDE_DIRS}
+		    ${IKExtended_HEADERS}
                                     )
 
 # Save path to include directory for "internal" usage

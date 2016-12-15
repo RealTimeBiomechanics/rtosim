@@ -17,7 +17,7 @@ include_directories(
     ${OPENSIM_INCLUDE_DIRS}
     ${SIMTK_INCLUDE_DIRS}
     ${rtosim_INCLUDE_DIRS}
-    ${Osens_INCLUDE_DIRS}
+    ${IKExtended_HEADERS}
     ${rtosim_InverseKinematicsOsens_INCLUDE_DIRS}
 )
     
@@ -94,7 +94,7 @@ add_executable(rtosim_ik_osens_from_file
 
 target_link_libraries(rtosim_ik_osens_from_file 
     ${OPENSIM_LIBRARIES}
-    ${Osens_LIBRARIES}
+    IKExtended
     Common
     Utilities
     Concurrency
@@ -110,7 +110,7 @@ add_executable(test_osens
 
 target_link_libraries(test_osens
     ${OPENSIM_LIBRARIES}
-    ${Osens_LIBRARIES}
+    IKExtended
     Common
     Utilities
     Concurrency
@@ -126,7 +126,7 @@ add_executable(test_osens_from_mobile
 
 target_link_libraries(test_osens_from_mobile
     ${OPENSIM_LIBRARIES}
-    ${Osens_LIBRARIES}
+    IKExtended
     Common
     Utilities
     Concurrency
@@ -145,7 +145,7 @@ add_executable(test_osens_from_mobile_to_queue
 
 target_link_libraries(test_osens_from_mobile_to_queue
     ${OPENSIM_LIBRARIES}
-    ${Osens_LIBRARIES}
+    IKExtended
     Common
     Utilities
     Concurrency
@@ -164,7 +164,7 @@ add_executable(rtosim_osens_ik_from_mobile
 
 target_link_libraries(rtosim_osens_ik_from_mobile
     ${OPENSIM_LIBRARIES}
-    ${Osens_LIBRARIES}
+    IKExtended
     Common
     Utilities
     Concurrency
