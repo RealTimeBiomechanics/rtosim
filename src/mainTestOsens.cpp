@@ -32,11 +32,11 @@ vector<string> getOsensNamesFromModel(const string& osimModelFilename) {
 }
 */
 int main() {
-    
-  OpenSim::Object::registerType(OpenSim::OrientationSensor());
-  OpenSim::Object::registerType(OpenSim::IKExtendedTaskSet());
-  OpenSim::Object::registerType(OpenSim::IKOrientationSensorTask());
-  OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
+    OpenSim::Object::registerType(OpenSim::OrientationSensorSet());
+ // OpenSim::Object::registerType(OpenSim::OrientationSensor());
+//  OpenSim::Object::registerType(OpenSim::IKExtendedTaskSet());
+//  OpenSim::Object::registerType(OpenSim::IKOrientationSensorTask());
+//  OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
   
   string motFilename("/home/claudio/Data/IMU_test_data/cq_trial04_res7ms.mot");
   string osimModelFilename("/home/claudio/Data/IMU_test_data/phantomModel_pelvisLocked.osim");

@@ -30,12 +30,11 @@ add_library(Concurrency ${Concurrency_HEADERS} ${Concurrency_TEMPLATE_IMPLEMENTA
 
 set(rtosim_Concurrency_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for Concurrency library")
 
-#install(FILES ${Concurrency_HEADERS} ${Concurrency_TEMPLATE_IMPLEMENTATIONS}
-#        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim/concurrency COMPONENT Development)
-
-#install(TARGETS Concurrency
-#        EXPORT CEINMSTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Applications
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT Development)
-
+install(FILES ${Concurrency_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS Concurrency
+        EXPORT RtosimTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
+        )

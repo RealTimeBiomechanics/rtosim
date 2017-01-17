@@ -31,6 +31,7 @@ target_include_directories(rtosim PRIVATE
                                 ${rtosim_OutputDevice_INCLUDE_DIRS} 
                                 ${rtosim_InverseKinematics_INCLUDE_DIRS}
                                 ${rtosim_InverseDynamics_INCLUDE_DIRS}
+								${rtosim_InverseKinematicsOsens_INCLUDE_DIRS}
                                 ${rtosim_SignalProcessing_INCLUDE_DIRS}
                                 ${rtosim_Utilities_INCLUDE_DIRS} 
                                 ${SIMTK_INCLUDE_DIRS} 
@@ -44,5 +45,6 @@ set(rtosim_INCLUDE_DIRS
     ${rtosim_InputDevice_INCLUDE_DIRS}
 	${rtosim_OutputDevice_INCLUDE_DIRS}
     ${rtosim_InverseKinematics_INCLUDE_DIRS}
+	${rtosim_InverseKinematicsOsens_INCLUDE_DIRS}
 	${rtosim_InverseDynamics_INCLUDE_DIRS}    
 	${rtosim_SignalProcessing_INCLUDE_DIRS} CACHE INTERNAL "")

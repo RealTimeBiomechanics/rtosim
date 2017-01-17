@@ -34,9 +34,9 @@ namespace rtosim{
 	  ThreadPoolJobs<OrientationSetFrame>& inputMarkerSetFrameQueue, 
 	  const std::vector<std::string>& osensNames, 
 	  const std::vector<double>& osensWeigths);
-        virtual ~OrientationSensorsReferenceFromQueue() {}
+        virtual ~OrientationSensorsReferenceFromQueue();
         virtual void getValues(const SimTK::State &s, SimTK::Array_<SimTK::Quaternion> &values) const override;
- //       virtual void getWeights(const SimTK::State &s, SimTK::Array_<double> &weights) const override;
+        virtual void getWeights(const SimTK::State &s, SimTK::Array_<double> &weights) const override;
         virtual const SimTK::Array_<std::string>& getNames() const override;
         double getCurrentTime() { return time_; }
         bool isEndOfData() const;

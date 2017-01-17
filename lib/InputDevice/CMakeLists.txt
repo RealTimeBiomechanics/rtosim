@@ -21,6 +21,7 @@ set(InputDevice_SOURCES
     ExternalForcesFromStorageFile.cpp
     GeneralisedCoordinatesFromX.cpp
     GeneralisedCoordinatesFromStorageFile.cpp
+	OrientationsFromMR3.cpp
     )
 
 set(InputDevice_HEADERS 
@@ -32,6 +33,7 @@ set(InputDevice_HEADERS
     rtosim/ExternalForcesFromStorageFile.h
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
+	rtosim/OrientationsFromMR3.h
 	)
 
 SET(InputDevice_Nexus_SOURCES
@@ -61,11 +63,12 @@ target_include_directories(InputDevice PRIVATE
 								${rtosim_Utilities_INCLUDE_DIRS} 
                                 ${CMAKE_CURRENT_SOURCE_DIR}
 								PUBLIC
+								${MR3tools_HEADERS}
 								${SIMTK_INCLUDE_DIRS}
 								${OPENSIM_INCLUDE_DIRS}
 )
 
-TARGET_LINK_LIBRARIES(InputDevice Common Utilities)
+#TARGET_LINK_LIBRARIES(InputDevice PRIVATE ${OPENSIM_LIBRARIES} Common Utilities)
 IF(${VICONSDK_FOUND})
 	target_include_directories(InputDevice PUBLIC
 								${ViconSDK_INCLUDE_DIRS}
@@ -78,11 +81,11 @@ ENDIF(${VICONSDK_FOUND})
 set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
 
-#install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InputDevice
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InputDevice
+        EXPORT RtosimTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
- #       )
+        )

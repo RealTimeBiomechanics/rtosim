@@ -13,10 +13,10 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_InverseKinematics_h
-#define rtosim_InverseKinematics_h
+#ifndef rtosim_InverseKinematicsOsens_h
+#define rtosim_InverseKinematicsOsens_h
 
 //all the other headers are not required outside
-#include "rtosim/QueueToInverseKinametics.h"
+#include "rtosim/QueueToInverseKinematicsOsens.h"
 
 #endif

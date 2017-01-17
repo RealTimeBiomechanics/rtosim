@@ -24,7 +24,7 @@ set(InverseKinematicsOsens_SOURCES
 						)
 
 set(InverseKinematicsOsens_HEADERS
-						rtosim/InverseKinematics.h
+						rtosim/InverseKinematicsOsens.h
                         rtosim/QueueToInverseKinematicsOsens.h
                         rtosim/IKSequencer.h 
 						rtosim/IKSolverParallelOsens.h 
@@ -68,11 +68,12 @@ target_include_directories(InverseKinematicsOsens PRIVATE
 set(rtosim_InverseKinematicsOsens_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseKinematics library")
 # Install
 
-#install(FILES ${InverseKinematics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InverseKinematics
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
-#        )
+install(FILES ${InverseKinematicsOsens_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InverseKinematicsOsens
+        EXPORT RtosimTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
+        )
+

@@ -43,6 +43,10 @@ namespace rtosim{
 
     }
 
+    OrientationSensorsReferenceFromQueue::~OrientationSensorsReferenceFromQueue()
+    {
+    }
+
     bool OrientationSensorsReferenceFromQueue::isEndOfData() const {
 
         OrientationSetFrame frame(inputOrientationSetFrameQueue_.front());
@@ -98,9 +102,9 @@ namespace rtosim{
         return names_;
     }
 
-   /* void OrientationSensorsReferenceFromQueue::getWeights(const SimTK::State &s, SimTK::Array_<double> &weights) const {
+    void OrientationSensorsReferenceFromQueue::getWeights(const SimTK::State &s, SimTK::Array_<double> &weights) const {
 
         weights = weights_;
     }
-    */
+    
 }

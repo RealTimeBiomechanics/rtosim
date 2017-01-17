@@ -52,7 +52,14 @@ namespace rtosim {
         std::string concatenatePaths(const std::string& path1, const std::string& path2) {
 
             std::string fs(SimTK::Pathname::getPathSeparator());
-            return path1 + fs + path2;
+            std::string concatenated;
+            if (path1.empty())
+                concatenated = path2;
+            else if (path1.back() == fs.front())
+                concatenated = path1 + path2;
+            else  
+                path1 + fs + path2;
+            return concatenated;
         }
     }
 }

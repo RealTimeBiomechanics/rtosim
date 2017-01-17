@@ -20,7 +20,7 @@
 #include <OpenSim/Common/OrientationSensorData.h>
 #include <OpenSim/Simulation/Model/OrientationSensorSet.h>
 #include <OpenSim/Simulation/Model/OrientationSensor.h>
-#include <OpenSim/OpenSim.h>
+//#include <OpenSim/OpenSim.h>
 #include <OpenSim/Simulation/Model/ComponentSet.h>
 #include <chrono>
 #include <thread>
@@ -59,7 +59,7 @@ namespace rtosim {
 	for(unsigned i(0); i < componentSet.getSize(); ++i) {
 	  OpenSim::OrientationSensor* sensor(dynamic_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
 	  if(sensor != nullptr)
-	    orientationSensorSet.cloneAndAppend(*sensor);
+	    orientationSensorSet.adoptAndAppend(sensor->clone());
 	}
 	
         OpenSim::Array<std::string> sensorsNamesArray;

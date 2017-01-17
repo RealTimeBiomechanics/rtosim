@@ -61,10 +61,10 @@ void printHelp() {
 
 int main(int argc, char* argv[]) {
 
-    OpenSim::Object::registerType(OpenSim::OrientationSensor());
-  OpenSim::Object::registerType(OpenSim::IKExtendedTaskSet());
-  OpenSim::Object::registerType(OpenSim::IKOrientationSensorTask());
-  OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
+ //   OpenSim::Object::registerType(OpenSim::OrientationSensor());
+ // OpenSim::Object::registerType(OpenSim::IKExtendedTaskSet());
+ // OpenSim::Object::registerType(OpenSim::IKOrientationSensorTask());
+ // OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
   
     ProgramOptionsParser po(argc, argv);
     if (po.exists("-h") || po.empty()) {

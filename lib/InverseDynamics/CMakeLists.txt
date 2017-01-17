@@ -53,16 +53,16 @@ target_include_directories(InverseDynamics PRIVATE
                                              ${SIMTK_INCLUDE_DIRS}
                                     )
 
-TARGET_LINK_LIBRARIES(InverseDynamics Common)
+TARGET_LINK_LIBRARIES(InverseDynamics PRIVATE Common)
 # Save path to include directory for "internal" usage
 set(rtosim_InverseDynamics_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseDynamics library")
 # Install
 
-#install(FILES ${InverseKinematics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InverseKinematics
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
-#        )
+install(FILES ${InverseDynamics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InverseDynamics
+        EXPORT RtosimTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
+        )

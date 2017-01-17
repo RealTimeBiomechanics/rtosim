@@ -63,7 +63,7 @@ namespace rtosim{
         constraintWeight_(constraintWeight) {
 	  
         names_ = getOsensNamesFromModel(osimModelFilename);
-	attachOsensToModel(model_);
+//	attachOsensToModel(model_);
 	
         nOsens_ = names_.size();
 	OpenSim::Array<std::string> coordinateNamesArray;
@@ -129,12 +129,11 @@ namespace rtosim{
         std::vector<double> sortedWeights;
 	for (auto it : names_)
             sortedWeights.push_back(weights_[it]);
-	std::cout << "Names from constructor" << std::endl;
-	for (auto n : names_) 
-	  std::cout << n << std::endl;
+//	std::cout << "Names from constructor" << std::endl;
+	//for (auto n : names_) 
+//	  std::cout << n << std::endl;
         //I may need to use a raw pointer because of OpenSim..
-        unique_ptr<OrientationSensorsReferenceFromQueue> osensReference(
-	  new OrientationSensorsReferenceFromQueue(inputThreadPoolJobs_, names_, sortedWeights));
+      OrientationSensorsReferenceFromQueue osensReference(inputThreadPoolJobs_, names_, sortedWeights);
     //    OpenSim::Set<OpenSim::OrientationSensorWeight> osimWeights;
     //    for (auto it : names_)
      //       osimWeights.adoptAndAppend(new OpenSim::OrientationSensorWeight(it, weights_[it]));
@@ -145,12 +144,12 @@ namespace rtosim{
         SimTK::Array_<OpenSim::CoordinateReference> coordinateRefs;
         double previousTime(0.);
         double currentTime(0.);
-	auto names = osensReference->getNames();
-	std::cout << "Names " << std::endl;
-	for(unsigned j(0); j < names.size(); ++j)
-	  std::cout << names[j] << "\n" << std::flush; 
-	std::cout << "model name" << model_ << std::endl;
-	OpenSim::InverseKinematicsExtendedSolver ikSolver(model_, *osensReference, coordinateRefs, constraintWeight_);
+	auto names = osensReference.getNames();
+	//std::cout << "Names " << std::endl;
+	//for(unsigned j(0); j < names.size(); ++j)
+	//  std::cout << names[j] << "\n" << std::flush; 
+	//std::cout << "model name" << model_ << std::endl;
+	OpenSim::InverseKinematicsExtendedSolver ikSolver(model_, osensReference, coordinateRefs, constraintWeight_);
         /* 
 	SimTK::Array_<double> currentWeights;
 	osensReference->getWeights(s, currentWeights);
@@ -174,12 +173,12 @@ namespace rtosim{
             }
             catch (...){
                 std::cerr << "Time " << s.getTime() << " Model not assembled" << std::endl;
-                osensReference->purgeCurrentFrame();
+                osensReference.purgeCurrentFrame();
                 isAssembled = false;
             }
         }
         SimTK::State defaultState(s);
-        currentTime = osensReference->getCurrentTime();
+        currentTime = osensReference.getCurrentTime();
         s.updTime() = currentTime;
         previousTime = currentTime;
         pushState(s);
@@ -187,7 +186,7 @@ namespace rtosim{
         //     auto start = std::chrono::system_clock::now();
         //init the stats, so we can start measuring the frame processing time correctly
         while (localRunCondition) {
-            if (!osensReference->isEndOfData()){
+            if (!osensReference.isEndOfData()){
                 try{
 		  stopWatch_.init();
                     ikSolver.track(s);
@@ -200,7 +199,7 @@ namespace rtosim{
                 }
                 SimTK::Array_<double> markerErrors;
                // ikSolver.computeCurrentMarkerErrors(markerErrors);
-                currentTime = osensReference->getCurrentTime();
+                currentTime = osensReference.getCurrentTime();
                 s.updTime() = currentTime;
                 previousTime = currentTime;
                 pushState(s);

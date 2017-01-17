@@ -18,7 +18,7 @@ include_directories(
     ${SIMTK_INCLUDE_DIRS}
     ${rtosim_INCLUDE_DIRS}
     ${IKExtended_HEADERS}
-    ${rtosim_InverseKinematicsOsens_INCLUDE_DIRS}
+	${MR3tools_HEADERS}
 )
     
 add_executable(rtosim_ik_from_file 
@@ -93,15 +93,15 @@ add_executable(rtosim_ik_osens_from_file
     )
 
 target_link_libraries(rtosim_ik_osens_from_file 
-    ${OPENSIM_LIBRARIES}
-    IKExtended
+#	${OPENSIM_LIBRARIES}
     Common
     Utilities
     Concurrency
     InputDevice
-    InverseKinematicsOsens
     SignalProcessing
     OutputDevice
+	InverseKinematicsOsens
+	IKExtended	
     )
     
 add_executable(test_osens 
@@ -109,35 +109,37 @@ add_executable(test_osens
     )
 
 target_link_libraries(test_osens
-    ${OPENSIM_LIBRARIES}
     IKExtended
-    Common
+	${OPENSIM_LIBRARIES}
+    
+	Common
     Utilities
     Concurrency
     InputDevice
     InverseKinematicsOsens
-    SignalProcessing
+  #  SignalProcessing
+	
     OutputDevice
     )
     
-add_executable(test_osens_from_mobile 
-    mainRTOsensFromMobile.cpp
-    )
+#add_executable(test_osens_from_mobile 
+#    mainRTOsensFromMobile.cpp
+#    )
 
-target_link_libraries(test_osens_from_mobile
-    ${OPENSIM_LIBRARIES}
-    IKExtended
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    InverseKinematics
-    SignalProcessing
-    OutputDevice
-    )
-if(WIN32)
-    target_link_libraries(test_osens_from_mobile ws2_32)
-endif()
+#target_link_libraries(test_osens_from_mobile
+#    ${OPENSIM_LIBRARIES}
+#    IKExtended
+#    Common
+#    Utilities
+#    Concurrency
+#    InputDevice
+#    InverseKinematics
+#    SignalProcessing
+#    OutputDevice
+#    )
+#if(WIN32)
+#    target_link_libraries(test_osens_from_mobile ws2_32)
+#endif()
 
 add_executable(test_osens_from_mobile_to_queue
     mainTestOsensFromMobileToQueue.cpp
@@ -145,7 +147,7 @@ add_executable(test_osens_from_mobile_to_queue
 
 target_link_libraries(test_osens_from_mobile_to_queue
     ${OPENSIM_LIBRARIES}
-    IKExtended
+    InverseKinematicsOsens
     Common
     Utilities
     Concurrency
@@ -154,24 +156,57 @@ target_link_libraries(test_osens_from_mobile_to_queue
     SignalProcessing
     OutputDevice
     )
-if(WIN32)
-    target_link_libraries(test_osens_from_mobile_to_queue ws2_32)
-endif()
+#if(WIN32)
+#    target_link_libraries(test_osens_from_mobile_to_queue ws2_32)
+#endif()
 
-add_executable(rtosim_osens_ik_from_mobile
-    mainInverseKinematicsOsensFromMobile.cpp
-    )
+#add_executable(rtosim_osens_ik_from_mobile
+#    mainInverseKinematicsOsensFromMobile.cpp
+#    )
 
-target_link_libraries(rtosim_osens_ik_from_mobile
-    ${OPENSIM_LIBRARIES}
-    IKExtended
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    InverseKinematicsOsens
-    SignalProcessing
-    OutputDevice
-    )
+#target_link_libraries(rtosim_osens_ik_from_mobile
+#    ${OPENSIM_LIBRARIES}
+#	InverseKinematicsOsens
+#    IKExtended
+#    Common
+#    Utilities
+#    Concurrency
+#    InputDevice
+#    SignalProcessing
+#    OutputDevice
+#    )
 
 
+add_executable(test_data_from_MR3 mainTestDataFromMR3.cpp)
+
+target_link_libraries(test_data_from_MR3
+InputDevice
+MR3tools
+Concurrency
+Utilities
+Common
+${OPENSIM_LIBRARIES})
+
+add_executable(test_data_from_MR3_to_osim mainTestDataFromMR3toOsim.cpp)
+
+target_link_libraries(test_data_from_MR3_to_osim
+InputDevice
+OutputDevice
+MR3tools
+Concurrency
+Utilities
+Common
+IKExtended
+InverseKinematicsOsens
+${OPENSIM_LIBRARIES})
+
+add_executable(fromMR3toFile mainFromMR3toFile.cpp)
+
+target_link_libraries(fromMR3toFile
+InputDevice
+OutputDevice
+MR3tools
+Concurrency
+Utilities
+Common
+${OPENSIM_LIBRARIES})

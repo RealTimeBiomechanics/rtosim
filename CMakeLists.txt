@@ -42,8 +42,9 @@ find_package(ViconSDK QUIET)
 if(${VICONSDK_FOUND})
 	add_definitions(-DINCLUDEVICONSDK)
 endif()
+find_package(MR3tools REQUIRED)
 
-include_directories(${IKExtended_HEADERS})
+include_directories(${IKExtended_INCLUDE_DIRS})
 # Choose common build locations for executables and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

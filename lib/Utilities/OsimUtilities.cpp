@@ -15,6 +15,8 @@
 
 #include "rtosim/OsimUtilities.h"
 #include "rtosim/ArrayConverter.h"
+#include <OpenSim/Simulation/Model/OrientationSensor.h>
+#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
 
 namespace rtosim {
 
@@ -45,9 +47,9 @@ namespace rtosim {
     OpenSim::OrientationSensorSet orientationSensorSet;
     for(unsigned i(0); i < componentSet.getSize(); ++i) {
 	  std::cout << "Component " << i << std::endl;
-	  OpenSim::OrientationSensor* sensor(dynamic_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
+	  OpenSim::OrientationSensor* sensor(static_cast<OpenSim::OrientationSensor*>(&componentSet.get(i)));
 	  if(sensor != nullptr) {
-	    sensor->connectOSensorToModel(model);
+	    sensor->connectToModel(model);
 	    std::string nameSens = sensor->getName();
 	    std::string nameBody = sensor->getBody().getName();
 	    std::cout << "Name: " << nameSens << " Body" << nameBody << std::endl;

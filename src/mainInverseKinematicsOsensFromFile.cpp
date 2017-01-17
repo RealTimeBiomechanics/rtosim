@@ -176,14 +176,14 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "filtered_ik_from_file", "sto");
+        resultDir, "filtered_ik_from_file", ".sto");
     //read from generalisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> rawIkLogger(
         generalisedCoordinatesQueue,
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "raw_ik_from_file", "sto");
+        resultDir, "raw_ik_from_file", ".sto");
     //calculate the ik throughput time
     rtosim::FrameCounter<rtosim::GeneralisedCoordinatesQueue> ikFrameCounter(
         generalisedCoordinatesQueue,

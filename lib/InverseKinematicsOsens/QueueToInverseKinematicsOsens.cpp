@@ -102,6 +102,7 @@ namespace rtosim {
             for (auto& it : ikSolvers)
                 it->setInverseKinematicsTaskSet(ikTaskSetFilename_);
         }
+
         IKSequencer ikSequencer(ikOutputQueue, timeSequenceQueue, outputGeneralisedCoordinateQueue_, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);
         thread jobCreatorThr(ref(jobCreator));
         thread ikSequencerThr(ref(ikSequencer));

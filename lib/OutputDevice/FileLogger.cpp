@@ -28,7 +28,9 @@ namespace rtosim {
         filename_(filename),
         outputDir_(outputDir),
         sp_(separator)
-    {    }
+    {    
+        outputDir_ = FileSystem::concatenatePaths(outputDir_, "");
+    }
 
     template<typename DataType>
     void FileLogger<DataType>::logFrame(const FrameType& frame) {
@@ -92,12 +94,13 @@ namespace rtosim {
     bool FileLogger<DataType>::createFile() {
 
         bool success(true);
-        if (!FileSystem::directoryExists(outputDir_))
-            success = !FileSystem::createDirectory(outputDir_);
-        if (!success) {
-            std::cout << "Cannot create output directory: " + outputDir_ << std::endl;
+        if (!outputDir_.empty()) {
+            if (!FileSystem::directoryExists(outputDir_))
+                success = !FileSystem::createDirectory(outputDir_);
+            if (!success) {
+                std::cout << "Cannot create output directory: " + outputDir_ << std::endl;
+            }
         }
-
         std::string outFilename = FileSystem::concatenatePaths(outputDir_, filename_);
 
         outFile_.reset(new std::ofstream(outFilename.c_str()));

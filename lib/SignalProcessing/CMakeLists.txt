@@ -78,11 +78,19 @@ target_include_directories(SignalProcessing
 	PUBLIC
         ${OPENSIM_INCLUDE_DIRS}
         ${SIMTK_INCLUDE_DIRS}
+		 ${IKExtended_HEADERS}
 		)
 
+target_link_libraries(SignalProcessing PRIVATE ${OPENSIM_LIBRARIES} Common Utilities Concurrency IKExtended)
 set(rtosim_SignalProcessing_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "Include directory for SignalProcessing library" FORCE)
 mark_as_advanced(rtosim_SignalProcessing_INCLUDE_DIRS)
 
-#install(FILES ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS}
- #       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl/Filter)
 
+install(FILES ${SignalProcessing_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS SignalProcessing
+        EXPORT RtosimTargets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
+        )
