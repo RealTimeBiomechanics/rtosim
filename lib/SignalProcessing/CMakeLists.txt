@@ -76,8 +76,7 @@ target_include_directories(SignalProcessing
 		${rtosim_Utilities_INCLUDE_DIRS}
 		${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC
-        ${OPENSIM_INCLUDE_DIRS}
-        ${SIMTK_INCLUDE_DIRS}
+        ${OPENSIMSIMBODY_INCLUDE_DIRS}
 		)
 
 set(rtosim_SignalProcessing_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "Include directory for SignalProcessing library" FORCE)

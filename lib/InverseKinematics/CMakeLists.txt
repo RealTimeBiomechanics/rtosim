@@ -55,8 +55,7 @@ target_include_directories(InverseKinematics PRIVATE
 										     ${rtosim_Utilities_INCLUDE_DIRS}
 								    	     ${CMAKE_CURRENT_SOURCE_DIR}
                                              PUBLIC
-                                             ${OPENSIM_INCLUDE_DIRS}
-                                             ${SIMTK_INCLUDE_DIRS}
+                                             ${OPENSIMSIMBODY_INCLUDE_DIRS}
                                     )
 
 # Save path to include directory for "internal" usage

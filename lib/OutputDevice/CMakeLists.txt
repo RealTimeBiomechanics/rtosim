@@ -50,8 +50,7 @@ target_include_directories(
         ${rtosim_Utilities_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}
     PUBLIC
-        ${SIMTK_INCLUDE_DIRS}
-        ${OPENSIM_INCLUDE_DIRS}
+        ${OPENSIMSIMBODY_INCLUDE_DIRS}
 )
 
 TARGET_LINK_LIBRARIES(OutputDevice Common)#SharedData ${ViconSDK_LIBRARIES})

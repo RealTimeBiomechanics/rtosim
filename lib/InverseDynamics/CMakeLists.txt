@@ -49,8 +49,7 @@ target_include_directories(InverseDynamics PRIVATE
 										     ${rtosim_Utilities_INCLUDE_DIRS}
 								    	     ${CMAKE_CURRENT_SOURCE_DIR}
                                              PUBLIC
-                                             ${OPENSIM_INCLUDE_DIRS}
-                                             ${SIMTK_INCLUDE_DIRS}
+                                             ${OPENSIMSIMBODY_INCLUDE_DIRS}
                                     )
 
 TARGET_LINK_LIBRARIES(InverseDynamics Common)
