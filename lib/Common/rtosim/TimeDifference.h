@@ -87,7 +87,7 @@ namespace rtosim {
         void logCurrentTime(double frameTime);
         Q& queue_;
         
-        std::chrono::system_clock::time_point t_initialTimePoint_;
+        std::chrono::steady_clock::time_point t_initialTimePoint_;
         TimeData<double> t_frameProcessingTimes_;
 
         std::clock_t c_initialTimePoint_;

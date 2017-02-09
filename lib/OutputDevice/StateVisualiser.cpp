@@ -51,7 +51,7 @@ namespace rtosim{
         viz.setDesiredFrameRate(60);
         ShowInfo* info = new ShowInfo();
         viz.addDecorationGenerator(info);
-        auto start = std::chrono::system_clock::now();
+        auto start = std::chrono::steady_clock::now();
         int frameCounter = 0;
         bool localRunCondition(true);
         while (localRunCondition) {
@@ -69,9 +69,9 @@ namespace rtosim{
             viz.report(s);
             frameCounter++;
 
-            if ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)) > std::chrono::milliseconds(1000)) {
+            if ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start)) > std::chrono::milliseconds(1000)) {
                 info->setText("IK FPS: " + std::to_string(frameCounter));
-                start = std::chrono::system_clock::now();
+                start = std::chrono::steady_clock::now();
                 frameCounter = 0;
             }
         }
