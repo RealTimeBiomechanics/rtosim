@@ -17,7 +17,7 @@
 #include "rtosim/FileSystem.h"
 
 #include <chrono>
-using std::chrono::system_clock;
+using std::chrono::steady_clock;
 using std::chrono::duration_cast;
 #include <algorithm>
 #include <fstream>
@@ -40,13 +40,13 @@ namespace rtosim {
 
     void StopWatch::init() {
         id_ = std::this_thread::get_id();
-        t_initialTimePoint_ = t_finalTimePoint_ = t_timePoint_ = system_clock::now();
+        t_initialTimePoint_ = t_finalTimePoint_ = t_timePoint_ = steady_clock::now();
         c_initialTimePoint_ = c_finalTimePoint_ = c_timePoint_ = std::clock();
     }
 
     void StopWatch::log() {
 
-        system_clock::time_point t_newTimePoint(system_clock::now());
+        steady_clock::time_point t_newTimePoint(steady_clock::now());
         std::clock_t c_newTimePoint(std::clock());
 
         //using system clock
@@ -154,7 +154,7 @@ namespace rtosim {
 
     StopWatch& StopWatch::operator+=(const StopWatch& rhs)
     {
-        t_initialTimePoint_ = t_finalTimePoint_ = t_timePoint_ = system_clock::now();
+        t_initialTimePoint_ = t_finalTimePoint_ = t_timePoint_ = steady_clock::now();
         this->t_frameProcessingTime_.insert(this->t_frameProcessingTime_.end(), rhs.t_frameProcessingTime_.begin(), rhs.t_frameProcessingTime_.end());
 
         c_initialTimePoint_ = c_finalTimePoint_ = c_timePoint_ = std::clock();
