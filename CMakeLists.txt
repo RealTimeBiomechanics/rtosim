@@ -48,6 +48,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_DEBUG_POSTFIX "d")
 
+if(WIN32)
+    add_definitions(/DWIN32) #Hack to get OpenSim 3.3 to work
+endif()
+
 add_definitions(/D_USE_MATH_DEFINES)
 add_subdirectory(lib)
 add_subdirectory(src)
