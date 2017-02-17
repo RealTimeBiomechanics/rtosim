@@ -27,7 +27,7 @@ target_link_libraries(rtosim_ik_from_file
     ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
-    Concurrency
+    rtb::Concurrency
     InputDevice
     InverseKinematics
     SignalProcessing
@@ -43,7 +43,7 @@ target_link_libraries(rtosim_id_from_file
     ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
-    Concurrency
+    rtb::Concurrency
     InputDevice
     SignalProcessing
     InverseDynamics
@@ -58,7 +58,7 @@ target_link_libraries(rtosim_ik_id_from_file
     ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
-    Concurrency
+    rtb::Concurrency
     InputDevice
     SignalProcessing
     InverseKinematics
@@ -77,7 +77,7 @@ target_link_libraries(rtosim_ik_id_from_nexus
     ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
-    Concurrency
+    rtb::Concurrency
     InputDevice
     SignalProcessing
     InverseKinematics

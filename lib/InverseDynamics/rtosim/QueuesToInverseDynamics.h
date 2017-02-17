@@ -19,8 +19,8 @@
 #include "rtosim/QueueToXForces.h"
 
 #include "rtosim/GeneralisedCoordinatesData.h"
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/ExternalTorquesQueue.h"
@@ -36,8 +36,8 @@ namespace rtosim{
             GeneralisedCoordinatesQueue& inputGeneralisedCoordinatesQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             ExternalTorquesQueue& outputExternalTorquesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& externalLoadsXmlFilename);
 
@@ -45,8 +45,8 @@ namespace rtosim{
             GeneralisedCoordinatesQueue& inputGeneralisedCoordinatesQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             ExternalTorquesQueue& outputExternalTorquesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::vector<ExternalForceProperties>& externalForceDataProperties);
 

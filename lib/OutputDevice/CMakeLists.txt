@@ -45,7 +45,6 @@ add_library(OutputDevice STATIC
 target_include_directories(
     OutputDevice 
     PRIVATE
-        ${rtosim_Concurrency_INCLUDE_DIRS}
         ${rtosim_Common_INCLUDE_DIRS}
         ${rtosim_Utilities_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}

@@ -185,7 +185,7 @@ namespace rtosim {
 
 
     template<typename Q>
-    TimeProbe<Q>::TimeProbe(Q& queue, Concurrency::Latch& barrier) :
+    TimeProbe<Q>::TimeProbe(Q& queue, rtb::Concurrency::Latch& barrier) :
         queue_(queue),
         barrier_(barrier){
     
@@ -252,8 +252,8 @@ namespace rtosim {
     TimeDifference<Qin, Qout>::TimeDifference(
         Qin& queueIn,
         Qout& queueOut,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecutions) :
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecutions) :
         queueIn_(queueIn),
         queueOut_(queueOut),
         doneWithSubscriptions_(doneWithSubscriptions),
@@ -265,7 +265,7 @@ namespace rtosim {
     template<typename Qin, typename Qout>
     void TimeDifference<Qin, Qout>::operator()() {
 
-        Concurrency::Latch internalLatch(3);
+        rtb::Concurrency::Latch internalLatch(3);
 
         TimeProbe<Qin> pIn(queueIn_, internalLatch);
         TimeProbe<Qout>  pOut(queueOut_, internalLatch);

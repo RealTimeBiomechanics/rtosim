@@ -45,14 +45,13 @@ add_library(InverseDynamics STATIC
 
 target_include_directories(InverseDynamics PRIVATE
 									         ${rtosim_Common_INCLUDE_DIRS}
-								    	     ${rtosim_Concurrency_INCLUDE_DIRS}
 										     ${rtosim_Utilities_INCLUDE_DIRS}
 								    	     ${CMAKE_CURRENT_SOURCE_DIR}
                                              PUBLIC
                                              ${OPENSIMSIMBODY_INCLUDE_DIRS}
                                     )
 
-TARGET_LINK_LIBRARIES(InverseDynamics Common)
+target_link_libraries(InverseDynamics Common rtb::Concurrency)
 # Save path to include directory for "internal" usage
 set(rtosim_InverseDynamics_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseDynamics library")
 # Install

@@ -18,7 +18,7 @@
 
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/concurrency/Concurrency.h"
 #include "rtosim/ExternalLoadProperties.h"
 #include <map>
 
@@ -38,8 +38,8 @@ namespace rtosim{
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::map<std::string, std::string>& forcePlatesToMarkerNames,
             const std::vector<std::string>& markerNames);
 
@@ -51,8 +51,8 @@ namespace rtosim{
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& externalLoadsFilename);
 
@@ -60,8 +60,8 @@ namespace rtosim{
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::vector<ExternalForceProperties>& externalForcesProperties);
 
@@ -73,8 +73,8 @@ namespace rtosim{
         MarkerSetQueue& inputMarkerSetQueue_;
         MultipleExternalForcesQueue& outputExternalForcesQueue_;
         MultipleExternalForcesQueue& inputExternalForcesQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         std::map<std::string, unsigned> forcePlatesToMarkerIndex_;
     };
 }

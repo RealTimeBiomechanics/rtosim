@@ -16,7 +16,7 @@
 #ifndef rtosim_TimeDifference_h
 #define rtosim_TimeDifference_h
 
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Latch.h"
 #include <ctime>
 #include <chrono>
 #include <list>
@@ -76,7 +76,7 @@ namespace rtosim {
     template<typename Q>
     class TimeProbe {
     public:
-        TimeProbe(Q& queue, Concurrency::Latch& barrier);
+        TimeProbe(Q& queue, rtb::Concurrency::Latch& barrier);
         void operator()();
         TimeData<double> getWallClockTimes() const;
         TimeData<double> getCpuClockTimes() const;
@@ -92,7 +92,7 @@ namespace rtosim {
 
         std::clock_t c_initialTimePoint_;
         TimeData<double> c_frameProcessingTimes_;
-        Concurrency::Latch& barrier_;
+        rtb::Concurrency::Latch& barrier_;
 
 
     };
@@ -105,8 +105,8 @@ namespace rtosim {
         TimeDifference(
             Qin& queueIn, 
             Qout& queueOut, 
-            Concurrency::Latch& doneWithSubscriptions, 
-            Concurrency::Latch& doneWithExecutions);
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecutions);
         void operator()();
         TimeData<double> getWallClockDifference() const;
         TimeData<double> getCpuClockDifference() const;
@@ -114,8 +114,8 @@ namespace rtosim {
     private:
         Qin& queueIn_;
         Qout& queueOut_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecutions_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecutions_;
         TimeData<double> wallClockDifference_, cpuClockDifference_;
     };
 

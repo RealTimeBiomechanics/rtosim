@@ -31,8 +31,8 @@ namespace rtosim {
         MarkerSetQueue& inputMarkerQueue,
         ThreadPoolJobs<MarkerSetFrame>& outputJobsQueue,
         TimeSequence& outputTimeSequenceQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         unsigned noIkThreads) :
         inputMarkerQueue_(inputMarkerQueue),
         outputJobsQueue_(outputJobsQueue),

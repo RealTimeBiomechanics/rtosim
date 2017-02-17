@@ -24,8 +24,8 @@
 #include "rtosim/JobsCreator.h"
 #include "rtosim/IKSequencer.h"
 #include "rtosim/IKSolverParallel.h"
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/StopWatch.h"
@@ -37,8 +37,8 @@ namespace rtosim {
         QueueToInverseKinametics(
             MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
             double solverAccuracy = 1e-9,
@@ -47,8 +47,8 @@ namespace rtosim {
         QueueToInverseKinametics(
             MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
             const std::string& ikTaskSetFilename,
@@ -60,8 +60,8 @@ namespace rtosim {
     private:
         MarkerSetQueue& inputMarkerSetQueue_;
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         unsigned nThreads_;
         std::string osimModelFilename_;
         std::string ikTaskSetFilename_;

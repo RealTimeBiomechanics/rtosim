@@ -122,8 +122,8 @@ int main(int argc, char* argv[]) {
     ExternalTorquesQueue jointMomentsQueue;
 
     //define the barriers
-    rtosim::Concurrency::Latch doneWithSubscriptions;
-    rtosim::Concurrency::Latch doneWithExecution;
+    rtb::Concurrency::Latch doneWithSubscriptions;
+    rtb::Concurrency::Latch doneWithExecution;
     FlowControl runCondition(true);
 
     //define the filter

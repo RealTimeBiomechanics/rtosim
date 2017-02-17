@@ -68,11 +68,10 @@ add_library(SignalProcessing
     ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
     ${SignalProcessing_SOURCES} 
     )
-    
+target_link_libraries(SignalProcessing Common)
 target_include_directories(SignalProcessing 
 	PRIVATE	
 		${rtosim_Common_INCLUDE_DIRS}
-		${rtosim_Concurrency_INCLUDE_DIRS}
 		${rtosim_Utilities_INCLUDE_DIRS}
 		${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC

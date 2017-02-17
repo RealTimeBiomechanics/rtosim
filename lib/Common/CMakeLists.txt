@@ -57,8 +57,8 @@ source_group("Sources" FILES ${Common_SOURCES} ${Common_TEMPLATE_IMPLEMENTATION}
 # Define target
 add_library(Common STATIC ${Common_SOURCES} ${Common_HEADERS} ${Common_QUEUES_HEADERS} ${Common_TEMPLATE_IMPLEMENTATION})
 set_target_properties(Common PROPERTIES LINKER_LANGUAGE CXX)
-#target_link_libraries(rtosim_common LINK_PRIVATE${OPENSIMSIMBODY_LIBRARIES})
-target_include_directories(Common  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${Concurrency_INCLUDE_DIRS}  ${OPENSIMSIMBODY_INCLUDE_DIRS})
+target_link_libraries(Common rtb::Concurrency)
+target_include_directories(Common  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
 # Save path to include directory for "internal" usage
 set(rtosim_Common_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for library of common files")

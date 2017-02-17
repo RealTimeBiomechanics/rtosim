@@ -22,11 +22,10 @@ source_group("Headers" FILES ${rtosim_HEADERS})
 # Define target
 add_library(rtosim STATIC ${rtosim_HEADERS})
 set_target_properties(rtosim PROPERTIES LINKER_LANGUAGE CXX)
-#target_link_libraries(rtosim_common LINK_PRIVATE${OPENSIM_LIBRARIES})
+target_link_libraries(rtosim rtb::Concurrency)
 target_include_directories(rtosim PRIVATE 
                                 ${CMAKE_CURRENT_SOURCE_DIR} 
                                 ${rtosim_Common_INCLUDE_DIRS}
-                                ${rtosim_Concurrency_INCLUDE_DIRS} 
                                 ${rtosim_InputDevice_INCLUDE_DIRS} 
                                 ${rtosim_OutputDevice_INCLUDE_DIRS} 
                                 ${rtosim_InverseKinematics_INCLUDE_DIRS}
@@ -39,7 +38,6 @@ set(rtosim_INCLUDE_DIRS
 	${CMAKE_CURRENT_SOURCE_DIR}     
 	${rtosim_Utilities_INCLUDE_DIRS}
     ${rtosim_Common_INCLUDE_DIRS}
-    ${rtosim_Concurrency_INCLUDE_DIRS}
     ${rtosim_InputDevice_INCLUDE_DIRS}
 	${rtosim_OutputDevice_INCLUDE_DIRS}
     ${rtosim_InverseKinematics_INCLUDE_DIRS}

@@ -18,7 +18,7 @@
 
 #include "rtosim/ExternalForcesFromX.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/concurrency/Concurrency.h"
 #include "rtosim/ExternalLoadProperties.h"
 #include <OpenSim/OpenSim.h>
 #include <string>
@@ -30,16 +30,16 @@ namespace rtosim {
         //to parse the external forces easily, I need an opensim model.. otherwise I have to read manually from the storage
         ExternalForcesFromStorageFile(
             MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& externalLoadsXmlFilename,
             double fc = -1);
 
         //using this constructor, grfFilename replace the grf in externalLoadsXml
         ExternalForcesFromStorageFile(
             MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& externalLoadsXmlFilename,
             const std::string& grfFilename,
             double fc = -1);

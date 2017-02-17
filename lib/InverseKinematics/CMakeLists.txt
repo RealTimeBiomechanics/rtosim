@@ -48,10 +48,9 @@ add_library(InverseKinematics STATIC
   ${InverseKinematics_HEADERS}
   ${InverseKinematics_TEMPLATE_IMPLEMENTATION}
 )
-
+target_link_libraries(InverseKinematics rtb::Concurrency)
 target_include_directories(InverseKinematics PRIVATE
 									         ${rtosim_Common_INCLUDE_DIRS}
-								    	     ${rtosim_Concurrency_INCLUDE_DIRS}
 										     ${rtosim_Utilities_INCLUDE_DIRS}
 								    	     ${CMAKE_CURRENT_SOURCE_DIR}
                                              PUBLIC
