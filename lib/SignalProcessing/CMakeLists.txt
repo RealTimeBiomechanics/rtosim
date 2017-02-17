@@ -41,25 +41,21 @@ set_source_files_properties(
 source_group("Header files" FILES ${SignalProcessing_HEADERS})
 source_group("Source files" FILES ${SignalProcessing_SOURCES} ${SignalProcessing_SOURCES})
 
-include_directories(include)
 add_library(SignalProcessing
     ${SignalProcessing_HEADERS} 
     ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
     ${SignalProcessing_SOURCES} 
     )
-target_link_libraries(SignalProcessing Common rtb::Filter)
-target_include_directories(SignalProcessing 
-	PRIVATE	
-		${rtosim_Common_INCLUDE_DIRS}
-		${rtosim_Utilities_INCLUDE_DIRS}
-		${CMAKE_CURRENT_SOURCE_DIR}
-	PUBLIC
-        ${OPENSIMSIMBODY_INCLUDE_DIRS}
-		)
+target_link_libraries(SignalProcessing Common Utilities rtb::Filter)
+target_include_directories(SignalProcessing PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                                                   ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
-set(rtosim_SignalProcessing_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE PATH "Include directory for SignalProcessing library" FORCE)
-mark_as_advanced(rtosim_SignalProcessing_INCLUDE_DIRS)
 
-#install(FILES ${Filter_HEADERS} ${Filter_TEMPLATE_IMPLEMENTATIONS}
- #       DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl/Filter)
-
+install(FILES ${SignalProcessing_HEADERS} ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS SignalProcessing
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

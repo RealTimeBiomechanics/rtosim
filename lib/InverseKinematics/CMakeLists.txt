@@ -48,24 +48,15 @@ add_library(InverseKinematics STATIC
   ${InverseKinematics_HEADERS}
   ${InverseKinematics_TEMPLATE_IMPLEMENTATION}
 )
-target_link_libraries(InverseKinematics rtb::Concurrency)
-target_include_directories(InverseKinematics PRIVATE
-									         ${rtosim_Common_INCLUDE_DIRS}
-										     ${rtosim_Utilities_INCLUDE_DIRS}
-								    	     ${CMAKE_CURRENT_SOURCE_DIR}
-                                             PUBLIC
-                                             ${OPENSIMSIMBODY_INCLUDE_DIRS}
-                                    )
-
-# Save path to include directory for "internal" usage
-set(rtosim_InverseKinematics_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseKinematics library")
+target_link_libraries(InverseKinematics Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
+target_include_directories(InverseKinematics PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                                             ${OPENSIMSIMBODY_INCLUDE_DIRS})
 # Install
 
-#install(FILES ${InverseKinematics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InverseKinematics
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
-#        )
+install(FILES ${InverseKinematics_HEADERS} ${InverseKinematics_TEMPLATE_IMPLEMENTATION} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InverseKinematics
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -13,75 +13,26 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-include_directories(
-    ${OPENSIMSIMBODY_INCLUDE_DIRS}
-    ${SIMTK_INCLUDE_DIRS}
-    ${rtosim_INCLUDE_DIRS}
-)
-    
 add_executable(rtosim_ik_from_file 
     mainInverseKinematicsFromFile.cpp
     )
+target_link_libraries(rtosim_ik_from_file rtosim)
 
-target_link_libraries(rtosim_ik_from_file 
-    ${OPENSIMSIMBODY_LIBRARIES}
-    Common
-    Utilities
-    rtb::Concurrency
-    InputDevice
-    InverseKinematics
-    SignalProcessing
-    OutputDevice
-    )
-    
-
-add_executable(rtosim_id_from_file 
+add_executable(rtosim_id_from_file
     mainInverseDynamicsfromFile.cpp
     )
+target_link_libraries(rtosim_id_from_file rtosim)
 
-target_link_libraries(rtosim_id_from_file 
-    ${OPENSIMSIMBODY_LIBRARIES}
-    Common
-    Utilities
-    rtb::Concurrency
-    InputDevice
-    SignalProcessing
-    InverseDynamics
-    OutputDevice
-    )
     
- add_executable(rtosim_ik_id_from_file 
+add_executable(rtosim_ik_id_from_file
     mainInverseKinematicsInverseDynamicsFromFile.cpp
     )
-
-target_link_libraries(rtosim_ik_id_from_file 
-    ${OPENSIMSIMBODY_LIBRARIES}
-    Common
-    Utilities
-    rtb::Concurrency
-    InputDevice
-    SignalProcessing
-    InverseKinematics
-    InverseDynamics
-    OutputDevice
-    )   
-    
+target_link_libraries(rtosim_ik_id_from_file rtosim)
     
 
 IF(${VICONSDK_FOUND}) 
-     add_executable(rtosim_ik_id_from_nexus 
-    mainInverseKinematicsInverseDynamicsFromNexus.cpp
-    )
-
-target_link_libraries(rtosim_ik_id_from_nexus 
-    ${OPENSIMSIMBODY_LIBRARIES}
-    Common
-    Utilities
-    rtb::Concurrency
-    InputDevice
-    SignalProcessing
-    InverseKinematics
-    InverseDynamics
-    OutputDevice
-    )   
+    add_executable(rtosim_ik_id_from_nexus
+        mainInverseKinematicsInverseDynamicsFromNexus.cpp
+        )
+    target_link_libraries(rtosim_ik_id_from_nexus rtosim)
 ENDIF(${VICONSDK_FOUND})

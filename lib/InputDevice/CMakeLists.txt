@@ -51,14 +51,11 @@ add_library(InputDevice STATIC
     ${InputDevice_HEADERS}
 )
 
-target_include_directories(InputDevice PRIVATE
-								${rtosim_Common_INCLUDE_DIRS}
-								${rtosim_Utilities_INCLUDE_DIRS} 
-                                ${CMAKE_CURRENT_SOURCE_DIR}
-								PUBLIC
-                                ${OPENSIMSIMBODY_INCLUDE_DIRS})
+target_include_directories(InputDevice PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+								       ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
-target_link_libraries(InputDevice Common Utilities)
+target_link_libraries(InputDevice Common Utilities ${OPENSIMSIMBODY_LIBRARIES})
 if(${VICONSDK_FOUND})
     target_include_directories(InputDevice PUBLIC
                                 ${ViconSDK_INCLUDE_DIRS}
@@ -66,16 +63,10 @@ if(${VICONSDK_FOUND})
     target_link_libraries(InputDevice ${ViconSDK_LIBRARIES})
 endif(${VICONSDK_FOUND})
 
-
-# Save path to include directory for "internal" usage
-set(rtosim_InputDevice_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InputDevice library")
 # Install
-
-#install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InputDevice
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
- #       )
+install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InputDevice
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
