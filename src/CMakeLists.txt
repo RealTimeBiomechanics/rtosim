@@ -14,7 +14,7 @@
 # --------------------------------------------------------------------------#
 
 include_directories(
-    ${OPENSIM_INCLUDE_DIRS}
+    ${OPENSIMSIMBODY_INCLUDE_DIRS}
     ${SIMTK_INCLUDE_DIRS}
     ${rtosim_INCLUDE_DIRS}
 )
@@ -24,7 +24,7 @@ add_executable(rtosim_ik_from_file
     )
 
 target_link_libraries(rtosim_ik_from_file 
-    ${OPENSIM_LIBRARIES}
+    ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
     Concurrency
@@ -40,7 +40,7 @@ add_executable(rtosim_id_from_file
     )
 
 target_link_libraries(rtosim_id_from_file 
-    ${OPENSIM_LIBRARIES}
+    ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
     Concurrency
@@ -55,7 +55,7 @@ target_link_libraries(rtosim_id_from_file
     )
 
 target_link_libraries(rtosim_ik_id_from_file 
-    ${OPENSIM_LIBRARIES}
+    ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
     Concurrency
@@ -74,7 +74,7 @@ IF(${VICONSDK_FOUND})
     )
 
 target_link_libraries(rtosim_ik_id_from_nexus 
-    ${OPENSIM_LIBRARIES}
+    ${OPENSIMSIMBODY_LIBRARIES}
     Common
     Utilities
     Concurrency

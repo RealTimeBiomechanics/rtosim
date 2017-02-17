@@ -32,9 +32,8 @@ target_include_directories(rtosim PRIVATE
                                 ${rtosim_InverseKinematics_INCLUDE_DIRS}
                                 ${rtosim_InverseDynamics_INCLUDE_DIRS}
                                 ${rtosim_SignalProcessing_INCLUDE_DIRS}
-                                ${rtosim_Utilities_INCLUDE_DIRS} 
-                                ${SIMTK_INCLUDE_DIRS} 
-                                ${OPENSIM_INCLUDE_DIRS})
+                                ${rtosim_Utilities_INCLUDE_DIRS}
+                                ${OPENSIMSIMBODY_INCLUDE_DIRS})
 # Save path to include directory for "internal" usage
 set(rtosim_INCLUDE_DIRS 
 	${CMAKE_CURRENT_SOURCE_DIR}     

@@ -57,9 +57,7 @@ target_include_directories(InputDevice PRIVATE
 								${rtosim_Utilities_INCLUDE_DIRS} 
                                 ${CMAKE_CURRENT_SOURCE_DIR}
 								PUBLIC
-								${SIMTK_INCLUDE_DIRS}
-								${OPENSIM_INCLUDE_DIRS}
-)
+                                ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
 target_link_libraries(InputDevice Common Utilities)
 if(${VICONSDK_FOUND})
