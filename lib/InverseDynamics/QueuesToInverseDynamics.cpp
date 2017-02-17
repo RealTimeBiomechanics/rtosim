@@ -63,7 +63,7 @@ namespace rtosim {
         QueueToXForces::doneWithSubscriptions();
 
         bool runCondition(true);
-        
+
         while (runCondition) {
 
             GeneralisedCoordinatesFrame generalisedCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
@@ -86,7 +86,7 @@ namespace rtosim {
                 outputExternalTorquesQueue_.push(externalTorquesFrame);
                 stopWatch_.log();
             }
-           
+
         }
         sendEndOfData();
         QueueToXForces::doneWithExecution();

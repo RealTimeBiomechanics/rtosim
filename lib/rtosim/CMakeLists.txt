@@ -14,9 +14,8 @@
 # --------------------------------------------------------------------------#
 
 # List source files
-set(rtosim_HEADERS  
-	rtosim/rtosim.h
-    )
+set(rtosim_HEADERS
+    rtosim/rtosim.h)
 
 source_group("Headers" FILES ${rtosim_HEADERS})
 # Define target

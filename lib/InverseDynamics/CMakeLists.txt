@@ -18,32 +18,31 @@ set(InverseDynamics_SOURCES
                         QueuesToInverseDynamics.cpp
                         QueueToXForces.cpp
                         ExternalForceFromQueue.cpp
-                        JointContactFromOpensim.cpp
-						)
+                        JointContactFromOpensim.cpp)
 
 set(InverseDynamics_HEADERS
-						rtosim/InverseDynamics.h
+                        rtosim/InverseDynamics.h
                         rtosim/QueuesToInverseDynamics.h
                         rtosim/QueueToXForces.h
                         rtosim/ExternalForceFromQueue.h
-                        rtosim/JointContactFromOpensim.h
-						)
+                        rtosim/JointContactFromOpensim.h)
 
 source_group("Headers" FILES ${InverseDynamics_HEADERS})
 source_group("Sources" FILES ${InverseDynamics_SOURCES})
 
 # Define target
-add_library(InverseDynamics STATIC
+add_library(InverseDynamics
   ${InverseDynamics_SOURCES}
-  ${InverseDynamics_HEADERS}
-)
+  ${InverseDynamics_HEADERS})
 
 target_include_directories(InverseDynamics PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                                   ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
 target_link_libraries(InverseDynamics Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
-
+if(WIN32)
+    target_compile_definitions(InverseDynamics PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 # Install
 
 install(FILES ${InverseDynamics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)

@@ -23,7 +23,7 @@
 #include <vector>
 #include <tuple>
 #include <ostream>
-//calculates the time that takes a frame to 
+//calculates the time that takes a frame to
 //travel from one queue to the other
 
 namespace rtosim {
@@ -51,7 +51,7 @@ namespace rtosim {
 
     template<typename T>
     class TimeData {
-    
+
     public:
         TimeData();
         void setTime(const T& key, double measuredTime);
@@ -80,13 +80,13 @@ namespace rtosim {
         void operator()();
         TimeData<double> getWallClockTimes() const;
         TimeData<double> getCpuClockTimes() const;
-    
+
         void initialise();
     private:
         //uses frameTime as key and logs the cpu and wall clocks
         void logCurrentTime(double frameTime);
         Q& queue_;
-        
+
         std::chrono::steady_clock::time_point t_initialTimePoint_;
         TimeData<double> t_frameProcessingTimes_;
 
@@ -103,8 +103,8 @@ namespace rtosim {
         TimeDifference() = delete;
         TimeDifference(const TimeDifference<Qin, Qout>&) = delete;
         TimeDifference(
-            Qin& queueIn, 
-            Qout& queueOut, 
+            Qin& queueIn,
+            Qout& queueOut,
             rtb::Concurrency::Latch& doneWithSubscriptions,
             rtb::Concurrency::Latch& doneWithExecutions);
         void operator()();

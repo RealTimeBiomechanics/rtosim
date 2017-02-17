@@ -13,40 +13,39 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-set(OutputDevice_SOURCES 
-	StateVisualiser.cpp
-    )
+set(OutputDevice_SOURCES
+    StateVisualiser.cpp)
 
-set(OutputDevice_HEADERS 
+set(OutputDevice_HEADERS
     rtosim/QueueToFileLogger.h
-	rtosim/OutputDevice.h
+    rtosim/OutputDevice.h
     rtosim/FileLogger.h
     rtosim/FrameCounter.h
-	rtosim/StateVisualiser.h
-)
+    rtosim/StateVisualiser.h)
 
-set(OutputDevice_TEMPLATE_IMPLEMENTATIONS 
+set(OutputDevice_TEMPLATE_IMPLEMENTATIONS
     FileLogger.cpp
-	QueueToFileLogger.cpp
-    FrameCounter.cpp
-)    
-    
+    QueueToFileLogger.cpp
+    FrameCounter.cpp)
+
 set_source_files_properties(${OutputDevice_TEMPLATE_IMPLEMENTATIONS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 source_group("Headers" FILES ${OutputDevice_HEADERS})
 source_group("Sources" FILES ${OutputDevice_SOURCES} ${OutputDevice_TEMPLATE_IMPLEMENTATIONS})
 
-add_library(OutputDevice STATIC
+add_library(OutputDevice
     ${OutputDevice_SOURCES}
     ${OutputDevice_HEADERS}
-	${OutputDevice_TEMPLATE_IMPLEMENTATIONS}
-)
+    ${OutputDevice_TEMPLATE_IMPLEMENTATIONS})
 
 target_include_directories(OutputDevice PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                         ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
 target_link_libraries(OutputDevice Common Utilities ${OPENSIMSIMBODY_LIBRARIES})
+if(WIN32)
+    target_compile_definitions(OutputDevice PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 # Install
 
 install(FILES ${OutputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)

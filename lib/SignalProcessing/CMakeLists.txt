@@ -13,43 +13,39 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-set(SignalProcessing_HEADERS 
+set(SignalProcessing_HEADERS
     rtosim/GeneralisedCoordinatesStateSpace.h
-	rtosim/SignalProcessingCommon.h
+    rtosim/SignalProcessingCommon.h
     rtosim/SignalProcessing.h
     rtosim/QueueAdapter.h
     rtosim/ExternalForceDataFilterStateSpace.h
     rtosim/MultipleExternalForcesDataFilterStateSpace.h
-    rtosim/AdaptiveCop.h
-    )
+    rtosim/AdaptiveCop.h)
 
-set(SignalProcessing_SOURCES 
+set(SignalProcessing_SOURCES
     GeneralisedCoordinatesStateSpace.cpp
     ExternalForceDataFilterStateSpace.cpp
     MultipleExternalForcesDataFilterStateSpace.cpp
-    AdaptiveCop.cpp
-    )
-    
-set(SignalProcessing_TEMPLATE_IMPLEMENTATIONS 
-	SignalProcessingCommon.cpp
+    AdaptiveCop.cpp)
+
+set(SignalProcessing_TEMPLATE_IMPLEMENTATIONS
+    SignalProcessingCommon.cpp
     QueueAdapter.cpp)
 
 set_source_files_properties(
-    ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
+    ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS}
     PROPERTIES HEADER_FILE_ONLY TRUE)
 
 source_group("Header files" FILES ${SignalProcessing_HEADERS})
 source_group("Source files" FILES ${SignalProcessing_SOURCES} ${SignalProcessing_SOURCES})
 
 add_library(SignalProcessing
-    ${SignalProcessing_HEADERS} 
-    ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
-    ${SignalProcessing_SOURCES} 
-    )
+    ${SignalProcessing_HEADERS}
+    ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS}
+    ${SignalProcessing_SOURCES})
 target_link_libraries(SignalProcessing Common Utilities rtb::Filter)
 target_include_directories(SignalProcessing PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                                   ${OPENSIMSIMBODY_INCLUDE_DIRS})
+                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 
 install(FILES ${SignalProcessing_HEADERS} ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS}

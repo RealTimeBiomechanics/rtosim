@@ -73,7 +73,7 @@ namespace rtosim {
         void printLatencyData(const std::string& filename) const;
 
     private:
-        
+
         std::vector<SimTK::Vec3> getForcePlatePosition() const;
         void setAxisMapping(VDS::Client& client) const;
         void initialiseMarkerNames(const std::string&);

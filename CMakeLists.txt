@@ -30,29 +30,20 @@ if(UNIX AND NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++1y -Wno-deprecated-declarations")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 endif(UNIX)
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(Concurrency REQUIRED)
 find_package(Filter REQUIRED)
 find_package(OpenSim REQUIRED)
 find_package(ViconSDK QUIET)
-if(${VICONSDK_FOUND})
-    add_definitions(-DINCLUDEVICONSDK)
-endif()
-
 
 # Choose common build locations for executables and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_DEBUG_POSTFIX "d")
-
-if(WIN32)
-    add_definitions(/DWIN32) #Hack to get OpenSim 3.3 to work
-endif()
+set(CMAKE_DEBUG_POSTFIX "_d")
 
 add_subdirectory(lib)
 add_subdirectory(src)
@@ -88,4 +79,3 @@ configure_file(
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-

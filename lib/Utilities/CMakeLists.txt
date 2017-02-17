@@ -14,33 +14,34 @@
 # --------------------------------------------------------------------------#
 
 # List source files
-set(Utilities_HEADERS  
-	rtosim/Utilities.h
+set(Utilities_HEADERS
+    rtosim/Utilities.h
     rtosim/ProgramOptionsParser.h
     rtosim/Mapper.h
     rtosim/ArrayConverter.h
     rtosim/StopWatch.h
     rtosim/FileSystem.h
-    rtosim/OsimUtilities.h
-    )
+    rtosim/OsimUtilities.h)
 
-set(Utilities_SOURCES 
+set(Utilities_SOURCES
     ProgramOptionsParser.cpp
     Mapper.cpp
     StopWatch.cpp
     FileSystem.cpp
-    OsimUtilities.cpp
-    )
+    OsimUtilities.cpp)
 
 source_group("Headers" FILES ${Utilities_HEADERS})
 source_group("Sources" FILES ${Utilities_SOURCES})
 
 # Define target
-add_library(Utilities STATIC ${Utilities_SOURCES} ${Utilities_HEADERS})
+add_library(Utilities ${Utilities_SOURCES} ${Utilities_HEADERS})
 target_link_libraries(Utilities PUBLIC ${OPENSIMSIMBODY_LIBRARIES})
 target_include_directories(Utilities PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
                                             ${OPENSIMSIMBODY_INCLUDE_DIRS})
+if(WIN32)
+    target_compile_definitions(Utilities PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 
 install(FILES ${Utilities_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
 install(TARGETS Utilities

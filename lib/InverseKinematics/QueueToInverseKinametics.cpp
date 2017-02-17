@@ -82,12 +82,12 @@ namespace rtosim {
         vector<unique_ptr<IKSolverParallel>> ikSolvers;
         for (unsigned i(0); i < nThreads_; ++i)
             ikSolvers.emplace_back(new IKSolverParallel(
-                threadPoolJobQueue, 
-                ikOutputQueue, 
-                internalDoneWithSubscriptions, 
-                internalDoneWithexecution, 
-                osimModelFilename_, 
-                solverAccuracy_, 
+                threadPoolJobQueue,
+                ikOutputQueue,
+                internalDoneWithSubscriptions,
+                internalDoneWithexecution,
+                osimModelFilename_,
+                solverAccuracy_,
                 contraintWeight_));
 
         if (useIkTaskSet_) {
