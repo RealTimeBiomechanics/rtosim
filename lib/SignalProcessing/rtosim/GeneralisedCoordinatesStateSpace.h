@@ -16,7 +16,7 @@
 #ifndef rtosim_GeneralisedCoordinatesStateSpace_h
 #define rtosim_GeneralisedCoordinatesStateSpace_h
 
-#include "rtosim/Filter/StateSpaceFilter.h"
+#include "rtb/Filter/StateSpaceFilter.h"
 #include "rtosim/GeneralisedCoordinatesData.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include <vector>
@@ -32,7 +32,7 @@ namespace rtosim {
     private:
         size_t dim_;
         double fc_;
-        std::vector< Filter::StateSpaceFilter<double> > generalisedCoordinatesFilter_;
+        std::vector< rtb::Filter::StateSpaceFilter<double> > generalisedCoordinatesFilter_;
     };
 }
 

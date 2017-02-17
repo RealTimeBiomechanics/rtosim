@@ -13,21 +13,6 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-set(Filter_HEADERS 
-    rtosim/Filter/Filter.h
-    rtosim/Filter/StateSpaceFilter.h
-    rtosim/Filter/TransferFunction.h
-    rtosim/Filter/Polynomial.h
-    rtosim/Filter/Designer.h
-    )
-
-set(Filter_TEMPLATE_IMPLEMENTATIONS 
-    Filter/Filter.cpp
-    Filter/StateSpaceFilter.cpp
-    Filter/Polynomial.cpp
-    Filter/TransferFunction.cpp
-    )
-
 set(SignalProcessing_HEADERS 
     rtosim/GeneralisedCoordinatesStateSpace.h
 	rtosim/SignalProcessingCommon.h
@@ -50,25 +35,19 @@ set(SignalProcessing_TEMPLATE_IMPLEMENTATIONS
     QueueAdapter.cpp)
 
 set_source_files_properties(
-    ${Filter_TEMPLATE_IMPLEMENTATIONS} 
     ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
     PROPERTIES HEADER_FILE_ONLY TRUE)
 
-source_group("Filter Header files" FILES ${Filter_HEADERS})
-source_group("Filter Source files" FILES ${Filter_TEMPLATE_IMPLEMENTATIONS} ${Filter_SOURCES})
 source_group("Header files" FILES ${SignalProcessing_HEADERS})
 source_group("Source files" FILES ${SignalProcessing_SOURCES} ${SignalProcessing_SOURCES})
 
 include_directories(include)
-add_library(SignalProcessing 
-    ${Filter_HEADERS} 
-    ${Filter_TEMPLATE_IMPLEMENTATIONS} 
-    ${Filter_SOURCES} 
+add_library(SignalProcessing
     ${SignalProcessing_HEADERS} 
     ${SignalProcessing_TEMPLATE_IMPLEMENTATIONS} 
     ${SignalProcessing_SOURCES} 
     )
-target_link_libraries(SignalProcessing Common)
+target_link_libraries(SignalProcessing Common rtb::Filter)
 target_include_directories(SignalProcessing 
 	PRIVATE	
 		${rtosim_Common_INCLUDE_DIRS}
