@@ -19,8 +19,8 @@ namespace rtosim {
     QueueAdapter<Qin, Qout, T>::QueueAdapter(
         Qin& qIn,
         Qout& qOut,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const T& adapter
         ) :
         qIn_(qIn),

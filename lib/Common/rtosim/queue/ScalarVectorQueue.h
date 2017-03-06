@@ -17,14 +17,14 @@
 #define rtosim_ScalarVectorQueue_h
 
 #include "rtosim/QueueData.h"
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/concurrency/Queue.h"
 #include <vector>
 
 namespace rtosim {
 
     using ScalarVectorData = std::vector < double > ;
     using ScalarVectorFrame = QueueData < ScalarVectorData > ;
-    using ScalarVectorQueue = Concurrency::Queue < ScalarVectorFrame > ;
+    using ScalarVectorQueue = rtb::Concurrency::Queue < ScalarVectorFrame >;
 }
 
 #endif

@@ -16,7 +16,7 @@
 #ifndef rtosim_MarkersFromTrc_h
 #define rtosim_MarkersFromTrc_h
 
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include <string>
 #include <vector>
@@ -31,8 +31,8 @@ namespace rtosim{
         MarkersFromTrc(MarkersFromTrc&) = delete;
         MarkersFromTrc(
             MarkerSetQueue& outputMarkerSetQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& trcFilename,
             bool loop = true);
@@ -50,8 +50,8 @@ namespace rtosim{
         unsigned sampleFrequency_;
         std::vector<MarkerSetFrame> frames_;
         MarkerSetQueue& outputMarkerSetQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         std::string trcFilename_;
         OpenSim::Model model_;
         std::size_t noMarkers_;

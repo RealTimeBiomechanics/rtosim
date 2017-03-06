@@ -18,7 +18,6 @@
 
 #include <string>
 #include <OpenSim/OpenSim.h>
-#include "rtosim/concurrency/Concurrency.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 
 namespace rtosim{

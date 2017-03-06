@@ -18,50 +18,36 @@ set(InverseDynamics_SOURCES
                         QueuesToInverseDynamics.cpp
                         QueueToXForces.cpp
                         ExternalForceFromQueue.cpp
-                        JointContactFromOpensim.cpp
-						)
+                        JointContactFromOpensim.cpp)
 
 set(InverseDynamics_HEADERS
-						rtosim/InverseDynamics.h
+                        rtosim/InverseDynamics.h
                         rtosim/QueuesToInverseDynamics.h
                         rtosim/QueueToXForces.h
                         rtosim/ExternalForceFromQueue.h
-                        rtosim/JointContactFromOpensim.h
-						)
+                        rtosim/JointContactFromOpensim.h)
 
-set(InverseDynamics_TEMPLATE_IMPLEMENTATION )
-
-
-set_source_files_properties( ${InverseDynamics_TEMPLATE_IMPLEMENTATION} PROPERTIES HEADER_FILE_ONLY TRUE)
 source_group("Headers" FILES ${InverseDynamics_HEADERS})
-source_group("Sources" FILES ${InverseDynamics_SOURCES}  ${InverseDynamics_TEMPLATE_IMPLEMENTATION})
+source_group("Sources" FILES ${InverseDynamics_SOURCES})
 
 # Define target
-add_library(InverseDynamics STATIC
+add_library(InverseDynamics
   ${InverseDynamics_SOURCES}
-  ${InverseDynamics_HEADERS}
-  ${InverseDynamics_TEMPLATE_IMPLEMENTATION}
-)
+  ${InverseDynamics_HEADERS})
 
-target_include_directories(InverseDynamics PRIVATE
-									         ${rtosim_Common_INCLUDE_DIRS}
-								    	     ${rtosim_Concurrency_INCLUDE_DIRS}
-										     ${rtosim_Utilities_INCLUDE_DIRS}
-								    	     ${CMAKE_CURRENT_SOURCE_DIR}
-                                             PUBLIC
-                                             ${OPENSIMSIMBODY_INCLUDE_DIRS}
-                                    )
+target_include_directories(InverseDynamics PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                                                  ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
-TARGET_LINK_LIBRARIES(InverseDynamics Common)
-# Save path to include directory for "internal" usage
-set(rtosim_InverseDynamics_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseDynamics library")
+target_link_libraries(InverseDynamics Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
+if(WIN32)
+    target_compile_definitions(InverseDynamics PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 # Install
 
-#install(FILES ${InverseKinematics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vosl)
-#install(TARGETS InverseKinematics
-#        EXPORT VOSLTargets
-#        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
-#        )
+install(FILES ${InverseDynamics_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS InverseDynamics
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

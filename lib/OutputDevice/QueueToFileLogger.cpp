@@ -23,8 +23,8 @@ namespace rtosim{
     template <typename DataType>
     QueueToFileLogger<DataType>::QueueToFileLogger(
         QueueType& inputQueue,
-        rtosim::Concurrency::Latch& subscriptionLatch,
-        rtosim::Concurrency::Latch& readyToWriteLatch,
+        rtb::Concurrency::Latch& subscriptionLatch,
+        rtb::Concurrency::Latch& readyToWriteLatch,
         const std::vector<std::string>& columnLabels,
         const std::string& outputDir,
         const std::string& filename,

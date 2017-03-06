@@ -13,7 +13,7 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-cmake_minimum_required (VERSION 2.8.11) # "target_include_directories" command  and VS12 generator are missing in previous versions
+cmake_minimum_required (VERSION 3.0.0) # add_library(... INTERFACE is missing in older versions)
 project(RTOSIM CXX)
 set(RTOSIM_MAJOR_VERSION 1)
 set(RTOSIM_MINOR_VERSION 0)
@@ -30,24 +30,52 @@ if(UNIX AND NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -std=c++1y -Wno-deprecated-declarations")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 endif(UNIX)
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+find_package(Concurrency REQUIRED)
+find_package(Filter REQUIRED)
 find_package(OpenSim REQUIRED)
 find_package(ViconSDK QUIET)
-if(${VICONSDK_FOUND})
-    add_definitions(-DINCLUDEVICONSDK)
-endif()
-
 
 # Choose common build locations for executables and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_DEBUG_POSTFIX "d")
+set(CMAKE_DEBUG_POSTFIX "_d")
 
-add_definitions(/D_USE_MATH_DEFINES)
 add_subdirectory(lib)
 add_subdirectory(src)
+
+# Create RTOSIMConfig.cmake
+set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/RTOSIM)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(cmake/RTOSIMConfig.cmake.in
+                              ${CMAKE_CURRENT_BINARY_DIR}/RTOSIMConfigForInstall.cmake
+                              INSTALL_DESTINATION ${ConfigPackageLocation}
+                              PATH_VARS CMAKE_INSTALL_INCLUDEDIR)
+
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/RTOSIMConfigVersion.cmake
+                                    VERSION 0.1
+                                    COMPATIBILITY ExactVersion )
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/RTOSIMConfigForInstall.cmake
+              DESTINATION ${ConfigPackageLocation}
+              RENAME RTOSIMConfig.cmake)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/RTOSIMConfigVersion.cmake
+              DESTINATION ${ConfigPackageLocation})
+
+install(EXPORT RTOSIM_Exports NAMESPACE rtb::
+                              DESTINATION ${ConfigPackageLocation})
+
+# Uninstall target
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

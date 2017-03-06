@@ -79,19 +79,19 @@ namespace rtosim {
     template<typename T>
     std::ostream& operator<<(std::ostream& os, const TimeData<T>& rhs) {
 
-        
+
         os << "#frames    : " << rhs.size() << std::endl;
         os << "mean (s)   : " << rhs.getMean() << std::endl;
         os << "std (s)    : " << rhs.getStd()  << std::endl;
         os << "median (s) : " << rhs.getMedian()  << std::endl;
         os << "min (s)    : " << rhs.getMin() << std::endl;
         os << "max (s)    : " << rhs.getMax()  << std::endl;
-        
+
         /*
         os << "Key\t\tTime" << std::endl;
         for (auto& e : rhs.data_)
             os << std::get<0>(e) << "\t" << std::get<1>(e) << std::endl;
-          */  
+          */
         return os;
     }
 
@@ -113,44 +113,44 @@ namespace rtosim {
 
     template<typename T>
     std::vector<double> TimeData<T>::getTimes() const {
-    
+
         std::vector<double> times;
         for (auto& e : data_)
             times.emplace_back(std::get<1>(e));
         return times;
-    
+
     }
-    
+
     template<typename T>
     std::vector<T> TimeData<T>::getKeys() const {
-    
+
         std::vector<T> keys;
         for (auto& e : data_)
             keys.emplace_back(std::get<0>(e));
         return keys;
     }
-    
+
     template<typename T>
     double TimeData<T>::getTime(const T& key) const {
-    
+
         auto it(std::find_if(std::begin(data_), std::end(data_), key, TupleCompare<0, std::equal_to>()));
         if (it == std::end(data_))
             throw std::invalid_argument("key " + std::to_string(key) + " not found");
         return *it;
     }
-    
+
     template<typename T>
     double TimeData<T>::getMean() const {
-    
+
         auto values(getTimes());
         double sum(std::accumulate(values.cbegin(), values.cend(), 0.));
         return (sum / static_cast<double>(values.size()));
 
     }
-    
+
     template<typename T>
     double TimeData<T>::getStd() const {
-        
+
         auto values(getTimes());
         auto mean(getMean());
         double e(0);
@@ -159,10 +159,10 @@ namespace rtosim {
         e /= values.size();
         return std::sqrt(e);
     }
-    
+
     template<typename T>
     double TimeData<T>::getMedian() const {
-        
+
         auto values(getTimes());
         std::size_t n(values.size() / 2);
         std::nth_element(std::begin(values), std::next(std::begin(values), n), std::end(values));
@@ -185,10 +185,10 @@ namespace rtosim {
 
 
     template<typename Q>
-    TimeProbe<Q>::TimeProbe(Q& queue, Concurrency::Latch& barrier) :
+    TimeProbe<Q>::TimeProbe(Q& queue, rtb::Concurrency::Latch& barrier) :
         queue_(queue),
         barrier_(barrier){
-    
+
         initialise();
     }
 
@@ -218,13 +218,13 @@ namespace rtosim {
 
     template<typename Q>
     TimeData<double> TimeProbe<Q>::getWallClockTimes() const {
-    
+
         return t_frameProcessingTimes_;
     }
 
     template<typename Q>
     TimeData<double> TimeProbe<Q>::getCpuClockTimes() const{
-        
+
         return c_frameProcessingTimes_;
     }
 
@@ -252,8 +252,8 @@ namespace rtosim {
     TimeDifference<Qin, Qout>::TimeDifference(
         Qin& queueIn,
         Qout& queueOut,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecutions) :
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecutions) :
         queueIn_(queueIn),
         queueOut_(queueOut),
         doneWithSubscriptions_(doneWithSubscriptions),
@@ -265,7 +265,7 @@ namespace rtosim {
     template<typename Qin, typename Qout>
     void TimeDifference<Qin, Qout>::operator()() {
 
-        Concurrency::Latch internalLatch(3);
+        rtb::Concurrency::Latch internalLatch(3);
 
         TimeProbe<Qin> pIn(queueIn_, internalLatch);
         TimeProbe<Qout>  pOut(queueOut_, internalLatch);
@@ -275,7 +275,7 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
         thrIn.join(); thrOut.join();
         doneWithExecutions_.wait();
-     
+
         wallClockDifference_ = pOut.getWallClockTimes() - pIn.getWallClockTimes();
         cpuClockDifference_ = pOut.getCpuClockTimes() - pIn.getCpuClockTimes();
      }

@@ -16,7 +16,7 @@
 #ifndef rtosim_MultipleExternalForcesQueue_h
 #define rtosim_MultipleExternalForcesQueue_h
 
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/concurrency/Queue.h"
 #include "rtosim/QueueData.h"
 #include "rtosim/ExternalForceData.h"
 #include <vector>
@@ -25,7 +25,7 @@ namespace rtosim {
 
     using MultipleExternalForcesData = std::vector < ExternalForceData > ;
     using MultipleExternalForcesFrame = QueueData < MultipleExternalForcesData > ;
-    using MultipleExternalForcesQueue = Concurrency::Queue < MultipleExternalForcesFrame > ;
+    using MultipleExternalForcesQueue = rtb::Concurrency::Queue < MultipleExternalForcesFrame > ;
 }
 
 #endif

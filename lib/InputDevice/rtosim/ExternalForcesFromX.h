@@ -19,8 +19,8 @@
 #include <string>
 #include <vector>
 #include "rtosim/ExternalForceData.h"
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 
 namespace rtosim {
@@ -30,8 +30,8 @@ namespace rtosim {
 
         ExternalForcesFromX(
             MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution);
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution);
         virtual ~ExternalForcesFromX() {};
         virtual void operator()() = 0;
         void updateExternalForces(const MultipleExternalForcesData& currentExternalForceData, double currentTime);
@@ -40,8 +40,8 @@ namespace rtosim {
         void doneWithExecution();
     private:
         MultipleExternalForcesQueue& outputMultipleExternalForcesQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
     };
 }
 #endif

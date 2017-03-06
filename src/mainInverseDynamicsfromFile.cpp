@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
     MultipleExternalForcesQueue grfQueue;
     GeneralisedCoordinatesQueue coordinatesQueue;
     ExternalTorquesQueue jointMomentsQueue;
-    rtosim::Concurrency::Latch doneWithSubscription, doneWithExecution;
+    rtb::Concurrency::Latch doneWithSubscription, doneWithExecution;
 
     ExternalForcesFromStorageFile grfProducer(
         grfQueue,

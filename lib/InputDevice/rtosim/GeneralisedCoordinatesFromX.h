@@ -16,8 +16,8 @@
 #ifndef rtosim_GeneralisedCoordinatesFromX_h
 #define rtosim_GeneralisedCoordinatesFromX_h
 
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/GeneralisedCoordinatesData.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include <string>
@@ -29,8 +29,8 @@ namespace rtosim {
     public:
         GeneralisedCoordinatesFromX(
             GeneralisedCoordinatesQueue& outputGeneralisedCoordinatesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution);
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution);
         GeneralisedCoordinatesFromX(const GeneralisedCoordinatesFromX&) = delete;
         virtual ~GeneralisedCoordinatesFromX() {};
         virtual void operator()() = 0;
@@ -40,8 +40,8 @@ namespace rtosim {
         void sendEndOfData();
     private:
         GeneralisedCoordinatesQueue& outputGeneralisedCoordinatesQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
     };
 }
 #endif

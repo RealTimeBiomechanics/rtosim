@@ -22,8 +22,8 @@
 #include <algorithm>
 #include <OpenSim/OpenSim.h>
 
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/SingleExternalForceQueue.h"
 #include "rtosim/ExternalForceProperties.h"
@@ -36,15 +36,15 @@ namespace rtosim {
 
         QueueToXForces(
             MultipleExternalForcesQueue& inputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& externalLoadsXmlFilename);
 
         QueueToXForces(
             MultipleExternalForcesQueue& inputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::vector<ExternalForceProperties>& externalForceProperties);
 
@@ -65,9 +65,9 @@ namespace rtosim {
         void updateCeinmsToOpenSimMuscleMapping();
         void initialiseExternalForces();
         MultipleExternalForcesQueue& inputExternalForcesQueue_;
-        Concurrency::Latch splitForcesLatch_;
-        Concurrency::Latch& externalDoneWithSubscriptionsLatch_;
-        Concurrency::Latch& externalDoneWithExecutionLatch_;
+        rtb::Concurrency::Latch splitForcesLatch_;
+        rtb::Concurrency::Latch& externalDoneWithSubscriptionsLatch_;
+        rtb::Concurrency::Latch& externalDoneWithExecutionLatch_;
         std::future<void> splitForcesThread_;
         std::vector<OpenSim::Force*> extForces_;
         std::vector<SingleExternalForceQueue*> singleExternalForceQueues_;

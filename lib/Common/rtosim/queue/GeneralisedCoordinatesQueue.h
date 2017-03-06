@@ -16,14 +16,14 @@
 #ifndef rtosim_GeneralisedCoordinatesQueue_h
 #define rtosim_GeneralisedCoordinatesQueue_h
 
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/concurrency/Queue.h"
 #include "rtosim/QueueData.h"
 #include "rtosim/GeneralisedCoordinatesData.h"
 
 namespace rtosim {
 
     using GeneralisedCoordinatesFrame = QueueData < GeneralisedCoordinatesData > ;
-    using GeneralisedCoordinatesQueue = Concurrency::Queue < GeneralisedCoordinatesFrame > ;
+    using GeneralisedCoordinatesQueue = rtb::Concurrency::Queue < GeneralisedCoordinatesFrame > ;
 }
 
 #endif

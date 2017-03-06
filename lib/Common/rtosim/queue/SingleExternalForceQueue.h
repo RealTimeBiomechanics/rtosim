@@ -16,14 +16,14 @@
 #ifndef rtosim_SingleExternalForcesQueue_h
 #define rtosim_SingleExternalForcesQueue_h
 
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/concurrency/Queue.h"
 #include "rtosim/QueueData.h"
 #include "rtosim/ExternalForceData.h"
 
 namespace rtosim {
 
     using SingleExternalForceFrame = QueueData < ExternalForceData > ;
-    using SingleExternalForceQueue = Concurrency::Queue < SingleExternalForceFrame > ;
+    using SingleExternalForceQueue = rtb::Concurrency::Queue < SingleExternalForceFrame > ;
 }
 
 #endif

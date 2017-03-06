@@ -50,7 +50,7 @@ namespace rtosim {
         return filteredData;
     }
 
-    SimTK::Vec3 ExternalForceDataFilterStateSpace::filter(const SimTK::Vec3& vec, double time, std::vector< Filter::StateSpaceFilter<double> > & f) {
+    SimTK::Vec3 ExternalForceDataFilterStateSpace::filter(const SimTK::Vec3& vec, double time, std::vector< rtb::Filter::StateSpaceFilter<double> > & f) {
 
         SimTK::Vec3 ans;
         ans[0] = f[0].filter(vec[0], time, fc_);

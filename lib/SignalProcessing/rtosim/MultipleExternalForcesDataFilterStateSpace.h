@@ -16,7 +16,7 @@
 #ifndef rtosim_MultipleExternalForcesDataFilterStateSpace_h
 #define rtosim_MultipleExternalForcesDataFilterStateSpace_h
 
-#include "rtosim/Filter/StateSpaceFilter.h"
+#include "rtb/Filter/StateSpaceFilter.h"
 #include "rtosim/ExternalForceDataFilterStateSpace.h"
 #include "rtosim/MultipleExternalForcesDataFilterStateSpace.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"

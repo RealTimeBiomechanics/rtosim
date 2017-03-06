@@ -33,8 +33,8 @@ namespace rtosim {
 
     MarkersFromTrc::MarkersFromTrc(
         MarkerSetQueue& outputMarkerSetQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::string& trcFilename,
         bool loop) :
