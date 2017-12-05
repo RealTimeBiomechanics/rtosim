@@ -13,200 +13,44 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-include_directories(
-    ${OPENSIM_INCLUDE_DIRS}
-    ${SIMTK_INCLUDE_DIRS}
-    ${rtosim_INCLUDE_DIRS}
-    ${IKExtended_HEADERS}
-	${MR3tools_HEADERS}
-)
-    
-add_executable(rtosim_ik_from_file 
-    mainInverseKinematicsFromFile.cpp
-    )
+add_executable(rtosim_ik_from_file  mainInverseKinematicsFromFile.cpp)
+target_link_libraries(rtosim_ik_from_file rtosim)
 
-target_link_libraries(rtosim_ik_from_file 
-    ${OPENSIM_LIBRARIES}
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    InverseKinematics
-    SignalProcessing
-    OutputDevice
-    )
-    
+add_executable(rtosim_id_from_file mainInverseDynamicsfromFile.cpp)
+target_link_libraries(rtosim_id_from_file rtosim)
 
-add_executable(rtosim_id_from_file 
-    mainInverseDynamicsfromFile.cpp
-    )
-
-target_link_libraries(rtosim_id_from_file 
-    ${OPENSIM_LIBRARIES}
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    SignalProcessing
-    InverseDynamics
-    OutputDevice
-    )
-    
- add_executable(rtosim_ik_id_from_file 
-    mainInverseKinematicsInverseDynamicsFromFile.cpp
-    )
-
-target_link_libraries(rtosim_ik_id_from_file 
-    ${OPENSIM_LIBRARIES}
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    SignalProcessing
-    InverseKinematics
-    InverseDynamics
-    OutputDevice
-    )   
-    
-    
-
-IF(${VICONSDK_FOUND}) 
-     add_executable(rtosim_ik_id_from_nexus 
-    mainInverseKinematicsInverseDynamicsFromNexus.cpp
-    )
-
-target_link_libraries(rtosim_ik_id_from_nexus 
-    ${OPENSIM_LIBRARIES}
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    SignalProcessing
-    InverseKinematics
-    InverseDynamics
-    OutputDevice
-    )   
-ENDIF(${VICONSDK_FOUND})
-
-add_executable(rtosim_ik_osens_from_file 
-    mainInverseKinematicsOsensFromFile.cpp
-    )
-
-target_link_libraries(rtosim_ik_osens_from_file 
-#	${OPENSIM_LIBRARIES}
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    SignalProcessing
-    OutputDevice
-	InverseKinematicsOsens
-	IKExtended	
-    )
-    
-add_executable(test_osens 
-    mainTestOsens.cpp
-    )
-
-target_link_libraries(test_osens
-    IKExtended
-	${OPENSIM_LIBRARIES}
-    
-	Common
-    Utilities
-    Concurrency
-    InputDevice
-    InverseKinematicsOsens
-  #  SignalProcessing
-	
-    OutputDevice
-    )
-    
-#add_executable(test_osens_from_mobile 
-#    mainRTOsensFromMobile.cpp
-#    )
-
-#target_link_libraries(test_osens_from_mobile
-#    ${OPENSIM_LIBRARIES}
-#    IKExtended
-#    Common
-#    Utilities
-#    Concurrency
-#    InputDevice
-#    InverseKinematics
-#    SignalProcessing
-#    OutputDevice
-#    )
-#if(WIN32)
-#    target_link_libraries(test_osens_from_mobile ws2_32)
-#endif()
-
-add_executable(test_osens_from_mobile_to_queue
-    mainTestOsensFromMobileToQueue.cpp
-    )
-
-target_link_libraries(test_osens_from_mobile_to_queue
-    ${OPENSIM_LIBRARIES}
-    InverseKinematicsOsens
-    Common
-    Utilities
-    Concurrency
-    InputDevice
-    InverseKinematics
-    SignalProcessing
-    OutputDevice
-    )
-#if(WIN32)
-#    target_link_libraries(test_osens_from_mobile_to_queue ws2_32)
-#endif()
-
-#add_executable(rtosim_osens_ik_from_mobile
-#    mainInverseKinematicsOsensFromMobile.cpp
-#    )
-
-#target_link_libraries(rtosim_osens_ik_from_mobile
-#    ${OPENSIM_LIBRARIES}
-#	InverseKinematicsOsens
-#    IKExtended
-#    Common
-#    Utilities
-#    Concurrency
-#    InputDevice
-#    SignalProcessing
-#    OutputDevice
-#    )
+add_executable(rtosim_ik_id_from_file mainInverseKinematicsInverseDynamicsFromFile.cpp)
+target_link_libraries(rtosim_ik_id_from_file rtosim)
 
 
-add_executable(test_data_from_MR3 mainTestDataFromMR3.cpp)
 
-target_link_libraries(test_data_from_MR3
-InputDevice
-MR3tools
-Concurrency
-Utilities
-Common
-${OPENSIM_LIBRARIES})
 
-add_executable(test_data_from_MR3_to_osim mainTestDataFromMR3toOsim.cpp)
+install(TARGETS rtosim_ik_from_file rtosim_id_from_file rtosim_ik_id_from_file
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
-target_link_libraries(test_data_from_MR3_to_osim
-InputDevice
-OutputDevice
-MR3tools
-Concurrency
-Utilities
-Common
-IKExtended
-InverseKinematicsOsens
-${OPENSIM_LIBRARIES})
+if(${VICONSDK_FOUND})
+    add_executable(rtosim_ik_id_from_nexus mainInverseKinematicsInverseDynamicsFromNexus.cpp)
+    target_link_libraries(rtosim_ik_id_from_nexus rtosim)
 
-add_executable(fromMR3toFile mainFromMR3toFile.cpp)
+    install(TARGETS rtosim_ik_id_from_nexus
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif(${VICONSDK_FOUND})
 
-target_link_libraries(fromMR3toFile
-InputDevice
-OutputDevice
-MR3tools
-Concurrency
-Utilities
-Common
-${OPENSIM_LIBRARIES})
+
+if(${MR3tools_FOUND})
+    add_executable(test_data_from_MR3 mainTestDataFromMR3.cpp)
+    target_link_libraries(test_data_from_MR3 rtosim MR3tools)
+
+    add_executable(test_data_from_MR3_to_osim mainTestDataFromMR3toOsim.cpp)
+    target_link_libraries(test_data_from_MR3_to_osim rtosim MR3tools)
+
+    add_executable(fromMR3toFile mainFromMR3toFile.cpp)
+    target_link_libraries(fromMR3toFile MR3tools rtosim)
+endif(${MR3tools_FOUND})
+

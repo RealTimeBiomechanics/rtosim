@@ -68,7 +68,7 @@ namespace rtosim {
 
     private:
         Double getMedian(const std::list<Double>& v) const; //move it as free function
-        std::chrono::system_clock::time_point t_timePoint_, t_initialTimePoint_, t_finalTimePoint_;
+        std::chrono::steady_clock::time_point t_timePoint_, t_initialTimePoint_, t_finalTimePoint_;
         std::list<Double> t_frameProcessingTime_;
 
         std::clock_t c_timePoint_, c_initialTimePoint_, c_finalTimePoint_;

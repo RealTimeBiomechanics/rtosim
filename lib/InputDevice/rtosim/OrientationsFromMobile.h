@@ -22,7 +22,7 @@
 #include <OpenSim/OpenSim.h>
 #include <map>
 #include "rtosim/Mapper.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/concurrency/Concurrency.h"
 #include "rtosim/queue/OrientationSetQueue.h"
 #include "rtosim/FlowControl.h"
 
@@ -36,8 +36,8 @@ namespace rtosim {
 
         OrientationsFromMobile(
             OrientationSetQueue& outputOrientationSetQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
             const std::string& osimFilename,
             const std::string& devicePort,
@@ -60,8 +60,8 @@ namespace rtosim {
         OrientationSetFrame getOrientationFrame(unsigned long long sock);
         SimTK::Rotation globalToOsim_;
         OrientationSetQueue& outputOrientationSetQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         FlowControl& runCondition_;
         short devicePort_;
         double firstTime_;

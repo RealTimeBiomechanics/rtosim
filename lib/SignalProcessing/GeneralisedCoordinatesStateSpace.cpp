@@ -16,7 +16,6 @@
 #include "rtosim/GeneralisedCoordinatesStateSpace.h"
 #include "rtosim/SignalProcessingCommon.h"
 #include <iostream>
-#include <cmath>
 using std::cout;
 using std::endl;
 

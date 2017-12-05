@@ -16,8 +16,8 @@
 #ifndef rtosim_QueueToFileLogger_h
 #define rtosim_QueueToFileLogger_h
 
-#include "rtosim/concurrency/Latch.h"
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
 #include "rtosim/QueueData.h"
 #include "rtosim/FileLogger.h"
 
@@ -27,15 +27,15 @@ namespace rtosim {
     class QueueToFileLogger {
     public:
         using FrameType = QueueData < DataType > ;
-        using QueueType = rtosim::Concurrency::Queue < FrameType > ;
+        using QueueType = rtb::Concurrency::Queue < FrameType > ;
         QueueToFileLogger() = delete;
         QueueToFileLogger(const QueueToFileLogger<DataType>&) = delete;
         QueueToFileLogger& operator=(const QueueToFileLogger<DataType>&) = delete;
 
         QueueToFileLogger(
             QueueType& inputQueue,
-            rtosim::Concurrency::Latch& subscriptionLatch,
-            rtosim::Concurrency::Latch& readyToWriteLatch,
+            rtb::Concurrency::Latch& subscriptionLatch,
+            rtb::Concurrency::Latch& readyToWriteLatch,
             const std::vector<std::string>& columnLabels,
             const std::string& outputDir,
             const std::string& filename,
@@ -45,8 +45,8 @@ namespace rtosim {
 
     private:
         QueueType& inputQueue_;
-        rtosim::Concurrency::Latch& subscriptionLatch_;
-        rtosim::Concurrency::Latch& readyToWriteLatch_;
+        rtb::Concurrency::Latch& subscriptionLatch_;
+        rtb::Concurrency::Latch& readyToWriteLatch_;
         FileLogger<DataType> logger_;
     };
 }

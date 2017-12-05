@@ -14,35 +14,39 @@
 # --------------------------------------------------------------------------#
 
 # List source files
-set(Utilities_HEADERS  
-	rtosim/Utilities.h
+set(Utilities_HEADERS
+    rtosim/Utilities.h
     rtosim/ProgramOptionsParser.h
     rtosim/Mapper.h
     rtosim/ArrayConverter.h
     rtosim/StopWatch.h
     rtosim/FileSystem.h
-    rtosim/OsimUtilities.h
-    )
+    rtosim/OsimUtilities.h)
 
-set(Utilities_SOURCES 
+set(Utilities_SOURCES
     ProgramOptionsParser.cpp
     Mapper.cpp
     StopWatch.cpp
     FileSystem.cpp
-    OsimUtilities.cpp
-    )
+    OsimUtilities.cpp)
 
-set(Utilities_TEMPLATE_IMPLEMENTATION)
-
-
-set_source_files_properties( ${Utilities_TEMPLATE_IMPLEMENTATION} PROPERTIES HEADER_FILE_ONLY TRUE)
 source_group("Headers" FILES ${Utilities_HEADERS})
-source_group("Sources" FILES ${Utilities_SOURCES} ${Utilities_TEMPLATE_IMPLEMENTATION} )
+source_group("Sources" FILES ${Utilities_SOURCES})
 
 # Define target
-add_library(Utilities STATIC ${Utilities_SOURCES} ${Utilities_HEADERS} ${Utilities_TEMPLATE_IMPLEMENTATION})
-#target_link_libraries(Utilities PRIVATE IKExtended)
-target_include_directories(Utilities PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${Osens_INCLUDE_DIRS} ${SIMTK_INCLUDE_DIRS} ${OPENSIM_INCLUDE_DIRS})
+add_library(Utilities ${Utilities_SOURCES} ${Utilities_HEADERS})
+target_link_libraries(Utilities PUBLIC ${OPENSIMSIMBODY_LIBRARIES} )
+target_include_directories(Utilities PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                                            ${OPENSIMSIMBODY_INCLUDE_DIRS}
+                                            ${IKExtended_INCLUDE_DIRS})
+if(WIN32)
+    target_compile_definitions(Utilities PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 
-# Save path to include directory for "internal" usage
-set(rtosim_Utilities_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for SignalProcessing files")
+install(FILES ${Utilities_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(TARGETS Utilities
+        EXPORT RTOSIM_Targets
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

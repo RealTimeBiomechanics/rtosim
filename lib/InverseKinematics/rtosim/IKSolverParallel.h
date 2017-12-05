@@ -16,8 +16,8 @@
 #ifndef rtosim_IKSolverParallel_h
 #define rtosim_IKSolverParallel_h
 
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/ThreadPoolJobs.h"
@@ -38,8 +38,8 @@ namespace rtosim{
         IKSolverParallel(
             ThreadPoolJobs<MarkerSetFrame>& inputThreadPoolJobs,
             IKoutputs<rtosim::GeneralisedCoordinatesFrame>& outputGeneralisedCoordinatesQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             double solverAccuracy = 1e-8,
             double contraintWeight = SimTK::Infinity
@@ -54,8 +54,8 @@ namespace rtosim{
         bool isWithinRom(const SimTK::State& s) const;
         ThreadPoolJobs<MarkerSetFrame>& inputThreadPoolJobs_;
         IKoutputs<rtosim::GeneralisedCoordinatesFrame>& outputGeneralisedCoordinatesQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         const std::string& osimModelFilename_;
         OpenSim::Model model_;
         std::vector<std::string> markerNames_, coordinateNames_;

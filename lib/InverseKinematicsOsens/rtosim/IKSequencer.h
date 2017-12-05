@@ -16,8 +16,7 @@
 #ifndef rtosim_IKSequencer_h
 #define rtosim_IKSequencer_h
 
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/Concurrency/Concurrency.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/TimeSequence.h"
 #include "rtosim/IKoutputs.h"
@@ -34,8 +33,8 @@ namespace rtosim{
             IKoutputs<rtosim::GeneralisedCoordinatesFrame>& inputGeneralisedCoordinateFrameFromIK,
             TimeSequence& inputTimeSequence,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             unsigned numberOfIKSolver);
         virtual ~IKSequencer();
         void operator()();
@@ -43,8 +42,8 @@ namespace rtosim{
         IKoutputs<rtosim::GeneralisedCoordinatesFrame>& inputGeneralisedCoordinateFrameFromIK_;
         TimeSequence& inputTimeSequence_;
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         unsigned numberOfIKSolver_;
     };
 }

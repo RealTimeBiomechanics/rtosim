@@ -16,7 +16,7 @@
 #ifndef rtosim_OrientationsFromMot_h
 #define rtosim_OrientationsFromMot_h
 
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/Concurrency/Latch.h"
 #include "rtosim/queue/OrientationSetQueue.h"
 #include <string>
 #include <vector>
@@ -31,8 +31,8 @@ namespace rtosim{
         OrientationsFromMot(OrientationsFromMot&) = delete;
         OrientationsFromMot(
             OrientationSetQueue& outputOrientationSetQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& motFilename,
             bool loop = false);
@@ -50,8 +50,8 @@ namespace rtosim{
         unsigned sampleFrequency_;
         std::vector<OrientationSetFrame> frames_;
         OrientationSetQueue& outputOrientationSetQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         std::string motFilename_;
         OpenSim::Model model_;
         std::size_t noSensors_;

@@ -30,8 +30,8 @@ namespace rtosim {
 
     ExternalForcesFromStorageFile::ExternalForcesFromStorageFile(
         MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& externalLoadsXmlFilename,
         double fc) :
         ExternalForcesFromX(outputMultipleExternalForcesQueue, doneWithSubscriptions, doneWithExecution),
@@ -45,8 +45,8 @@ namespace rtosim {
 
     ExternalForcesFromStorageFile::ExternalForcesFromStorageFile(
         MultipleExternalForcesQueue& outputMultipleExternalForcesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& externalLoadsXmlFilename,
         const std::string& grfFilename,
         double fc) :

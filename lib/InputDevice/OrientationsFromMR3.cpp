@@ -27,8 +27,8 @@ namespace rtosim {
 
     OrientationsFromMR3::OrientationsFromMR3(
         OrientationSetQueue& outputOrientationSetQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
         const std::vector<std::string>& orientationNames):
         outputOrientationSetQueue_(outputOrientationSetQueue),

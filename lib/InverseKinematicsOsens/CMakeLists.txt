@@ -18,7 +18,6 @@ set(InverseKinematicsOsens_SOURCES
                         QueueToInverseKinematicsOsens.cpp
                         IKSequencer.cpp 
 						IKSolverParallelOsens.cpp 
-                        
 						OrientationSensorsReferenceFromQueue.cpp 
 						TimeSequence.cpp
 						)
@@ -52,28 +51,21 @@ add_library(InverseKinematicsOsens STATIC
   ${InverseKinematicsOsens_HEADERS}
   ${InverseKinematicsOsens_TEMPLATE_IMPLEMENTATION}
 )
+target_link_libraries(InverseKinematicsOsens Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES}  ${IKExtended_LIBRARIES})
+target_include_directories(InverseKinematicsOsens PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+                                             ${OPENSIMSIMBODY_INCLUDE_DIRS} 
+                                             ${IKExtended_INCLUDE_DIRS})
 
-target_include_directories(InverseKinematicsOsens PRIVATE
-		${rtosim_Common_INCLUDE_DIRS}
-		${rtosim_Concurrency_INCLUDE_DIRS}
-		${rtosim_Utilities_INCLUDE_DIRS}
-		${CMAKE_CURRENT_SOURCE_DIR}
-		PUBLIC
-		${OPENSIM_INCLUDE_DIRS}
-             ${SIMTK_INCLUDE_DIRS}
-		    ${IKExtended_HEADERS}
-                                    )
 
-# Save path to include directory for "internal" usage
-set(rtosim_InverseKinematicsOsens_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "Include directory for InverseKinematics library")
+if(WIN32)
+    target_compile_definitions(InverseKinematicsOsens PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
+endif()
 # Install
 
-install(FILES ${InverseKinematicsOsens_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(FILES ${InverseKinematicsOsens_HEADERS} ${InverseKinematicsOsens_TEMPLATE_IMPLEMENTATION} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
 install(TARGETS InverseKinematicsOsens
-        EXPORT RtosimTargets
+        EXPORT RTOSIM_Targets
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        #INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}# only available from CMake 2.8.12
-        )
-
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

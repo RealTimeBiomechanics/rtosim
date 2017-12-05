@@ -33,7 +33,7 @@ namespace rtosim {
     class FileLogger {
     public:
         using FrameType = QueueData < DataType > ;
-        using QueueType = Concurrency::Queue < FrameType > ;
+        using QueueType = rtb::Concurrency::Queue < FrameType >;
         FileLogger(
             const std::vector<std::string>& columnLabels,
             const std::string& filename,

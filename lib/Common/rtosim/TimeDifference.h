@@ -16,14 +16,14 @@
 #ifndef rtosim_TimeDifference_h
 #define rtosim_TimeDifference_h
 
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Latch.h"
 #include <ctime>
 #include <chrono>
 #include <list>
 #include <vector>
 #include <tuple>
 #include <ostream>
-//calculates the time that takes a frame to 
+//calculates the time that takes a frame to
 //travel from one queue to the other
 
 namespace rtosim {
@@ -51,7 +51,7 @@ namespace rtosim {
 
     template<typename T>
     class TimeData {
-    
+
     public:
         TimeData();
         void setTime(const T& key, double measuredTime);
@@ -76,23 +76,23 @@ namespace rtosim {
     template<typename Q>
     class TimeProbe {
     public:
-        TimeProbe(Q& queue, Concurrency::Latch& barrier);
+        TimeProbe(Q& queue, rtb::Concurrency::Latch& barrier);
         void operator()();
         TimeData<double> getWallClockTimes() const;
         TimeData<double> getCpuClockTimes() const;
-    
+
         void initialise();
     private:
         //uses frameTime as key and logs the cpu and wall clocks
         void logCurrentTime(double frameTime);
         Q& queue_;
-        
-        std::chrono::system_clock::time_point t_initialTimePoint_;
+
+        std::chrono::steady_clock::time_point t_initialTimePoint_;
         TimeData<double> t_frameProcessingTimes_;
 
         std::clock_t c_initialTimePoint_;
         TimeData<double> c_frameProcessingTimes_;
-        Concurrency::Latch& barrier_;
+        rtb::Concurrency::Latch& barrier_;
 
 
     };
@@ -103,10 +103,10 @@ namespace rtosim {
         TimeDifference() = delete;
         TimeDifference(const TimeDifference<Qin, Qout>&) = delete;
         TimeDifference(
-            Qin& queueIn, 
-            Qout& queueOut, 
-            Concurrency::Latch& doneWithSubscriptions, 
-            Concurrency::Latch& doneWithExecutions);
+            Qin& queueIn,
+            Qout& queueOut,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecutions);
         void operator()();
         TimeData<double> getWallClockDifference() const;
         TimeData<double> getCpuClockDifference() const;
@@ -114,8 +114,8 @@ namespace rtosim {
     private:
         Qin& queueIn_;
         Qout& queueOut_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecutions_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecutions_;
         TimeData<double> wallClockDifference_, cpuClockDifference_;
     };
 

@@ -21,7 +21,7 @@
 #include <memory>
 #include <OpenSim/OpenSim.h>
 #include <map>
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/Concurrency/Concurrency.h"
 #include "rtosim/queue/OrientationSetQueue.h"
 #include "rtosim/FlowControl.h"
 #include "rtosim/Mapper.h"
@@ -37,8 +37,8 @@ namespace rtosim {
 
         OrientationsFromMR3(
             OrientationSetQueue& outputOrientationSetQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
             const std::vector<std::string>& orientationNames);
         void operator()();
@@ -47,8 +47,8 @@ namespace rtosim {
         template<typename T>
         SimTK::Quaternion getFullQuaterion(const T& q);
         OrientationSetQueue& outputOrientationSetQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         FlowControl& runCondition_;
         std::vector<std::string> orientationNames_;
         Mapper mapper;

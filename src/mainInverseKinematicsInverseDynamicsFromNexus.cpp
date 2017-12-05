@@ -122,8 +122,8 @@ int main(int argc, char* argv[]) {
     ExternalTorquesQueue jointMomentsQueue;
 
     //define the barriers
-    rtosim::Concurrency::Latch doneWithSubscriptions;
-    rtosim::Concurrency::Latch doneWithExecution;
+    rtb::Concurrency::Latch doneWithSubscriptions;
+    rtb::Concurrency::Latch doneWithExecution;
     FlowControl runCondition(true);
 
     //define the filter
@@ -165,25 +165,25 @@ int main(int argc, char* argv[]) {
     //corrects the value of the COP when the
     //foot is not in contact with the force plate
     AdaptiveCop adaptiveCop(
-        markerSetQueue, 
+        markerSetQueue,
         grfQueue,
-        adaptedGrfQueue, 
-        doneWithSubscriptions, 
-        doneWithExecution, 
-        osimModelFilename, 
-        externalLoadsXml 
+        adaptedGrfQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
+        osimModelFilename,
+        externalLoadsXml
         );
-    
-    using GrfFilter = QueueAdapter < 
-        MultipleExternalForcesQueue, 
-        MultipleExternalForcesQueue, 
+
+    using GrfFilter = QueueAdapter <
+        MultipleExternalForcesQueue,
+        MultipleExternalForcesQueue,
         MultipleExternalForcesDataFilterStateSpace > ;
     MultipleExternalForcesDataFilterStateSpace multipleExternalForcesDataFilterStateSpace(fc, 40, 2);
     GrfFilter grfFilter(
-        adaptedGrfQueue, 
-        filteredGrfQueue, 
-        doneWithSubscriptions, 
-        doneWithExecution, 
+        adaptedGrfQueue,
+        filteredGrfQueue,
+        doneWithSubscriptions,
+        doneWithExecution,
         multipleExternalForcesDataFilterStateSpace);
 
     //read the filtered coordinates from IK and the filtered GRF,

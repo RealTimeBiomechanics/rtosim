@@ -44,8 +44,8 @@ namespace rtosim {
 
     DataFromNexus::DataFromNexus(
         MarkerSetQueue& outputMarkerSetQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
         const std::string& osimFilename,
         const std::string& hostname) :
@@ -67,8 +67,8 @@ namespace rtosim {
 
     DataFromNexus::DataFromNexus(
         MultipleExternalForcesQueue& outputGrfQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
         const std::string& osimFilename,
         const std::string& hostname) :
@@ -91,11 +91,11 @@ namespace rtosim {
     DataFromNexus::DataFromNexus(
         MarkerSetQueue& outputMarkerSetQueue,
         MultipleExternalForcesQueue& outputGrfQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
         const std::string& osimFilename,
-        const std::string& hostname) : 
+        const std::string& hostname) :
         useMarkerData_(true),
         outputMarkerSetQueue_(&outputMarkerSetQueue),
         useGrfData_(true),
@@ -286,7 +286,7 @@ namespace rtosim {
             //TODO: change this time
             currentFrame.time = 1. / rate.FrameRateHz*frameNumber_;
             outputMarkerSetQueue_->push(currentFrame);
-         
+
         } //end subjectCount else
     }
 
@@ -298,7 +298,7 @@ namespace rtosim {
             outputGrfQueue_->push(EndOfData::get<MultipleExternalForcesFrame>());
     }
 
-    //this is a correction required to calculate the force plane moments 
+    //this is a correction required to calculate the force plane moments
     //in the correct reference system. They are the same values that are available through Vicon Nexus
     //but they have to be roated accordingly to client.SetAxisMapping
     vector<SimTK::Vec3> DataFromNexus::getForcePlatePosition() const {
@@ -375,7 +375,7 @@ namespace rtosim {
     void DataFromNexus::setAxisMapping(VDS::Client& client) const {
 
         //map axis, try Backward, right, up for subject walking against the y direction of the lab..
-        //this is HARDCODED for the GU Undercroft Lab.. also, the mapping makes no sense IMO, 
+        //this is HARDCODED for the GU Undercroft Lab.. also, the mapping makes no sense IMO,
         //I've used try and error approach to get the right one
         client.SetAxisMapping(
             VDS::Direction::Right,

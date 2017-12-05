@@ -5,10 +5,6 @@ RTOSIM is a set of efficient and extensible C++ libraries to connect OpenSim wit
 
 Read more about RTOSIM at the [RTOSIM project page](https://simtk.org/home/rtosim)
 
-Quick Start
------------
-Test data and examples
-
 Dependencies
 ------------
 RTOSIM depends on the following 
@@ -27,9 +23,7 @@ RTOSIM depends on the following
 
 Install
 -------
-RTOSIM works on Windows, Mac, and Linux. Binary packages are available for Windows.
-
-[RTOSIM Win32 installer](https://simtk.org/frs/download.php?file_id=4494) (does not require any external library).
+RTOSIM works on Windows, Mac, and Linux. Binary packages will be available for Windows.
 
 Build
 -----
@@ -77,7 +71,7 @@ Get the [test data](https://drive.google.com/open?id=0BzMAK5L0QV2PUXk4SW9qcV9jSV
         menu, check that the force plates, which names are `#1 Right` and `#2 Left` are connected to `#2 MX Giganet - Slot 1`
    * Execute the example file rtosim\_ik\_id\_from\_nexus (you need to adapt the command to your directory structure)
 
-        ` rtosim_ik_id_from_nexus --model rtosim-testdata\models\2392_scaled_clusters.osim --task-set rtosim-testdata\setup\walking\ik_taskset.xml --ext-loads rtosim-testdata\setup\walking\externalLoads_nexus.xml -v `
+        ` rtosim_ik_id_from_nexus --model rtosim-testdata/models/2392_scaled_clusters.osim --task-set rtosim-testdata/setup/walking/ik_taskset.xml --ext-loads rtosim-testdata/setup/walking/externalLoads_nexus.xml -v `
 
    * To close the execution of RTOSIM press any key followed by `enter`
    * For the available options execute `rtosim_ik_id_from_nexus -h`
@@ -123,8 +117,9 @@ Publications
 
 If you are using rtosim or part of it please cite:
 
-Pizzolato, C., Reggiani, M., Modenese, L., Lloyd, D.G.. 
-Real-time inverse kinematics and inverse dynamics for lower limb applications using OpenSim.(under review). _Computer methods in biomechanics and biomedical engineering_.
+C. Pizzolato, M. Reggiani, L. Modenese & D. G. Lloyd (2016): Real-time inverse kinematics and inverse dynamics for lower limb applications using OpenSim, _Computer Methods in Biomechanics and Biomedical Engineering_, DOI:
+10.1080/10255842.2016.1240789
+To link to this article: http://dx.doi.org/10.1080/10255842.2016.1240789
 
 Acknowledgments
 ---------------

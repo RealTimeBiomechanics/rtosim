@@ -17,7 +17,7 @@
 #define rtosim_OrientationSetQueue_h
 
 #include "rtosim/QueueData.h"
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/Concurrency/Queue.h"
 #include <OpenSim/Common/OrientationSensorFrame.h>
 #include <vector>
 
@@ -26,7 +26,7 @@ namespace rtosim {
     
     using OrientationSetData  = std::vector<SimTK::Quaternion>;
     using OrientationSetFrame = QueueData < OrientationSetData > ;
-    using OrientationSetQueue = Concurrency::Queue < OrientationSetFrame > ;
+    using OrientationSetQueue = rtb::Concurrency::Queue < OrientationSetFrame > ;
 }
 
 #endif

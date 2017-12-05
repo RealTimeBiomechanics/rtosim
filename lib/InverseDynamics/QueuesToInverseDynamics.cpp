@@ -23,8 +23,8 @@ namespace rtosim {
         GeneralisedCoordinatesQueue& inputGeneralisedCoordinatesQueue,
         MultipleExternalForcesQueue& inputExternalForcesQueue,
         ExternalTorquesQueue& outputExternalTorquesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::string& externalLoadsXmlFilename) :
         QueueToXForces(inputExternalForcesQueue,
@@ -41,8 +41,8 @@ namespace rtosim {
         GeneralisedCoordinatesQueue& inputGeneralisedCoordinatesQueue,
         MultipleExternalForcesQueue& inputExternalForcesQueue,
         ExternalTorquesQueue& outputExternalTorquesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::vector<ExternalForceProperties>& externalForceDataProperties) :
         QueueToXForces(inputExternalForcesQueue,
@@ -63,7 +63,7 @@ namespace rtosim {
         QueueToXForces::doneWithSubscriptions();
 
         bool runCondition(true);
-        
+
         while (runCondition) {
 
             GeneralisedCoordinatesFrame generalisedCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
@@ -86,7 +86,7 @@ namespace rtosim {
                 outputExternalTorquesQueue_.push(externalTorquesFrame);
                 stopWatch_.log();
             }
-           
+
         }
         sendEndOfData();
         QueueToXForces::doneWithExecution();

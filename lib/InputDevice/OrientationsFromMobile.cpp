@@ -62,8 +62,8 @@ namespace rtosim {
 
     OrientationsFromMobile::OrientationsFromMobile(
         OrientationSetQueue& outputOrientationSetQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
         const std::string& osimFilename,
         const std::string& devicePort,

@@ -24,8 +24,7 @@
 #include "rtosim/JobsCreatorOsens.h"
 #include "rtosim/IKSequencer.h"
 #include "rtosim/IKSolverParallelOsens.h"
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/Concurrency/Concurrency.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/StopWatch.h"
@@ -37,8 +36,8 @@ namespace rtosim {
         QueueToInverseKinematicsOsens(
             OrientationSetQueue& inputOrientationSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
             double solverAccuracy = 1e-9,
@@ -47,8 +46,8 @@ namespace rtosim {
         QueueToInverseKinematicsOsens(
             OrientationSetQueue& inputOrientationSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
             const std::string& ikTaskSetFilename,
@@ -60,8 +59,8 @@ namespace rtosim {
     private:
         OrientationSetQueue& inputOrientationSetQueue_;
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         unsigned nThreads_;
         std::string osimModelFilename_;
         std::string ikTaskSetFilename_;

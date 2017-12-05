@@ -16,8 +16,8 @@
 #ifndef rtosim_QueueAdapter_h
 #define rtosim_QueueAdapter_h
 
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/EndOfData.h"
 
 namespace rtosim {
@@ -32,8 +32,8 @@ namespace rtosim {
         QueueAdapter(
             Qin& qIn,
             Qout& qOut,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const T& adapter
             );
         void operator()();
@@ -42,8 +42,8 @@ namespace rtosim {
     private:
         Qin& qIn_;
         Qout& qOut_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         T adapter_;
     };
 }

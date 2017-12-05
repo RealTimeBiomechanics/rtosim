@@ -27,8 +27,8 @@ namespace rtosim {
 
     QueueToInverseKinametics::QueueToInverseKinametics(MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         unsigned nThreads,
         double solverAccuracy,
@@ -49,8 +49,8 @@ namespace rtosim {
     QueueToInverseKinametics::QueueToInverseKinametics(
         MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         unsigned nThreads,
         const std::string& ikTaskSetFilename,
@@ -76,18 +76,18 @@ namespace rtosim {
         TimeSequence timeSequenceQueue;
         IKoutputs<rtosim::GeneralisedCoordinatesFrame> ikOutputQueue;
         rtosim::GeneralisedCoordinatesQueue orderedGeneralisedCoordinateQueue;
-        rtosim::Concurrency::Latch internalDoneWithSubscriptions(3 + nThreads_), internalDoneWithexecution(2 + nThreads_);
+        rtb::Concurrency::Latch internalDoneWithSubscriptions(3 + nThreads_), internalDoneWithexecution(2 + nThreads_);
 
         JobsCreator jobCreator(inputMarkerSetQueue_, threadPoolJobQueue, timeSequenceQueue, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);
         vector<unique_ptr<IKSolverParallel>> ikSolvers;
         for (unsigned i(0); i < nThreads_; ++i)
             ikSolvers.emplace_back(new IKSolverParallel(
-                threadPoolJobQueue, 
-                ikOutputQueue, 
-                internalDoneWithSubscriptions, 
-                internalDoneWithexecution, 
-                osimModelFilename_, 
-                solverAccuracy_, 
+                threadPoolJobQueue,
+                ikOutputQueue,
+                internalDoneWithSubscriptions,
+                internalDoneWithexecution,
+                osimModelFilename_,
+                solverAccuracy_,
                 contraintWeight_));
 
         if (useIkTaskSet_) {

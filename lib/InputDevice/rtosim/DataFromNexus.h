@@ -23,7 +23,7 @@
 #include <map>
 #include <Client.h> //from ViconSDK
 #include "rtosim/Mapper.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/concurrency/Concurrency.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/FlowControl.h"
@@ -40,16 +40,16 @@ namespace rtosim {
 
         DataFromNexus(
             MarkerSetQueue& outputMarkerSetQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
             const std::string& osimFilename,
             const std::string& hostname = "127.0.0.1:801");
 
         DataFromNexus(
             MultipleExternalForcesQueue& outputGrfQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
             const std::string& osimFilename,
             const std::string& hostname = "127.0.0.1:801");
@@ -57,8 +57,8 @@ namespace rtosim {
         DataFromNexus(
             MarkerSetQueue& outputMarkerSetQueue,
             MultipleExternalForcesQueue& outputGrfQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
             const std::string& osimFilename,
             const std::string& hostname = "127.0.0.1:801");
@@ -73,7 +73,7 @@ namespace rtosim {
         void printLatencyData(const std::string& filename) const;
 
     private:
-        
+
         std::vector<SimTK::Vec3> getForcePlatePosition() const;
         void setAxisMapping(VDS::Client& client) const;
         void initialiseMarkerNames(const std::string&);
@@ -89,8 +89,8 @@ namespace rtosim {
         void pushToLatency(const std::string& key, double value);
         MarkerSetQueue* outputMarkerSetQueue_;
         MultipleExternalForcesQueue* outputGrfQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         FlowControl& runCondition_;
         std::string hostName_;
         std::vector<std::string> markerNamesFromModel_;

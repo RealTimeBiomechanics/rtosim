@@ -28,8 +28,8 @@ namespace rtosim {
     QueueToInverseKinematicsOsens::QueueToInverseKinematicsOsens(
 	OrientationSetQueue& inputOrientationSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         unsigned nThreads,
         double solverAccuracy,
@@ -51,8 +51,8 @@ namespace rtosim {
     QueueToInverseKinematicsOsens::QueueToInverseKinematicsOsens(
         OrientationSetQueue& inputOrientationSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         unsigned nThreads,
         const std::string& ikTaskSetFilename,
@@ -78,7 +78,7 @@ namespace rtosim {
         TimeSequence timeSequenceQueue;
         IKoutputs<rtosim::GeneralisedCoordinatesFrame> ikOutputQueue;
         rtosim::GeneralisedCoordinatesQueue orderedGeneralisedCoordinateQueue;
-        rtosim::Concurrency::Latch internalDoneWithSubscriptions(3 + nThreads_), internalDoneWithexecution(2 + nThreads_);
+        rtb::Concurrency::Latch internalDoneWithSubscriptions(3 + nThreads_), internalDoneWithexecution(2 + nThreads_);
         JobsCreatorOsens<OrientationSetQueue> jobCreator(
 	  inputOrientationSetQueue_, 
 	  threadPoolJobQueue, 

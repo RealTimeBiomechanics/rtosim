@@ -18,8 +18,7 @@
 
 #include "rtosim/ThreadPoolJobs.h"
 #include "rtosim/IKSequencer.h"
-#include "rtosim/concurrency/Queue.h"
-#include "rtosim/concurrency/Latch.h"
+#include "rtb/Concurrency/Concurrency.h"
 
 #include <string>
 #include <thread>
@@ -36,8 +35,8 @@ namespace rtosim {
             Q& inputMarkerSetQueue,
             ThreadPoolJobs<FrameType>& outputJobsQueue,
             TimeSequence& outputTImeSequenceQueue,
-            rtosim::Concurrency::Latch& doneWithSubscriptions,
-            rtosim::Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             unsigned noIkThreads);
         virtual ~JobsCreatorOsens();
         void operator()();
@@ -45,8 +44,8 @@ namespace rtosim {
         Q& inputMarkerQueue_;
         ThreadPoolJobs<FrameType>& outputJobsQueue_;
         TimeSequence& outputTimeSequenceQueue_;
-        rtosim::Concurrency::Latch& doneWithSubscriptions_;
-        rtosim::Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         unsigned noIkThreads_;
     };
 }

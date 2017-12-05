@@ -1,0 +1,4 @@
+#CMake configuration file for RTOSIM library
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/RTOSIM_Exports.cmake")

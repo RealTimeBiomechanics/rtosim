@@ -47,8 +47,8 @@ namespace rtosim{
     IKSolverParallelOsens::IKSolverParallelOsens(
         ThreadPoolJobs<OrientationSetFrame>& inputThreadPoolJobs,
         IKoutputs<rtosim::GeneralisedCoordinatesFrame>& outputGeneralisedCoordinatesQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         double solverAccuracy,
         double constraintWeight

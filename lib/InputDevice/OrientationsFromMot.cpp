@@ -36,8 +36,8 @@ namespace rtosim {
 
     OrientationsFromMot::OrientationsFromMot(
         OrientationSetQueue& outputOrientationSetQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::string& motFilename,
         bool loop) :

@@ -18,18 +18,18 @@
 
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/concurrency/Concurrency.h"
 #include "rtosim/ExternalLoadProperties.h"
 #include <map>
 
 namespace rtosim{
 
-    //When the foot is not in contact with the force plate, the COP is 
-    //normally set to 0 by the input device. AdaptiveCop modify the value of the COP 
-    //when the foot is not in contact with the force plate, and sets it equal to the 
-    //projection of the marker defined in forcePlatesToMarkerNames on the force plate. 
-    //In this way, the COP follows the foot. 
-    //This helps to reduce the rise-time delay introduced 
+    //When the foot is not in contact with the force plate, the COP is
+    //normally set to 0 by the input device. AdaptiveCop modify the value of the COP
+    //when the foot is not in contact with the force plate, and sets it equal to the
+    //projection of the marker defined in forcePlatesToMarkerNames on the force plate.
+    //In this way, the COP follows the foot.
+    //This helps to reduce the rise-time delay introduced
     //filtering the COP.
     class AdaptiveCop {
 
@@ -38,21 +38,21 @@ namespace rtosim{
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::map<std::string, std::string>& forcePlatesToMarkerNames,
             const std::vector<std::string>& markerNames);
 
-        //when using this constructor, the marker that is used to 
-        //adapt the COP corresponds to the most posterior marker 
-        //connected to the body defined in the applied_to_body tag in 
+        //when using this constructor, the marker that is used to
+        //adapt the COP corresponds to the most posterior marker
+        //connected to the body defined in the applied_to_body tag in
         //externalLoadsFilename
         AdaptiveCop(
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::string& externalLoadsFilename);
 
@@ -60,8 +60,8 @@ namespace rtosim{
             MarkerSetQueue& inputMarkerSetQueue,
             MultipleExternalForcesQueue& inputExternalForcesQueue,
             MultipleExternalForcesQueue& outputExternalForcesQueue,
-            Concurrency::Latch& doneWithSubscriptions,
-            Concurrency::Latch& doneWithExecution,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             const std::vector<ExternalForceProperties>& externalForcesProperties);
 
@@ -73,8 +73,8 @@ namespace rtosim{
         MarkerSetQueue& inputMarkerSetQueue_;
         MultipleExternalForcesQueue& outputExternalForcesQueue_;
         MultipleExternalForcesQueue& inputExternalForcesQueue_;
-        Concurrency::Latch& doneWithSubscriptions_;
-        Concurrency::Latch& doneWithExecution_;
+        rtb::Concurrency::Latch& doneWithSubscriptions_;
+        rtb::Concurrency::Latch& doneWithExecution_;
         std::map<std::string, unsigned> forcePlatesToMarkerIndex_;
     };
 }

@@ -31,8 +31,8 @@ namespace rtosim{
         IKoutputs<rtosim::GeneralisedCoordinatesFrame>& inputGeneralisedCoordinateFrameFromIK,
         TimeSequence& inputTimeSequence,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-        rtosim::Concurrency::Latch& doneWithSubscriptions,
-        rtosim::Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         unsigned numberOfIKSolver) :
         inputGeneralisedCoordinateFrameFromIK_(inputGeneralisedCoordinateFrameFromIK),
         inputTimeSequence_(inputTimeSequence),

@@ -16,7 +16,7 @@
 #ifndef rtosim_TimeSequence
 #define rtosim_TimeSequence
 
-#include "rtosim/concurrency/Queue.h"
+#include "rtb/Concurrency/Queue.h"
 #include <string>
 #include <thread>
 #include <queue>

@@ -29,8 +29,8 @@ namespace rtosim {
         MarkerSetQueue& inputMarkerSetQueue,
         MultipleExternalForcesQueue& inputExternalForcesQueue,
         MultipleExternalForcesQueue& outputExternalForcesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::map<std::string, std::string>& forcePlatesToMarkerNames,
         const std::vector<std::string>& markerNames) :
         inputMarkerSetQueue_(inputMarkerSetQueue),
@@ -50,8 +50,8 @@ namespace rtosim {
         MarkerSetQueue& inputMarkerSetQueue,
         MultipleExternalForcesQueue& inputExternalForcesQueue,
         MultipleExternalForcesQueue& outputExternalForcesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::string& externalLoadsFilename) :
         inputMarkerSetQueue_(inputMarkerSetQueue),
@@ -68,8 +68,8 @@ namespace rtosim {
         MarkerSetQueue& inputMarkerSetQueue,
         MultipleExternalForcesQueue& inputExternalForcesQueue,
         MultipleExternalForcesQueue& outputExternalForcesQueue,
-        Concurrency::Latch& doneWithSubscriptions,
-        Concurrency::Latch& doneWithExecution,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
         const std::string& osimModelFilename,
         const std::vector<ExternalForceProperties>& externalForcesProperties) :
         inputMarkerSetQueue_(inputMarkerSetQueue),
