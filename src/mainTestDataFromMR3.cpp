@@ -1,5 +1,5 @@
 #include "rtosim/OrientationsFromMR3.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/Concurrency/Concurrency.h"
 #include "rtosim/queue/OrientationSetQueue.h"
 #include "rtosim/EndOfData.h"
 #include "rtosim/QueuesSync.h"
@@ -42,8 +42,8 @@ public:
 
     DataReader(
         OrientationSetQueue& inputQueue,
-        Concurrency::Latch& ready,
-        Concurrency::Latch& done) :
+        rtb::Concurrency::Latch& ready,
+        rtb::Concurrency::Latch& done) :
         inputQueue_(inputQueue),
         ready_(ready),
         done_(done)
@@ -106,8 +106,8 @@ public:
 
 private:
     OrientationSetQueue& inputQueue_;
-    Concurrency::Latch& ready_;
-    Concurrency::Latch& done_;
+    rtb::Concurrency::Latch& ready_;
+    rtb::Concurrency::Latch& done_;
 
 };
 
@@ -116,10 +116,10 @@ private:
 int main() {
 
     FlowControl flowControl(true);
-    Concurrency::Latch ready(2), done(2);
+    rtb::Concurrency::Latch ready(2), done(2);
     OrientationSetQueue orientationQueue;
 
-    vector<string> names{ "device.player.player.mm_gait;line.human.lt.leg.thigh;type.input.motion.rot;" };
+    vector<string> names{ "lt.leg.thigh" };
     OrientationsFromMR3 producer(orientationQueue, ready, done, flowControl, names);
     DataReader consumer(orientationQueue, ready, done);
     auto trigger([&flowControl]() {

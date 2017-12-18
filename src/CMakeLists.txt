@@ -54,3 +54,6 @@ if(${MR3tools_FOUND})
     target_link_libraries(fromMR3toFile MR3tools rtosim)
 endif(${MR3tools_FOUND})
 
+add_executable(rtosim_ik_osens_from_file  mainInverseKinematicsOsensFromFile.cpp)
+target_link_libraries(rtosim_ik_osens_from_file rtosim)
+

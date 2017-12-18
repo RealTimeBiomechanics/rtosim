@@ -22,6 +22,7 @@ set(InputDevice_SOURCES
     GeneralisedCoordinatesFromX.cpp
     GeneralisedCoordinatesFromStorageFile.cpp
 	OrientationsFromMR3.cpp
+    DataFromMR3.cpp
     )
 
 set(InputDevice_HEADERS
@@ -34,6 +35,7 @@ set(InputDevice_HEADERS
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
 	rtosim/OrientationsFromMR3.h
+    rtosim/DataFromMR3.h
 	)
 
 

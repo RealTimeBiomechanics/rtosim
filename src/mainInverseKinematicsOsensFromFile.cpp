@@ -51,7 +51,7 @@ void printHelp() {
     cout << "------              --------         --------------\n";
     cout << "-h                                   Print the command-line options for " << filename << ".\n";
     cout << "--model             ModelFilename    Specify the name of the osim model file for the investigation.\n";
-    cout << "--mot               TrcFilename      Specify the name of the mot file to be used.\n";
+    cout << "--mot               MotFilename      Specify the name of the mot file to be used.\n";
     cout << "--task-set          TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
     cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
     cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
@@ -63,7 +63,7 @@ void printHelp() {
 
 int main(int argc, char* argv[]) {
 
-    OpenSim::Object::registerType(OpenSim::OrientationSensor());
+  OpenSim::Object::registerType(OpenSim::OrientationSensor());
   OpenSim::Object::registerType(OpenSim::IKExtendedTaskSet());
   OpenSim::Object::registerType(OpenSim::IKOrientationSensorTask());
   OpenSim::Object::registerType(OpenSim::InverseKinematicsExtendedTool());
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
     if (po.exists("-j"))
         nThreads = po.getParameter<unsigned>("-j");
 
-    double solverAccuracy(1e-5);
+    double solverAccuracy(1e-3);
     if (po.exists("-a"))
         nThreads = po.getParameter<double>("-a");
 
@@ -131,8 +131,8 @@ int main(int argc, char* argv[]) {
     rtosim::GeneralisedCoordinatesQueue generalisedCoordinatesQueue, filteredGeneralisedCoordinatesQueue;
 
     //define the barriers
-    rtosim::Concurrency::Latch doneWithSubscriptions;
-    rtosim::Concurrency::Latch doneWithExecution;
+    rtb::Concurrency::Latch doneWithSubscriptions;
+    rtb::Concurrency::Latch doneWithExecution;
 
     //define the filter
     auto coordNames = getCoordinateNamesFromModel(osimModelFilename);
@@ -238,14 +238,15 @@ int main(int argc, char* argv[]) {
     
     //multithreaded part is over, all threads are joined
 
-/*    auto stopWatches = inverseKinematics.getProcessingTimes();
+    auto stopWatches = inverseKinematics.getProcessingTimes();
     rtosim::StopWatch combinedSW("time-ikparallel-processing");
     for (auto& s : stopWatches)
         combinedSW += s;
+    std::cout << "Printing results in " << stopWatchResultDir << endl;
     combinedSW.print(stopWatchResultDir);
     ikFrameCounter.getProcessingTimes().print(stopWatchResultDir);
     ikTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-markerqueue-to-jointangles.txt");
     gcQueueAdaptorTimeDifference.getWallClockDifference().print(stopWatchResultDir + "/time-jointangles-to-filteredjointangles.txt");
-    */
+    
     return 0;
 }

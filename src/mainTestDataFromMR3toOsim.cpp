@@ -1,5 +1,5 @@
 #include "rtosim/OrientationsFromMR3.h"
-#include "rtosim/concurrency/Concurrency.h"
+#include "rtb/Concurrency/Concurrency.h"
 #include "rtosim/queue/OrientationSetQueue.h"
 #include "rtosim/EndOfData.h"
 #include "rtosim/QueuesSync.h"
@@ -16,14 +16,13 @@ int main() {
 
     OpenSim::Object::registerType(OpenSim::OrientationSensor());
     FlowControl flowControl(true);
-    Concurrency::Latch ready(2), done(2);
+    rtb::Concurrency::Latch ready(2), done(2);
     OrientationSetQueue orientationQueue;
     GeneralisedCoordinatesQueue coordinatesQueue;
 
     string osimModelFilename("C:/Users/s2849511/coding/versioning/rtosim/data/arm26_osens.osim");
 
-//    vector<string> names{ "device.player.player.mm_gait;line.human.lt.leg.thigh;type.input.motion.rot;" };
-    vector<string> names;
+    vector<string> names{ "rt.arm.fore"};
     OrientationsFromMR3 producer(orientationQueue, ready, done, flowControl, names);
     QueueToInverseKinematicsOsens consumer(
         orientationQueue,
@@ -31,7 +30,7 @@ int main() {
         ready,
         done,
         osimModelFilename,
-        1);
+        2);
     
     StateVisualiser stateVisualiser(coordinatesQueue, osimModelFilename);
     auto trigger([&flowControl]() {
