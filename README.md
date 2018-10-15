@@ -41,8 +41,8 @@ Patch Simbody
 -------------
 
 If you want to use multiple threads to solve the OpenSim inverse kinematics using IpOpt as optimisation algorithm (which is the default algorithm for constrained optimisations in OpenSim), 
-you need to patch Simbody first. To do this, get the files [IpLapackSolverInterface.cpp](https://github.com/cpizzolato/simbody/blob/master/SimTKmath/Optimizers/src/IpOpt/IpLapackSolverInterface.cpp) and 
-[IpLapackSolverInterface.hpp](https://github.com/cpizzolato/simbody/blob/master/SimTKmath/Optimizers/src/IpOpt/IpLapackSolverInterface.hpp) and use them to replace the corresponding 
+you need to patch Simbody first. To do this, get the files [IpLapackSolverInterface.cpp](https://github.com/cpizzolato/simbody/blob/fix-ipopt-issue175/SimTKmath/Optimizers/src/IpOpt/IpLapackSolverInterface.cpp) and 
+[IpLapackSolverInterface.hpp](https://github.com/cpizzolato/simbody/blob/fix-ipopt-issue175/SimTKmath/Optimizers/src/IpOpt/IpLapackSolverInterface.hpp) and use them to replace the corresponding 
 files in your Simbody distribution in the directory SimTKmath/Optimizers/src/IpOpt. Then, compile and install Simbody.
 
 Test Data
