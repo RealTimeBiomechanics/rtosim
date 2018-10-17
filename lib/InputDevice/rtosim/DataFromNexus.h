@@ -21,7 +21,7 @@
 #include <memory>
 #include <OpenSim/OpenSim.h>
 #include <map>
-#include <Client.h> //from ViconSDK
+#include <DataStreamClient.h> //from ViconSDK
 #include "rtosim/Mapper.h"
 #include "rtb/concurrency/Concurrency.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"

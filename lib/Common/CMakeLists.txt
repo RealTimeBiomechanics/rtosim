@@ -62,7 +62,7 @@ target_include_directories(Common  PRIVATE ${OPENSIMSIMBODY_INCLUDE_DIRS}
                                    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-install(FILES ${Common_HEADERS} ${Common_TEMPLATE_IMPLEMENTATIONS}
+install(FILES ${Common_HEADERS} ${Common_TEMPLATE_IMPLEMENTATION}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
 install(FILES ${Common_QUEUES_HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim/queue)

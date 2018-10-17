@@ -46,7 +46,7 @@ namespace rtosim{
         OrientationSetFrame getPastFrame(double time) const;
         OrientationSetFrame getFrameFromQueue() const;
 
-        unsigned static const MaxFramesToStore = 1000;
+        unsigned static const MaxFramesToStore = 5000;
         mutable std::list<OrientationSetFrame> pastFrames_;
         mutable double lastQueueTime_;
         mutable double time_;

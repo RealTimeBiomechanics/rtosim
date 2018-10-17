@@ -73,6 +73,8 @@ namespace rtosim {
         rtosim::ArrayConverter::toStdVector(motFile.getOrientationSensorNames(), sensorsNamesFromFile);
 
         rtosim::Mapper markersMapper(sensorsNamesFromFile, sensorsNamesFromModel);
+        for(auto& name : sensorsNamesFromModel)
+            std::cout << name << std::endl;
 
         for (size_t i(0); i < static_cast<size_t>(motFile.getNumFrames()); ++i) {
             auto frame(motFile.getFrame(i));

@@ -20,9 +20,7 @@ set(InputDevice_SOURCES
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
     GeneralisedCoordinatesFromX.cpp
-    GeneralisedCoordinatesFromStorageFile.cpp
-	OrientationsFromMR3.cpp
-    DataFromMR3.cpp
+	GeneralisedCoordinatesFromStorageFile.cpp
     )
 
 set(InputDevice_HEADERS
@@ -34,22 +32,34 @@ set(InputDevice_HEADERS
     rtosim/ExternalForcesFromStorageFile.h
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
-	rtosim/OrientationsFromMR3.h
-    rtosim/DataFromMR3.h
 	)
 
+set(InputDevice_MR3_HEADERS
+		rtosim/DataFromMR3.h
+		rtosim/OrientationsFromMR3.h )
+
+set(InputDevice_MR3_SOURCES
+		OrientationsFromMR3.cpp
+		DataFromMR3.cpp )
+
+set(InputDevice_Nexus_HEADERS
+        rtosim/DataFromNexus.h )
 
 set(InputDevice_Nexus_SOURCES
         DataFromNexus.cpp )
 
-set(InputDevice_Nexus_HEADERS
-        rtosim/DataFromNexus.h )
 
 if(${VICONSDK_FOUND})
     message( STATUS "Using ViconSDK in InputDevice")
     list(APPEND InputDevice_HEADERS ${InputDevice_Nexus_HEADERS})
     list(APPEND InputDevice_SOURCES ${InputDevice_Nexus_SOURCES})
 endif(${VICONSDK_FOUND})
+
+if(${MR3TOOLS_FOUND})
+    message( STATUS "Using MR3tools in InputDevice")
+    list(APPEND InputDevice_HEADERS ${InputDevice_MR3_HEADERS})
+    list(APPEND InputDevice_SOURCES ${InputDevice_MR3_SOURCES})
+endif(${MR3TOOLS_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
@@ -61,13 +71,13 @@ add_library(InputDevice
 
 target_include_directories(InputDevice PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                       ${OPENSIMSIMBODY_INCLUDE_DIRS}
-                                       ${MR3tools_INCLUDE_DIRS})
+                                       ${OPENSIMSIMBODY_INCLUDE_DIRS})
 
-target_link_libraries(InputDevice Common Utilities ${IKExtended_LIBRARIES} ${OPENSIMSIMBODY_LIBRARIES} ${MR3tools_LIBRARIES})
+target_link_libraries(InputDevice Common Utilities ${IKExtended_LIBRARIES} ${OPENSIMSIMBODY_LIBRARIES})
 if(WIN32)
     target_compile_definitions(InputDevice PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
 endif()
+
 if(${VICONSDK_FOUND})
     target_include_directories(InputDevice PUBLIC
                                 ${ViconSDK_INCLUDE_DIRS}
@@ -76,10 +86,19 @@ if(${VICONSDK_FOUND})
     target_compile_definitions(InputDevice PUBLIC INCLUDEVICONSDK)
 endif(${VICONSDK_FOUND})
 
+if(${MR3TOOLS_FOUND})
+    target_include_directories(InputDevice PUBLIC
+                                ${MR3tools_INCLUDE_DIRS}
+    )
+    target_link_libraries(InputDevice ${MR3tools_LIBRARIES})
+    target_compile_definitions(InputDevice PUBLIC INCLUDEMR3TOOLS)
+endif(${MR3TOOLS_FOUND})
+
+
 # Install
 install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
 install(TARGETS InputDevice
-        EXPORT RTOSIM_Targets
+        EXPORT RTOSIM_Exports
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})

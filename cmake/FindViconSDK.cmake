@@ -17,7 +17,7 @@ set(ViconSDK_POSSIBLE_DIRECTORIES
 	$ENV{VICONDATASTREAM_INSTALL_DIR}
 	)
 
-find_path(ViconSDK_INCLUDE_DIRS Client.h
+find_path(ViconSDK_INCLUDE_DIRS DataStreamClient.h
           PATHS ${ViconSDK_POSSIBLE_DIRECTORIES}
           PATH_SUFFIXES include )
 MESSAGE( STATUS "ViconSDK Include path: ${ViconSDK_INCLUDE_DIRS}")

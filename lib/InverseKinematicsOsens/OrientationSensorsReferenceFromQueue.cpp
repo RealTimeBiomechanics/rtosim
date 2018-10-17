@@ -74,7 +74,6 @@ namespace rtosim{
         for (auto& quaternion : frame.data)
             values.push_back(quaternion);
         time_ = frame.time;
-
     }
 
     OrientationSetFrame OrientationSensorsReferenceFromQueue::getPastFrame(double time) const {
@@ -87,12 +86,12 @@ namespace rtosim{
 
     OrientationSetFrame OrientationSensorsReferenceFromQueue::getFrameFromQueue() const {
 
-	OrientationSetFrame frame(inputOrientationSetFrameQueue_.pop());
+        OrientationSetFrame frame(inputOrientationSetFrameQueue_.pop());
         lastQueueTime_ = frame.time;
 
-	pastFrames_.push_back(frame);
-        if (pastFrames_.size() < MaxFramesToStore)
-	  pastFrames_.pop_front();
+        pastFrames_.push_back(frame);
+        if (pastFrames_.size() > MaxFramesToStore)
+            pastFrames_.pop_front();
 
         return frame;
     }

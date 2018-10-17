@@ -61,7 +61,6 @@ namespace rtosim {
         quat = quat.normalize();
         return quat;
     }
-
 }
 
 #endif
