@@ -48,7 +48,7 @@ else()
 endif()
 
 find_package(MR3tools QUIET)
-if(${MR3TOOLS_FOUND})
+if(${MR3tools_FOUND})
 	message(STATUS "MR3tools found")
 	add_definitions(-DINCLUDEMR3TOOLS)
 else()
