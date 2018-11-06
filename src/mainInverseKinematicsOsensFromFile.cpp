@@ -52,12 +52,12 @@ void printHelp() {
     cout << "-h                                   Print the command-line options for " << filename << ".\n";
     cout << "--model             ModelFilename    Specify the name of the osim model file for the investigation.\n";
     cout << "--mot               MotFilename      Specify the name of the mot file to be used.\n";
-    cout << "--task-set          TaskSetFilename  Specify the name of the XML TaskSet file containing the marker weights to be used.\n";
+    cout << "--task-set          TaskSetFilename  Specify the name of the XML TaskSet file containing the sensors weights to be used.\n";
     cout << "--fc                CutoffFrequency  Specify the name of lowpass cutoff frequency to filter IK data.\n";
     cout << "-j                  IK threads       Specify the number of IK threads to be used.\n";
     cout << "-a                  Accuracy         Specify the IK solver accuracy.\n";
     cout << "--output            OutputDir        Specify the output directory.\n";
-    cout << "--push-frequency    PushFrequency    Specify the frequency to which the trajectories are read from the storage file.\n";
+    cout << "--push-frequency    PushFrequency    Specify the frequency to which the quaternions are read from the storage file.\n";
     cout << "-v                                   Show visualiser.\n";
 }
 
