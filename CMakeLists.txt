@@ -55,6 +55,8 @@ else()
 	message(STATUS "MR3tools not found")
 endif()
 
+add_definitions(/DBASE_DIR="${CMAKE_CURRENT_LIST_DIR}")
+
 # Choose common build locations for executables and libraries
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

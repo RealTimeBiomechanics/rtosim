@@ -78,6 +78,7 @@ int main(int argc, char* argv[]) {
     if (po.exists("--model"))
         osimModelFilename = po.getParameter("--model");
     else {
+		cout << "Missing --model option" << endl;
         printHelp();
         exit(EXIT_SUCCESS);
     }
@@ -86,6 +87,7 @@ int main(int argc, char* argv[]) {
     if (po.exists("--mot"))
         motTrialFilename = po.getParameter("--mot");
     else {
+		cout << "Missing --mot option" << endl;
         printHelp();
         exit(EXIT_SUCCESS);
     }
@@ -94,6 +96,7 @@ int main(int argc, char* argv[]) {
     if (po.exists("--task-set"))
         ikTaskFilename = po.getParameter("--task-set");
     else {
+		cout << "Missing --task-set option" << endl;
         printHelp();
         exit(EXIT_SUCCESS);
     }
@@ -106,7 +109,7 @@ int main(int argc, char* argv[]) {
     if (po.exists("-j"))
         nThreads = po.getParameter<unsigned>("-j");
 
-    double solverAccuracy(1e-3);
+    double solverAccuracy(1e-5);
     if (po.exists("-a"))
         nThreads = po.getParameter<double>("-a");
 
@@ -139,7 +142,7 @@ int main(int argc, char* argv[]) {
     rtosim::GeneralisedCoordinatesStateSpace gcFilt(fc, coordNames.size());
 
     //define the threads
-    //#read markers from file and save them in markerSetQueue
+    //read markers from file and push them in orientationsSetQueue
     rtosim::OrientationsFromMot orientationsFromMot(
         orientationsSetQueue,
         doneWithSubscriptions,
@@ -150,7 +153,7 @@ int main(int argc, char* argv[]) {
 
     orientationsFromMot.setOutputFrequency(pushFrequency);
 
-    //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
+    //read from markerSetQueue, calculate IK, and push results in generalisedCoordinatesQueue
     rtosim::QueueToInverseKinematicsOsens inverseKinematics(
         orientationsSetQueue,
         generalisedCoordinatesQueue,
@@ -158,8 +161,9 @@ int main(int argc, char* argv[]) {
         doneWithExecution,
         osimModelFilename,
         nThreads, solverAccuracy);
+
     //read from generalisedCoordinatesQueue, filter using gcFilt,
-    //and save filtered data in filteredGeneralisedCoordinatesQueue
+    //and push filtered data in filteredGeneralisedCoordinatesQueue
     rtosim::QueueAdapter <
         rtosim::GeneralisedCoordinatesQueue,
         rtosim::GeneralisedCoordinatesQueue,
@@ -170,6 +174,7 @@ int main(int argc, char* argv[]) {
     doneWithSubscriptions,
     doneWithExecution,
     gcFilt);
+
     //read from filteredGeneralisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> filteredIkLogger(
         filteredGeneralisedCoordinatesQueue,
@@ -210,7 +215,7 @@ int main(int argc, char* argv[]) {
     //all the multithreading is in this function
    
     if (showVisualiser) {
-        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);
+        rtosim::StateVisualiser visualiser(filteredGeneralisedCoordinatesQueue, osimModelFilename);
         rtosim::QueuesSync::launchThreads(
             orientationsFromMot,
             inverseKinematics,
@@ -237,7 +242,6 @@ int main(int argc, char* argv[]) {
     }
     
     //multithreaded part is over, all threads are joined
-
     auto stopWatches = inverseKinematics.getProcessingTimes();
     rtosim::StopWatch combinedSW("time-ikparallel-processing");
     for (auto& s : stopWatches)

@@ -16,6 +16,7 @@
 set(InputDevice_SOURCES
     MarkersFromTrc.cpp
     OrientationsFromMot.cpp
+#	OrientationsFromNoraxonCsv.cpp
     OrientationsFromMobile.cpp
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
@@ -26,6 +27,7 @@ set(InputDevice_SOURCES
 set(InputDevice_HEADERS
     rtosim/MarkersFromTrc.h
     rtosim/OrientationsFromMot.h
+#	rtosim/OrientationsFromNoraxonCsv.h
     rtosim/OrientationsFromMobile.h
     rtosim/InputDevice.h
     rtosim/ExternalForcesFromX.h
