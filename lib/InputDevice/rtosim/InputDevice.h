@@ -22,6 +22,9 @@
 #include "rtosim/OrientationsFromMot.h"
 #include "rtosim/OrientationsFromMobile.h"
 #ifdef INCLUDEVICONSDK
-  #include "rtosim/DataFromNexus.h"
+	#include "rtosim/DataFromNexus.h"
+#endif
+#ifdef INCLUDEMR3TOOLS
+	#include "rtosim/OrientationsFromMR3.h"
 #endif
 #endif

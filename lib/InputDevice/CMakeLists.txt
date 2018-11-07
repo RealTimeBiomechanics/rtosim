@@ -57,11 +57,11 @@ if(${VICONSDK_FOUND})
     list(APPEND InputDevice_SOURCES ${InputDevice_Nexus_SOURCES})
 endif(${VICONSDK_FOUND})
 
-if(${MR3TOOLS_FOUND})
+if(${MR3tools_FOUND})
     message( STATUS "Using MR3tools in InputDevice")
     list(APPEND InputDevice_HEADERS ${InputDevice_MR3_HEADERS})
     list(APPEND InputDevice_SOURCES ${InputDevice_MR3_SOURCES})
-endif(${MR3TOOLS_FOUND})
+endif(${MR3tools_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
@@ -88,14 +88,13 @@ if(${VICONSDK_FOUND})
     target_compile_definitions(InputDevice PUBLIC INCLUDEVICONSDK)
 endif(${VICONSDK_FOUND})
 
-if(${MR3TOOLS_FOUND})
+if(${MR3tools_FOUND})
     target_include_directories(InputDevice PUBLIC
                                 ${MR3tools_INCLUDE_DIRS}
     )
-    target_link_libraries(InputDevice ${MR3tools_LIBRARIES})
+    target_link_libraries(InputDevice MR3tools)
     target_compile_definitions(InputDevice PUBLIC INCLUDEMR3TOOLS)
-endif(${MR3TOOLS_FOUND})
-
+endif(${MR3tools_FOUND})
 
 # Install
 install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)

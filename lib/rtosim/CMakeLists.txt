@@ -24,13 +24,6 @@ add_custom_target(rtosim_IDE SOURCES ${rtosim_HEADERS})
 target_link_libraries(rtosim INTERFACE Common InputDevice OutputDevice InverseKinematics InverseKinematicsOsens
                              InverseDynamics SignalProcessing Utilities IKExtended)
 
-if(${MR3tools_FOUND})
-    target_include_directories(InputDevice PUBLIC
-                                ${MR3tools_INCLUDE_DIRS}
-    )
-	target_link_libraries(rtosim INTERFACE MR3tools)
-endif()
-
 target_include_directories(rtosim INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 # Install

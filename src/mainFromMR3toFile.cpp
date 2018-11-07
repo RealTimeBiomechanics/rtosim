@@ -1,12 +1,4 @@
-#include "rtosim/OrientationsFromMR3.h"
-#include "rtosim/concurrency/Concurrency.h"
-#include "rtosim/queue/OrientationSetQueue.h"
-#include "rtosim/EndOfData.h"
-#include "rtosim/QueuesSync.h"
-#include "rtosim/QueueToInverseKinematicsOsens.h"
-#include "rtosim/StateVisualiser.h"
-#include "rtosim/QueueToFileLogger.h"
-#include "rtosim/ProgramOptionsParser.h"
+#include "rtosim/rtosim.h"
 #include <OpenSim/Simulation/Model/OrientationSensor.h>
 #include <vector>
 #include <string>
@@ -35,7 +27,7 @@ int main(int argc, char* argv[]) {
     SimTK::Pathname::deconstructPathname(outputFilename, isAbsolute, dir, filename, ext);
 
     FlowControl flowControl(true);
-    Concurrency::Latch ready(2), done(2);
+    rtb::Concurrency::Latch ready(2), done(2);
     OrientationSetQueue orientationQueue;
     
     vector<string> names{"rt.leg.thigh", "rt.leg.shank", "rt.leg.foot" };

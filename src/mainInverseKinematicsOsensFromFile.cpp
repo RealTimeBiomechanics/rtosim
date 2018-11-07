@@ -184,6 +184,7 @@ int main(int argc, char* argv[]) {
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
         resultDir, outputFilename+ "-filtered", ".mot");
+	filteredIkLogger.setIsInDegrees(false);
     //read from generalisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> rawIkLogger(
         generalisedCoordinatesQueue,
@@ -191,6 +192,7 @@ int main(int argc, char* argv[]) {
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
         resultDir, outputFilename, ".mot");
+	rawIkLogger.setIsInDegrees(false);
     //calculate the ik throughput time
     rtosim::FrameCounter<rtosim::GeneralisedCoordinatesQueue> ikFrameCounter(
         generalisedCoordinatesQueue,

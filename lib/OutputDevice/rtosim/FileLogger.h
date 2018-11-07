@@ -48,6 +48,7 @@ namespace rtosim {
         void clearData();
         bool print();
         bool printable();
+		void setIsInDegrees(bool isInDegrees) { isInDegrees_ = isInDegrees; }
     private:
         bool createFile();
         void initFile();
@@ -58,6 +59,7 @@ namespace rtosim {
         std::string filename_;
         std::shared_ptr<std::ofstream> outFile_;
         std::list< FrameType > dataToWrite_;
+		bool isInDegrees_;
     };
 }
 

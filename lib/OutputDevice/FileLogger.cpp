@@ -116,10 +116,12 @@ namespace rtosim {
     template<typename DataType>
     void FileLogger<DataType>::initFile() {
 
-        *outFile_ << "CEINMS output" << std::endl;
-        *outFile_ << "datacolumns " << dataToWrite_.back().data.size() + 1 << std::endl;
-        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
-        *outFile_ << "endheader" << std::endl;
+        *outFile_ << "rtosim output" << std::endl;
+		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.size() + 1 << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+		*outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
             *outFile_ << it << sp_;
@@ -130,9 +132,11 @@ namespace rtosim {
     void FileLogger<std::vector<SimTK::Vec3>>::initFile()
     {
 
-        *outFile_ << "CEINMS output" << std::endl;
-        *outFile_ << "datacolumns " << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
-        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
+        *outFile_ << "rtosim output" << std::endl;
+		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -143,9 +147,11 @@ namespace rtosim {
     template<>
     void FileLogger<GeneralisedCoordinatesData>::initFile()
     {
-        *outFile_ << "CEINMS output" << std::endl;
-        *outFile_ << "datacolumns " << dataToWrite_.back().data.getNCoordinates() * 3 + 1 << std::endl;
-        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
+        *outFile_ << "rtosim output" << std::endl;
+		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.getNCoordinates() * 3 + 1 << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -156,9 +162,11 @@ namespace rtosim {
     template<>
     void FileLogger<MultipleExternalForcesData>::initFile()
     {
-        *outFile_ << "CEINMS output" << std::endl;
-        *outFile_ << "datacolumns " << dataToWrite_.back().data.size() * 12 + 1 << std::endl;
-        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
+        *outFile_ << "rtosim output" << std::endl;
+		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 12 + 1 << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -184,8 +192,10 @@ namespace rtosim {
     void FileLogger<OrientationSetData>::initFile()
     {
         *outFile_ << "rtosim output" << std::endl;
-        *outFile_ << "datacolumns " << dataToWrite_.back().data.size() * 4 + 1 << std::endl;
-        *outFile_ << "datarows " << dataToWrite_.size() << std::endl;
+		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 4 + 1 << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)

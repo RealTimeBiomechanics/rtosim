@@ -42,6 +42,7 @@ namespace rtosim {
             const std::string& extension = "sto");
         ~QueueToFileLogger() = default;
         void operator()();
+		void setIsInDegrees(bool isInDegrees) { logger_.setIsInDegrees(isInDegrees); }
 
     private:
         QueueType& inputQueue_;
