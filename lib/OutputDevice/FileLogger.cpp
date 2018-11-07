@@ -30,6 +30,7 @@ namespace rtosim {
         sp_(separator)
     {    
         outputDir_ = FileSystem::concatenatePaths(outputDir_, "");
+		std::cout << "Logging files in " << outputDir_ << std::endl;
     }
 
     template<typename DataType>

@@ -58,7 +58,7 @@ namespace rtosim {
             else if (path1.back() == fs.front())
                 concatenated = path1 + path2;
             else  
-                path1 + fs + path2;
+				concatenated = path1 + fs + path2;
             return concatenated;
         }
     }
