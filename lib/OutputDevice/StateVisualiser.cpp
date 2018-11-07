@@ -43,11 +43,11 @@ namespace rtosim{
         model_.setUseVisualizer(true);
         SimTK::State s(model_.initSystem());
         SimTK::Visualizer &viz = model_.updVisualizer().updSimbodyVisualizer();
-        viz.setShowFrameRate(false);
+        viz.setShowFrameRate(true);
         viz.setShutdownWhenDestructed(true);
         viz.setMode(SimTK::Visualizer::Mode::Sampling);
-        viz.setShutdownWhenDestructed(true);
-        viz.setDesiredBufferLengthInSec(5);
+   //     viz.setShutdownWhenDestructed(true);
+       // viz.setDesiredBufferLengthInSec(5);
         viz.setDesiredFrameRate(60);
         ShowInfo* info = new ShowInfo();
         viz.addDecorationGenerator(info);

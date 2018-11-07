@@ -128,7 +128,9 @@ int main(int argc, char* argv[]) {
     resultDir = rtosim::FileSystem::getAbsolutePath(resultDir);
     rtosim::FileSystem::createDirectory(resultDir);
     string stopWatchResultDir(resultDir);
-
+	bool isAbsolute; string trialFilename, tempDir, tempExtension;
+	SimTK::Pathname::deconstructPathname(motTrialFilename, isAbsolute, tempDir, trialFilename, tempExtension);
+	string outputFilename = trialFilename + "-ik";
     //define the shared buffer
     rtosim::OrientationSetQueue orientationsSetQueue;
     rtosim::GeneralisedCoordinatesQueue generalisedCoordinatesQueue, filteredGeneralisedCoordinatesQueue;
@@ -181,14 +183,14 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "filtered_ik_from_file", ".sto");
+        resultDir, outputFilename+ "-filtered", ".mot");
     //read from generalisedCoordinatesQueue and save to file
     rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> rawIkLogger(
         generalisedCoordinatesQueue,
         doneWithSubscriptions,
         doneWithExecution,
         getCoordinateNamesFromModel(osimModelFilename),
-        resultDir, "raw_ik_from_file", ".sto");
+        resultDir, outputFilename, ".mot");
     //calculate the ik throughput time
     rtosim::FrameCounter<rtosim::GeneralisedCoordinatesQueue> ikFrameCounter(
         generalisedCoordinatesQueue,

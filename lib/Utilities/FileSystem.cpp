@@ -61,5 +61,6 @@ namespace rtosim {
 				concatenated = path1 + fs + path2;
             return concatenated;
         }
+
     }
 }
