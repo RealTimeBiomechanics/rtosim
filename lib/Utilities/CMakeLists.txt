@@ -21,8 +21,7 @@ set(Utilities_HEADERS
     rtosim/ArrayConverter.h
     rtosim/StopWatch.h
     rtosim/FileSystem.h
-    rtosim/OsimUtilities.h
-	rtosim/CsvReader.h)
+    rtosim/OsimUtilities.h)
 
 set(Utilities_SOURCES
     ProgramOptionsParser.cpp

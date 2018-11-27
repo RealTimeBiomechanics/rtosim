@@ -26,6 +26,7 @@
 #include "rtb/concurrency/Concurrency.h"
 #include "rtosim/queue/MultipleExternalForcesQueue.h"
 #include "rtosim/queue/MarkerSetQueue.h"
+#include "rtosim/queue/EmgQueue.h"
 #include "rtosim/FlowControl.h"
 
 
@@ -54,15 +55,47 @@ namespace rtosim {
             const std::string& osimFilename,
             const std::string& hostname = "127.0.0.1:801");
 
-        DataFromNexus(
-            MarkerSetQueue& outputMarkerSetQueue,
-            MultipleExternalForcesQueue& outputGrfQueue,
-            rtb::Concurrency::Latch& doneWithSubscriptions,
-            rtb::Concurrency::Latch& doneWithExecution,
-            FlowControl& runCondition,
-            const std::string& osimFilename,
-            const std::string& hostname = "127.0.0.1:801");
+		/*The order of the names in emgChannelNames is important,
+		*it dictates the output order of the raw emg values in
+		*in the queue*/
+		DataFromNexus(
+			EmgQueue& outputEmgQueue,
+			rtb::Concurrency::Latch& doneWithSubscriptions,
+			rtb::Concurrency::Latch& doneWithExecution,
+			FlowControl& runCondition,
+			const std::vector<std::string>& emgChannelNames,
+			const std::string& hostname = "127.0.0.1:801");
 
+		DataFromNexus(
+			MarkerSetQueue& outputMarkerSetQueue,
+			MultipleExternalForcesQueue& outputGrfQueue,
+			rtb::Concurrency::Latch& doneWithSubscriptions,
+			rtb::Concurrency::Latch& doneWithExecution,
+			FlowControl& runCondition,
+			const std::string& osimFilename,
+			const std::string& hostname = "127.0.0.1:801");
+
+		DataFromNexus(
+			MarkerSetQueue& outputMarkerSetQueue,
+			EmgQueue& outputEmgQueue,
+			rtb::Concurrency::Latch& doneWithSubscriptions,
+			rtb::Concurrency::Latch& doneWithExecution,
+			FlowControl& runCondition,
+			const std::string& osimFilename,
+			const std::vector<std::string>& emgChannelNames,
+			const std::string& hostname = "127.0.0.1:801");
+
+
+		DataFromNexus(
+			MarkerSetQueue& outputMarkerSetQueue,
+			MultipleExternalForcesQueue& outputGrfQueue,
+			EmgQueue& outputEmgQueue,
+			rtb::Concurrency::Latch& doneWithSubscriptions,
+			rtb::Concurrency::Latch& doneWithExecution,
+			FlowControl& runCondition,
+			const std::string& osimFilename,
+			const std::vector<std::string>& emgChannelNames,
+			const std::string& hostname = "127.0.0.1:801");
 
         void setLoopMode(bool isLoop) {
             increaseFrameNumbers_ = isLoop;
@@ -80,24 +113,30 @@ namespace rtosim {
         void initialiseDataToStream(VDS::Client& client);
         void waitForForcePlates(VDS::Client& client);
         void waitForCompleteFrame(VDS::Client& client);
+		void waitForEmgs(VDS::Client& client);
         void connectToServer(VDS::Client& client) const;
         void getFrame(VDS::Client& client);
         void pushMarkerData(VDS::Client& client);
         void pushForcePlateData(VDS::Client& client);
+		void pushEmgData(VDS::Client& client);
         void pushEndOfData(VDS::Client& client);
         void updateLatency(VDS::Client& client);
         void pushToLatency(const std::string& key, double value);
         MarkerSetQueue* outputMarkerSetQueue_;
         MultipleExternalForcesQueue* outputGrfQueue_;
+		EmgQueue* outputEmgQueue_;
         rtb::Concurrency::Latch& doneWithSubscriptions_;
         rtb::Concurrency::Latch& doneWithExecution_;
         FlowControl& runCondition_;
         std::string hostName_;
         std::vector<std::string> markerNamesFromModel_;
         std::vector<std::string> forcePlateNames_;
+		std::vector<std::string> emgChannelNames_; //this are the names the user asks for
+		std::vector<std::string> enabledEmgChannelNames_; //this are the names required by the user that are also available
+		std::string emgDeviceName_;
         //    SimTK::Vec3 originTraslation_;
         double fromNexusToModelLengthConversion_;
-        bool useMarkerData_, useGrfData_;
+        bool useMarkerData_, useGrfData_, useEmgData_;
         unsigned forcePlateCount_;
         bool increaseFrameNumbers_;
         unsigned previousFrameNumber_, frameNumber_, lastFrameNumberOfTheLoop_;
