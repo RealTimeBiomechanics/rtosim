@@ -219,7 +219,7 @@ int main(int argc, char* argv[]) {
     //all the multithreading is in this function
    
     if (showVisualiser) {
-        rtosim::StateVisualiser visualiser(filteredGeneralisedCoordinatesQueue, osimModelFilename);
+        rtosim::StateVisualiser visualiser(generalisedCoordinatesQueue, osimModelFilename);
         rtosim::QueuesSync::launchThreads(
             orientationsFromMot,
             inverseKinematics,
