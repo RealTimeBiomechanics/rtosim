@@ -87,10 +87,10 @@ namespace rtosim{
             auto it = markerWeights_.find(currentMarkerName);
             if (it != markerWeights_.end() && ikTaskSet.get(i).getApply()) {
                 markerWeights_[ikTaskSet.get(i).getName()] = ikTaskSet.get(i).getWeight();
-                cout << currentMarkerName << "\t" << ikTaskSet.get(i).getWeight() << endl;
+      //          cout << currentMarkerName << "\t" << ikTaskSet.get(i).getWeight() << endl;
             }
-            else
-                cout << currentMarkerName << "\tskip" << endl;
+       //     else
+       //         cout << currentMarkerName << "\tskip" << endl;
         }
     }
 

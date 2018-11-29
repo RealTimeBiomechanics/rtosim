@@ -48,7 +48,7 @@ if(WIN32)
 endif()
 # Install
 
-install(FILES ${OutputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
+install(FILES ${OutputDevice_HEADERS} ${OutputDevice_TEMPLATE_IMPLEMENTATIONS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)
 install(TARGETS OutputDevice
         EXPORT RTOSIM_Exports
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
