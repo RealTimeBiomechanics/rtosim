@@ -22,6 +22,7 @@
 #include <ctime>
 #include <numeric>
 #include <algorithm>
+#include <cmath>
 
 namespace rtosim {
 
