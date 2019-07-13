@@ -31,6 +31,7 @@
 
 
 namespace VDS = ViconDataStreamSDK::CPP;
+
 namespace rtosim {
 
     class DataFromNexus{
@@ -100,7 +101,10 @@ namespace rtosim {
         void setLoopMode(bool isLoop) {
             increaseFrameNumbers_ = isLoop;
         }
-        virtual ~DataFromNexus();
+		void setForcePlatePosition(const std::vector<SimTK::Vec3>& positions) { forcePlatePositions_ = positions; }
+		void setAxisMapping(VDS::Direction::Enum x, VDS::Direction::Enum y, VDS::Direction::Enum z);
+		
+		virtual ~DataFromNexus();
         void operator()();
 
         void printLatencyData(const std::string& filename) const;
@@ -139,8 +143,20 @@ namespace rtosim {
         bool useMarkerData_, useGrfData_, useEmgData_;
         unsigned forcePlateCount_;
         bool increaseFrameNumbers_;
+
+		/*this is a correction required to calculate the force plane moments
+	    //in the correct reference system. They are the same values that are available through Vicon Nexus
+	    //but they have to be roated accordingly to client.SetAxisMapping
+		//	   
+	    // Default values for GU lab
+		//   SimTK::Vec3 fpPos2(-.949, -.026, -.8724);
+		//   SimTK::Vec3 fpPos1(-.949, -.026, -.3803);
+		//   vector<SimTK::Vec3> pfPos{ fpPos1, fpPos2 };
+	    /*/
+		std::vector<SimTK::Vec3> forcePlatePositions_;
         unsigned previousFrameNumber_, frameNumber_, lastFrameNumberOfTheLoop_;
         std::map<std::string, std::vector<double>> latencyData_;
+		VDS::Direction::Enum xMapping_, yMapping_, zMapping_;
     };
 }
 

@@ -61,7 +61,10 @@ namespace rtosim {
         hostName_(hostname),
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
-        previousFrameNumber_(0)
+        previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward)
     {
         initialiseMarkerNames(osimFilename);
     }
@@ -86,7 +89,10 @@ namespace rtosim {
         hostName_(hostname),
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
-        previousFrameNumber_(0)
+        previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward)
     {
         initialiseMarkerNames(osimFilename);
     }
@@ -112,7 +118,10 @@ namespace rtosim {
         hostName_(hostname),
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
-        previousFrameNumber_(0)
+        previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward)
     {
         initialiseMarkerNames(osimFilename);
     }
@@ -137,7 +146,10 @@ namespace rtosim {
 		hostName_(hostname),
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0) {}
+		previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward) {}
 
 
 	DataFromNexus::DataFromNexus(
@@ -162,7 +174,10 @@ namespace rtosim {
 		hostName_(hostname),
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0) {
+		previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward) {
 
 		initialiseMarkerNames(osimFilename);
 	}
@@ -191,7 +206,10 @@ namespace rtosim {
 		hostName_(hostname),
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0) {
+		previousFrameNumber_(0),
+		xMapping_(VDS::Direction::Right),
+		yMapping_(VDS::Direction::Up),
+		zMapping_(VDS::Direction::Backward) {
 		initialiseMarkerNames(osimFilename);
 	}
 
@@ -257,7 +275,9 @@ namespace rtosim {
             }
         }
         cout << "Found " << forcePlateCount_ << " force plates" << endl;
-
+		if (forcePlateCount_ != forcePlatePositions_.size()) {
+			cout << "Warning: Found a different number of force plates than the provided plate locations" << endl;
+		}
         for (unsigned i(0); i < client.GetDeviceCount().DeviceCount; ++i)
             if (client.GetDeviceName(i).DeviceType == VDS::DeviceType::ForcePlate) {
                 std::string fpName = client.GetDeviceName(i).DeviceName;
@@ -427,23 +447,10 @@ namespace rtosim {
         if (useGrfData_)
             outputGrfQueue_->push(EndOfData::get<MultipleExternalForcesFrame>());
     }
-
-    //this is a correction required to calculate the force plane moments
-    //in the correct reference system. They are the same values that are available through Vicon Nexus
-    //but they have to be roated accordingly to client.SetAxisMapping
-    vector<SimTK::Vec3> DataFromNexus::getForcePlatePosition() const {
-
-        SimTK::Vec3 fpPos2(-.949, -.026, -.8724);
-        SimTK::Vec3 fpPos1(-.949, -.026, -.3803);
-        vector<SimTK::Vec3> pfPos{ fpPos1, fpPos2 };
-        return pfPos;
-    }
-
+	  
     void DataFromNexus::pushForcePlateData(VDS::Client& client) {
 
-        vector<SimTK::Vec3> pfPos(getForcePlatePosition());
-
-        auto rate = client.GetFrameRate();
+	    auto rate = client.GetFrameRate();
         //Force Plates
         // Output the force plate information.
         const unsigned forcePlateSubsamples = client.GetForcePlateSubsamples(0).ForcePlateSubsamples;
@@ -452,7 +459,7 @@ namespace rtosim {
             currentGrfFrame.time = 1. / rate.FrameRateHz*(frameNumber_ + 1. / forcePlateSubsamples * ssIdx);
             for (unsigned fpIdx = 0; fpIdx < forcePlateCount_; ++fpIdx) {
 
-                SimTK::Vec3 currentFpPos = pfPos.at(fpIdx);
+                SimTK::Vec3 currentFpPos = forcePlatePositions_.at(fpIdx);
 
                 ExternalForceData fpData;
                 fpData.setSourceName(forcePlateNames_.at(fpIdx));
@@ -491,7 +498,7 @@ namespace rtosim {
                 fpData.setMoments(-moments);
                 fpData.setUseApplicationPoint(true);
                 fpData.setTorque(-grfTorque);
-                if (fabs(grfVec[1]) < 10) {
+                if (fabs(grfVec[1]) < 10.) {
                     grfPoint[0] = 0; grfPoint[2] = 0;
                 }
 
@@ -502,15 +509,25 @@ namespace rtosim {
         }
     }
 
+	void DataFromNexus::setForcePlatePosition(const std::vector<std::array<double, 3>>& positions) {
+
+
+
+	}
+
+	void DataFromNexus::setAxisMapping(VDS::Direction::Enum x, VDS::Direction::Enum y, VDS::Direction::Enum z) {
+		xMapping_ = x;
+		yMapping_ = y;
+		zMapping_ = z;
+	}
+
+
     void DataFromNexus::setAxisMapping(VDS::Client& client) const {
 
         //map axis, try Backward, right, up for subject walking against the y direction of the lab..
         //this is HARDCODED for the GU Undercroft Lab.. also, the mapping makes no sense IMO,
         //I've used try and error approach to get the right one
-        client.SetAxisMapping(
-            VDS::Direction::Right,
-            VDS::Direction::Up,
-            VDS::Direction::Backward);
+		client.SetAxisMapping(xMapping_, yMapping_, zMapping_);
     }
 
 	void DataFromNexus::pushEmgData(VDS::Client& client) {
