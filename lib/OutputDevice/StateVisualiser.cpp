@@ -43,8 +43,9 @@ namespace rtosim{
         model_.setUseVisualizer(true);
         SimTK::State s(model_.initSystem());
         SimTK::Visualizer &viz = model_.updVisualizer().updSimbodyVisualizer();
+
         viz.setShowFrameRate(true);
-        viz.setShutdownWhenDestructed(true);
+     //   viz.setShutdownWhenDestructed(true);
         viz.setMode(SimTK::Visualizer::Mode::Sampling);
    //     viz.setShutdownWhenDestructed(true);
        // viz.setDesiredBufferLengthInSec(5);
@@ -54,6 +55,7 @@ namespace rtosim{
         auto start = std::chrono::steady_clock::now();
         int frameCounter = 0;
         bool localRunCondition(true);
+		model_.getVisualizer().show(s);
         while (localRunCondition) {
 
             rtosim::GeneralisedCoordinatesFrame currentCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
@@ -66,7 +68,7 @@ namespace rtosim{
                     s.updQ()[i] = q[i];
             }
 
-            viz.report(s);
+			model_.getVisualizer().show(s);
             frameCounter++;
 
             if ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start)) > std::chrono::milliseconds(1000)) {

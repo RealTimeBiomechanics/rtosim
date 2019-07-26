@@ -62,6 +62,7 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
@@ -90,6 +91,7 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
@@ -119,6 +121,7 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
@@ -147,6 +150,7 @@ namespace rtosim {
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
 		previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward) {}
@@ -175,6 +179,7 @@ namespace rtosim {
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
 		previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward) {
@@ -207,6 +212,7 @@ namespace rtosim {
 		fromNexusToModelLengthConversion_(1.),
 		lastFrameNumberOfTheLoop_(0),
 		previousFrameNumber_(0),
+		emgSubSamples_(0),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward) {
@@ -325,14 +331,19 @@ namespace rtosim {
 		unsigned nDevices(client.GetDeviceCount().DeviceCount);
 		for (unsigned i(0); i < nDevices; ++i) {
 			string name(client.GetDeviceName(i).DeviceName);
-			//     cout << "Device... " << name << endl;
+			cout << "Device... " << name << endl;
 			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-			if (name.find("emg") != std::string::npos) {
+			if (name.find("emg") != std::string::npos || name.find("dts") != std::string::npos) {
 				emgDeviceName_ = client.GetDeviceName(i).DeviceName;
 				unsigned nChannels(client.GetDeviceOutputCount(emgDeviceName_).DeviceOutputCount);
 				vector<string> emgChannelNamesFromNexus;
+				cout << "EMG channel names available in Nexus:\n";
 				for (unsigned ch(0); ch < nChannels; ++ch) {
-					emgChannelNamesFromNexus.push_back(client.GetDeviceOutputName(emgDeviceName_, ch).DeviceOutputName);
+					string chName{ client.GetDeviceOutputName(emgDeviceName_, ch).DeviceOutputName };
+					if (chName == "v")
+						chName = "EMG" + std::to_string(ch);
+					cout << "#" << ch << chName << endl;
+					emgChannelNamesFromNexus.push_back(chName);
 				}
 
 				cout << "Found EMG device: " << emgDeviceName_ << endl;
@@ -352,6 +363,9 @@ namespace rtosim {
 				}
 			}
 		}
+		
+		emgSubSamples_ = client.GetDeviceOutputSubsamples(emgDeviceName_, 
+			client.GetDeviceOutputName(emgDeviceName_, 0).DeviceOutputName).DeviceOutputSubsamples;
 	}
 
     void DataFromNexus::getFrame(VDS::Client& client) {
@@ -446,6 +460,8 @@ namespace rtosim {
             outputMarkerSetQueue_->push(EndOfData::get<MarkerSetFrame>());
         if (useGrfData_)
             outputGrfQueue_->push(EndOfData::get<MultipleExternalForcesFrame>());
+		if (useEmgData_)
+			outputEmgQueue_->push(EndOfData::get<EmgFrame>());
     }
 	  
     void DataFromNexus::pushForcePlateData(VDS::Client& client) {
@@ -509,11 +525,6 @@ namespace rtosim {
         }
     }
 
-	void DataFromNexus::setForcePlatePosition(const std::vector<std::array<double, 3>>& positions) {
-
-
-
-	}
 
 	void DataFromNexus::setAxisMapping(VDS::Direction::Enum x, VDS::Direction::Enum y, VDS::Direction::Enum z) {
 		xMapping_ = x;
@@ -533,13 +544,12 @@ namespace rtosim {
 	void DataFromNexus::pushEmgData(VDS::Client& client) {
 
 		auto rate = client.GetFrameRate();
-		const unsigned emgSubSamples = client.GetDeviceOutputSubsamples(emgDeviceName_, enabledEmgChannelNames_.front()).DeviceOutputSubsamples;
-		for (unsigned int ssIdx = 0; ssIdx < emgSubSamples; ++ssIdx) {
+		for (unsigned int ssIdx = 0; ssIdx < emgSubSamples_; ++ssIdx) {
 
 			EmgData currentEmgs;
 			for (auto& ch : enabledEmgChannelNames_)
 				currentEmgs.emplace_back(client.GetDeviceOutputValue(emgDeviceName_, ch, ssIdx).Value);
-			double currentTime(1. / rate.FrameRateHz*(frameNumber_ + 1. / emgSubSamples * ssIdx));
+			double currentTime(1. / rate.FrameRateHz*(frameNumber_ + 1. / emgSubSamples_ * ssIdx));
 
 			outputEmgQueue_->push({ currentTime, currentEmgs });
 		}

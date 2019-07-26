@@ -143,7 +143,7 @@ namespace rtosim {
         bool useMarkerData_, useGrfData_, useEmgData_;
         unsigned forcePlateCount_;
         bool increaseFrameNumbers_;
-
+		unsigned emgSubSamples_;
 		/*this is a correction required to calculate the force plane moments
 	    //in the correct reference system. They are the same values that are available through Vicon Nexus
 	    //but they have to be roated accordingly to client.SetAxisMapping
