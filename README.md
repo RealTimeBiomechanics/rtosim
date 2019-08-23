@@ -17,6 +17,7 @@ RTOSIM depends on the following
 * Required external libraries:
     * [Simbody](https://github.com/simbody/simbody/tree/Simbody-3.5.3) versions 3.5.1 to 3.5.3
     * [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) versions 3.2 or 3.3
+    * [Concurrency](https://github.com/RealTimeBiomechanics/Concurrency)
 * Optional external libraries: 
     * [Vicon DataStream SDK](http://www.vicon.com/downloads) version 1.5+
 
@@ -31,11 +32,12 @@ Build
 1. Get and compile [Simbody](https://github.com/simbody/simbody/tree/Simbody-3.5.3). **IMPORTANT**: if you want to use multiple threads to solve the Inverse Kinematics it is
 necessary to first [patch Simbody](#patch-simbody).
 2. Get and compile [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) 
-3. If you want to enable the real-time stream from Vicon Nexus you need to download and install [Vicon DataStream SDK](http://www.vicon.com/downloads)
+3. Get and compile [Concurrency](https://github.com/RealTimeBiomechanics/Concurrency)
+4. If you want to enable the real-time stream from Vicon Nexus you need to download and install [Vicon DataStream SDK](http://www.vicon.com/downloads)
     * Add the environmental variable VICONDATASTREAM\_INSTALL\_DIR that points to the installation directory of the Vicon DataStream SDK (must contain the file Client.h), as example
        c:\Program Files (x86)\Vicon\DataStream SDK\Win32\CPP
-4. Build your project using CMake.
-5. Run the examples using the [test data](#test-data).
+5. Build your project using CMake.
+6. Run the examples using the [test data](#test-data).
 
 Patch Simbody
 -------------
@@ -108,9 +110,9 @@ Contacts
 --------
 
 If you need help using RTOSIM, please ask your questions in the RTOSIM Public Forum, available from the SimTK project page: https://simtk.org/projects/rtosim, 
-or send an email to claudio.pizzolato@griffithuni.edu.au
-You can send RTOSIM bug reports to claudio.pizzolato@griffithuni.edu.au
-If you want to participate in developing RTOSIM, please send an email to monica.reggiani@gmail.com
+or send an email to c.pizzolato@griffith.edu.au
+You can send RTOSIM bug reports to c.pizzolato@griffith.edu.au
+If you want to participate in developing RTOSIM, please send an email to c.pizzolato@griffith.edu.au
 
 Publications
 ------------
