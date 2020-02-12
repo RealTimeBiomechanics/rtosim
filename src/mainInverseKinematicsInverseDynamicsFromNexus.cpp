@@ -26,7 +26,7 @@ using std::string;
 void printAuthors() {
 
     cout << "Real-time OpenSim inverse kinematics and inverse dynamics" << endl;
-    cout << "Authors: Claudio Pizzolato <claudio.pizzolato@griffithuni.edu.au>" << endl;
+    cout << "Authors: Claudio Pizzolato <c.pizzolato@griffit.edu.au>" << endl;
     cout << "         Monica Reggiani <monica.reggiani@unipd.it>" << endl << endl;
 }
 

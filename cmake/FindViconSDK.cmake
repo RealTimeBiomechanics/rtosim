@@ -14,18 +14,19 @@
 # --------------------------------------------------------------------------#
 
 set(ViconSDK_POSSIBLE_DIRECTORIES 
-	$ENV{VICONDATASTREAM_INSTALL_DIR}
+	$ENV{VICONDATASTREAM_DIR}
 	)
+MESSAGE( STATUS "ViconSDK install path: ${ViconSDK_POSSIBLE_DIRECTORIES}")
 
-find_path(ViconSDK_INCLUDE_DIRS Client.h
+find_path(ViconSDK_INCLUDE_DIRS DataStreamClient.h
           PATHS ${ViconSDK_POSSIBLE_DIRECTORIES}
-          PATH_SUFFIXES include )
+          PATH_SUFFIXES Win64/CPP CPP include )
 MESSAGE( STATUS "ViconSDK Include path: ${ViconSDK_INCLUDE_DIRS}")
 
 find_library(ViconDataStreamSDK_CPP
              NAMES ViconDataStreamSDK_CPP
              PATHS ${ViconSDK_POSSIBLE_DIRECTORIES}
-             PATH_SUFFIXES lib)
+             PATH_SUFFIXES Win64/CPP CPP lib)
              
 set(ViconSDK_LIBRARIES 
     ${ViconDataStreamSDK_CPP} )
