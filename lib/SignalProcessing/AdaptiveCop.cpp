@@ -41,8 +41,10 @@ namespace rtosim {
 
         for (auto& it : forcePlatesToMarkerNames) {
             auto nIt(std::find(markerNames.begin(), markerNames.end(), it.second));
-            if (nIt != markerNames.end())
-                forcePlatesToMarkerIndex_.insert(std::make_pair(it.first, std::distance(markerNames.begin(), nIt)));
+			if (nIt != markerNames.end()) {
+				unsigned dist = std::distance(markerNames.begin(), nIt);
+				forcePlatesToMarkerIndex_.insert(std::make_pair(it.first, dist));
+			}
         }
     }
 
