@@ -13,8 +13,6 @@
 # limitations under the License.                                            #
 # --------------------------------------------------------------------------#
 
-
-
 add_executable(rtosim_ik_from_file mainInverseKinematicsFromFile.cpp)
 target_link_libraries(rtosim_ik_from_file rtosim)
 
@@ -24,24 +22,7 @@ target_link_libraries(rtosim_id_from_file rtosim)
 add_executable(rtosim_ik_id_from_file mainInverseKinematicsInverseDynamicsFromFile.cpp)
 target_link_libraries(rtosim_ik_id_from_file rtosim)
 
-add_executable(rtosim_ik_osens_from_file  mainInverseKinematicsOsensFromFile.cpp)
-target_link_libraries(rtosim_ik_osens_from_file rtosim)
-
-set(targetsToExport rtosim_ik_from_file rtosim_id_from_file rtosim_ik_id_from_file rtosim_ik_osens_from_file)
-
-if(${MR3tools_FOUND})
-    add_executable(test_data_from_MR3 mainTestDataFromMR3.cpp)
-    target_link_libraries(test_data_from_MR3 rtosim)
-
-    add_executable(test_data_from_MR3_to_osim mainTestDataFromMR3toOsim.cpp)
-    target_link_libraries(test_data_from_MR3_to_osim rtosim)
-
-    add_executable(fromMR3toFile mainFromMR3toFile.cpp)
-    target_link_libraries(fromMR3toFile rtosim)
-
-	list(APPEND targetsToExport test_data_from_MR3 test_data_from_MR3_to_osim fromMR3toFile)
-endif(${MR3tools_FOUND})
-
+set(targetsToExport rtosim_ik_from_file rtosim_id_from_file rtosim_ik_id_from_file )
 
 if(${VICONSDK_FOUND})
     add_executable(rtosim_ik_id_from_nexus mainInverseKinematicsInverseDynamicsFromNexus.cpp)

@@ -19,12 +19,7 @@
 #include "rtosim/MarkersFromTrc.h"
 #include "rtosim/ExternalForcesFromStorageFile.h"
 #include "rtosim/GeneralisedCoordinatesFromStorageFile.h"
-#include "rtosim/OrientationsFromMot.h"
-#include "rtosim/OrientationsFromMobile.h"
 #ifdef INCLUDEVICONSDK
 	#include "rtosim/DataFromNexus.h"
-#endif
-#ifdef INCLUDEMR3TOOLS
-	#include "rtosim/OrientationsFromMR3.h"
 #endif
 #endif

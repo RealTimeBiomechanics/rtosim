@@ -21,8 +21,8 @@ source_group("Headers" FILES ${rtosim_HEADERS})
 # Define target
 add_library(rtosim INTERFACE)
 add_custom_target(rtosim_IDE SOURCES ${rtosim_HEADERS})
-target_link_libraries(rtosim INTERFACE Common InputDevice OutputDevice InverseKinematics InverseKinematicsOsens
-                             InverseDynamics SignalProcessing Utilities IKExtended)
+target_link_libraries(rtosim INTERFACE Common InputDevice OutputDevice InverseKinematics
+                             InverseDynamics SignalProcessing Utilities)
 
 target_include_directories(rtosim INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)

@@ -13,38 +13,39 @@
  * limitations under the License.                                             *
  * -------------------------------------------------------------------------- */
 
-#ifndef rtosim_QueueToInverseKinematicsOsens_h
-#define rtosim_QueueToInverseKinematicsOsens_h
+#ifndef rtosim_QueueToInverseKinematics_h
+#define rtosim_QueueToInverseKinematics_h
 
 #include <string>
 #include <memory>
 #include <Simbody.h>
 
 #include "rtosim/ThreadPoolJobs.h"
-#include "rtosim/JobsCreatorOsens.h"
+#include "rtosim/JobsCreator.h"
 #include "rtosim/IKSequencer.h"
-#include "rtosim/IKSolverParallelOsens.h"
-#include "rtb/Concurrency/Concurrency.h"
+#include "rtosim/IKSolverParallel.h"
+#include "rtb/concurrency/Queue.h"
+#include "rtb/concurrency/Latch.h"
 #include "rtosim/queue/MarkerSetQueue.h"
 #include "rtosim/queue/GeneralisedCoordinatesQueue.h"
 #include "rtosim/StopWatch.h"
 
 namespace rtosim {
 
-    class QueueToInverseKinematicsOsens {
+    class QueueToInverseKinematics {
     public:
-        QueueToInverseKinematicsOsens(
-            OrientationSetQueue& inputOrientationSetQueue,
+		QueueToInverseKinematics(
+            MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
             rtb::Concurrency::Latch& doneWithSubscriptions,
             rtb::Concurrency::Latch& doneWithExecution,
             const std::string& osimModelFilename,
             unsigned nThreads,
             double solverAccuracy = 1e-9,
-            double constraintWeight = SimTK::Infinity);
+            double contraintWeight = SimTK::Infinity);
 
-        QueueToInverseKinematicsOsens(
-            OrientationSetQueue& inputOrientationSetQueue,
+        QueueToInverseKinematics(
+            MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
             rtb::Concurrency::Latch& doneWithSubscriptions,
             rtb::Concurrency::Latch& doneWithExecution,
@@ -52,12 +53,12 @@ namespace rtosim {
             unsigned nThreads,
             const std::string& ikTaskSetFilename,
             double solverAccuracy = 1e-9,
-            double constraintWeight = SimTK::Infinity);
+            double contraintWeight = SimTK::Infinity);
         void operator()();
 
         std::vector < StopWatch > getProcessingTimes() { return stopWatch_; }
     private:
-        OrientationSetQueue& inputOrientationSetQueue_;
+        MarkerSetQueue& inputMarkerSetQueue_;
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue_;
         rtb::Concurrency::Latch& doneWithSubscriptions_;
         rtb::Concurrency::Latch& doneWithExecution_;
@@ -66,7 +67,7 @@ namespace rtosim {
         std::string ikTaskSetFilename_;
         bool useIkTaskSet_;
         double solverAccuracy_;
-        double constraintWeight_;
+        double contraintWeight_;
         std::vector < StopWatch > stopWatch_;
     };
 }

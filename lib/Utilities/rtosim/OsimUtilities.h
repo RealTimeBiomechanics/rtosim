@@ -19,13 +19,9 @@
 #include <vector>
 #include <OpenSim/OpenSim.h>
 #include <OpenSim/Simulation/Model/ComponentSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensorSet.h>
-#include <OpenSim/Simulation/Model/OrientationSensor.h>
 
 namespace rtosim {
   
-    void attachOsensToModel(OpenSim::Model& model);
-    std::vector<std::string> getOsensNamesFromModel(const std::string& osimModelFilename); 
     std::vector<std::string> getMarkerNamesFromModel(const std::string& modelFilename);
     std::vector<std::string> getCoordinateNamesFromModel(const std::string& modelFilename);
     std::vector<std::string> getMarkerNamesOnBody(const OpenSim::Body& body);

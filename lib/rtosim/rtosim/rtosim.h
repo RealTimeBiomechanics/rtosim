@@ -21,7 +21,6 @@
 #include "rtosim/InputDevice.h"
 #include "rtosim/OutputDevice.h"
 #include "rtosim/InverseKinematics.h"
-#include "rtosim/InverseKinematicsOsens.h"
 #include "rtosim/Utilities.h"
 #include "rtosim/SignalProcessing.h"
 #include "rtosim/InverseDynamics.h"

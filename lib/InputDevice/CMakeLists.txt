@@ -15,9 +15,6 @@
 
 set(InputDevice_SOURCES
     MarkersFromTrc.cpp
-    OrientationsFromMot.cpp
-#	OrientationsFromNoraxonCsv.cpp
-    OrientationsFromMobile.cpp
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
     GeneralisedCoordinatesFromX.cpp
@@ -26,9 +23,6 @@ set(InputDevice_SOURCES
 
 set(InputDevice_HEADERS
     rtosim/MarkersFromTrc.h
-    rtosim/OrientationsFromMot.h
-#	rtosim/OrientationsFromNoraxonCsv.h
-    rtosim/OrientationsFromMobile.h
     rtosim/InputDevice.h
     rtosim/ExternalForcesFromX.h
     rtosim/ExternalForcesFromStorageFile.h
@@ -36,13 +30,6 @@ set(InputDevice_HEADERS
     rtosim/GeneralisedCoordinatesFromStorageFile.h
 	)
 
-set(InputDevice_MR3_HEADERS
-		rtosim/DataFromMR3.h
-		rtosim/OrientationsFromMR3.h )
-
-set(InputDevice_MR3_SOURCES
-		OrientationsFromMR3.cpp
-		DataFromMR3.cpp )
 
 set(InputDevice_Nexus_HEADERS
         rtosim/DataFromNexus.h )
@@ -56,12 +43,6 @@ if(${VICONSDK_FOUND})
     list(APPEND InputDevice_HEADERS ${InputDevice_Nexus_HEADERS})
     list(APPEND InputDevice_SOURCES ${InputDevice_Nexus_SOURCES})
 endif(${VICONSDK_FOUND})
-
-if(${MR3tools_FOUND})
-    message( STATUS "Using MR3tools in InputDevice")
-    list(APPEND InputDevice_HEADERS ${InputDevice_MR3_HEADERS})
-    list(APPEND InputDevice_SOURCES ${InputDevice_MR3_SOURCES})
-endif(${MR3tools_FOUND})
 
 source_group("Headers" FILES ${InputDevice_HEADERS})
 source_group("Sources" FILES ${InputDevice_SOURCES})
@@ -87,14 +68,6 @@ if(${VICONSDK_FOUND})
     target_link_libraries(InputDevice ${ViconSDK_LIBRARIES})
     target_compile_definitions(InputDevice PUBLIC INCLUDEVICONSDK)
 endif(${VICONSDK_FOUND})
-
-if(${MR3tools_FOUND})
-    target_include_directories(InputDevice PUBLIC
-                                ${MR3tools_INCLUDE_DIRS}
-    )
-    target_link_libraries(InputDevice MR3tools)
-    target_compile_definitions(InputDevice PUBLIC INCLUDEMR3TOOLS)
-endif(${MR3tools_FOUND})
 
 # Install
 install(FILES ${InputDevice_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/rtosim)

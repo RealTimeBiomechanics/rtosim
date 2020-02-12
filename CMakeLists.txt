@@ -38,7 +38,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 find_package(Concurrency REQUIRED)
 find_package(Filter REQUIRED)
 find_package(OpenSim REQUIRED)
-find_package(IKExtended REQUIRED)
 find_package(ViconSDK QUIET)
 if(${VICONSDK_FOUND})
 	message(STATUS "ViconSDK found")
@@ -47,13 +46,7 @@ else()
 	message(STATUS "ViconSDK not found")
 endif()
 
-find_package(MR3tools QUIET)
-if(${MR3tools_FOUND})
-	message(STATUS "MR3tools found")
-	add_definitions(-DINCLUDEMR3TOOLS)
-else()
-	message(STATUS "MR3tools not found")
-endif()
+
 
 add_definitions(/DBASE_DIR="${CMAKE_CURRENT_LIST_DIR}")
 
@@ -65,7 +58,6 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 
 add_subdirectory(lib)
 add_subdirectory(src)
-add_subdirectory(sandbox)
 
 # Create RTOSIMConfig.cmake
 set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/RTOSIM)

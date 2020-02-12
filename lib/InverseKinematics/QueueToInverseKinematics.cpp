@@ -20,13 +20,12 @@ using std::unique_ptr;
 #include <thread>
 using std::thread;
 using std::ref;
-#include "rtosim/QueueToInverseKinematicsOsens.h"
+#include "rtosim/QueueToInverseKinematics.h"
 #include "rtosim/EndOfData.h"
 
 namespace rtosim {
 
-    QueueToInverseKinematicsOsens::QueueToInverseKinematicsOsens(
-	OrientationSetQueue& inputOrientationSetQueue,
+    QueueToInverseKinematics::QueueToInverseKinematics(MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
@@ -34,7 +33,7 @@ namespace rtosim {
         unsigned nThreads,
         double solverAccuracy,
         double contraintWeight) :
-        inputOrientationSetQueue_(inputOrientationSetQueue),
+        inputMarkerSetQueue_(inputMarkerSetQueue),
         outputGeneralisedCoordinateQueue_(outputGeneralisedCoordinateQueue),
         doneWithExecution_(doneWithExecution),
         doneWithSubscriptions_(doneWithSubscriptions),
@@ -42,14 +41,13 @@ namespace rtosim {
         nThreads_(nThreads),
         useIkTaskSet_(false),
         solverAccuracy_(solverAccuracy),
-        constraintWeight_(contraintWeight){
+        contraintWeight_(contraintWeight){
 
-	  std::cout << "Constructor!!\n";
         if (nThreads_ < 1) nThreads_ = 1;
     }
 
-    QueueToInverseKinematicsOsens::QueueToInverseKinematicsOsens(
-        OrientationSetQueue& inputOrientationSetQueue,
+    QueueToInverseKinematics::QueueToInverseKinematics(
+        MarkerSetQueue& inputMarkerSetQueue,
         rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
@@ -58,8 +56,8 @@ namespace rtosim {
         const std::string& ikTaskSetFilename,
         double solverAccuracy,
         double contraintWeight) :
-        QueueToInverseKinematicsOsens(
-        inputOrientationSetQueue,
+        QueueToInverseKinematics(
+        inputMarkerSetQueue,
         outputGeneralisedCoordinateQueue,
         doneWithSubscriptions,
         doneWithExecution,
@@ -72,46 +70,43 @@ namespace rtosim {
         useIkTaskSet_ = true;
     }
 
-    void QueueToInverseKinematicsOsens::operator()() {
+    void QueueToInverseKinematics::operator()() {
 
-        ThreadPoolJobs<OrientationSetFrame> threadPoolJobQueue;
+        ThreadPoolJobs<MarkerSetFrame> threadPoolJobQueue;
         TimeSequence timeSequenceQueue;
         IKoutputs<rtosim::GeneralisedCoordinatesFrame> ikOutputQueue;
         rtosim::GeneralisedCoordinatesQueue orderedGeneralisedCoordinateQueue;
         rtb::Concurrency::Latch internalDoneWithSubscriptions(3 + nThreads_), internalDoneWithexecution(2 + nThreads_);
-        JobsCreatorOsens<OrientationSetQueue> jobCreator(
-	  inputOrientationSetQueue_, 
-	  threadPoolJobQueue, 
-	  timeSequenceQueue, 
-	  internalDoneWithSubscriptions, 
-	  internalDoneWithexecution, 
-	  nThreads_);
-        vector<unique_ptr<IKSolverParallelOsens>> ikSolvers;
 
+        JobsCreator jobCreator(inputMarkerSetQueue_, threadPoolJobQueue, timeSequenceQueue, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);
+        vector<unique_ptr<IKSolverParallel>> ikSolvers;
         for (unsigned i(0); i < nThreads_; ++i)
-            ikSolvers.emplace_back(new IKSolverParallelOsens(
-                threadPoolJobQueue, 
-                ikOutputQueue, 
-                internalDoneWithSubscriptions, 
-                internalDoneWithexecution, 
-                osimModelFilename_, 
-                solverAccuracy_, 
-                constraintWeight_));
+            ikSolvers.emplace_back(new IKSolverParallel(
+                threadPoolJobQueue,
+                ikOutputQueue,
+                internalDoneWithSubscriptions,
+                internalDoneWithexecution,
+                osimModelFilename_,
+                solverAccuracy_,
+                contraintWeight_));
 
-	    if (useIkTaskSet_) {
+        if (useIkTaskSet_) {
             for (auto& it : ikSolvers)
                 it->setInverseKinematicsTaskSet(ikTaskSetFilename_);
         }
 
         IKSequencer ikSequencer(ikOutputQueue, timeSequenceQueue, outputGeneralisedCoordinateQueue_, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);
+
         thread jobCreatorThr(ref(jobCreator));
         thread ikSequencerThr(ref(ikSequencer));
         vector<thread> ikSolversThrs;
         for (auto& it : ikSolvers)
             ikSolversThrs.emplace_back(ref(*it));
+
         internalDoneWithSubscriptions.wait();
         doneWithSubscriptions_.wait();
         std::cout << "starting IK" << std::endl;
+
         jobCreatorThr.join();
         ikSequencerThr.join();
         for (auto& it : ikSolversThrs)

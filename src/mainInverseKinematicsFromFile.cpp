@@ -138,7 +138,7 @@ int main(int argc, char* argv[]) {
     markersFromTrc.setOutputFrequency(pushFrequency);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
-    rtosim::QueueToInverseKinametics inverseKinematics(
+    rtosim::QueueToInverseKinematics inverseKinematics(
         markerSetQueue,
         generalisedCoordinatesQueue,
         doneWithSubscriptions,

@@ -154,7 +154,7 @@ int main(int argc, char* argv[]) {
     markersFromTrc.setOutputFrequency(pushFrequencyTrc);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
-    QueueToInverseKinametics inverseKinematics(
+    QueueToInverseKinematics inverseKinematics(
         markerSetQueue,
         generalisedCoordinatesQueue,
         doneWithSubscriptions,
