@@ -39,7 +39,7 @@ necessary to first [patch Simbody](#patch-simbody).
     * Add the environmental variable VICONDATASTREAM\_INSTALL\_DIR that points to the installation directory of the Vicon DataStream SDK (must contain the file Client.h), as example
        c:\Program Files (x86)\Vicon\DataStream SDK\Win32\CPP
 6. Build your project using CMake.
-7. Explore how to use RTOSIM APIs in your project using the provided [examples](rtosim/examples/) 
+7. Explore how to use RTOSIM APIs in your project using the provided [examples](examples/) 
 
 Patch Simbody
 -------------
@@ -112,11 +112,7 @@ limitations under the License.
 
 Contacts
 --------
-
-If you need help using RTOSIM, please ask your questions in the RTOSIM Public Forum, available from the SimTK project page: https://simtk.org/projects/rtosim, 
-or send an email to c.pizzolato@griffith.edu.au
-You can send RTOSIM bug reports to c.pizzolato@griffith.edu.au
-If you want to participate in developing RTOSIM, please send an email to c.pizzolato@griffith.edu.au
+Claudio Pizzolato c.pizzolato@griffith.edu.au
 
 Publications
 ------------
