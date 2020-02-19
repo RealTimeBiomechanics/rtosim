@@ -26,9 +26,9 @@ namespace rtosim{
         rtb::Concurrency::Latch& subscriptionLatch,
         rtb::Concurrency::Latch& readyToWriteLatch,
         const std::vector<std::string>& columnLabels,
-        const std::string& outputDir,
-        const std::string& filename,
-        const std::string& extension) :
+        std::string outputDir,
+        std::string filename,
+        std::string extension) :
         inputQueue_(inputQueue),
         subscriptionLatch_(subscriptionLatch),
         readyToWriteLatch_(readyToWriteLatch),

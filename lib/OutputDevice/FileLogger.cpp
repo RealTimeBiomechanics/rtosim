@@ -14,7 +14,7 @@
  * -------------------------------------------------------------------------- */
 
 #include "rtosim/FileSystem.h"
-
+#include "rtosim/queue/MarkerSetQueue.h"
 namespace rtosim {
 
     template<typename DataType>
@@ -144,6 +144,22 @@ namespace rtosim {
         *outFile_ << std::endl;
     }
 
+	template<>
+	void FileLogger<MarkerSetData>::initFile()
+	{
+
+		*outFile_ << "rtosim output" << std::endl;
+		*outFile_ << "version=1" << std::endl;
+		*outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+		*outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
+		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+		*outFile_ << "endheader" << std::endl;
+		*outFile_ << "time" + sp_;
+		for (auto& it : columnLabels_)
+			*outFile_ << it << "_x" << sp_ << it << "_y" << sp_ << it << "_z" << sp_;
+		*outFile_ << std::endl;
+	}
+
     template<>
     void FileLogger<GeneralisedCoordinatesData>::initFile()
     {
@@ -211,6 +227,19 @@ namespace rtosim {
             *outFile_ << std::endl;
         }
     }
+
+	template<>
+	void FileLogger<MarkerSetData>::writeToFile() {
+
+		for (auto& dataIt : dataToWrite_) {
+			*outFile_ << dataIt.time << sp_;
+			for (auto& sampleIt : dataIt.data)
+				*outFile_ << sampleIt.getCoordinates()[0] << sp_
+				<< sampleIt.getCoordinates()[1] << sp_
+				<< sampleIt.getCoordinates()[2] << sp_;
+			*outFile_ << std::endl;
+		}
+	}
 
     template<>
     void FileLogger<GeneralisedCoordinatesData>::writeToFile() {

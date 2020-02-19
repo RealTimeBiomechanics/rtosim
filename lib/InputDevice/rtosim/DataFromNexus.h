@@ -19,7 +19,6 @@
 #include <string>
 #include <thread>
 #include <memory>
-#include <OpenSim/OpenSim.h>
 #include <map>
 #include <DataStreamClient.h> //from ViconSDK
 #include "rtosim/Mapper.h"
@@ -45,7 +44,7 @@ namespace rtosim {
             rtb::Concurrency::Latch& doneWithSubscriptions,
             rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
-            const std::string& osimFilename,
+			const std::vector<std::string>& markersNames,
             const std::string& hostname = "127.0.0.1:801");
 
         DataFromNexus(
@@ -53,7 +52,7 @@ namespace rtosim {
             rtb::Concurrency::Latch& doneWithSubscriptions,
             rtb::Concurrency::Latch& doneWithExecution,
             FlowControl& runCondition,
-            const std::string& osimFilename,
+			const std::vector<std::string>& markersNames,
             const std::string& hostname = "127.0.0.1:801");
 
 		/*The order of the names in emgChannelNames is important,
@@ -73,7 +72,7 @@ namespace rtosim {
 			rtb::Concurrency::Latch& doneWithSubscriptions,
 			rtb::Concurrency::Latch& doneWithExecution,
 			FlowControl& runCondition,
-			const std::string& osimFilename,
+			const std::vector<std::string>& markersNames,
 			const std::string& hostname = "127.0.0.1:801");
 
 		DataFromNexus(
@@ -82,7 +81,7 @@ namespace rtosim {
 			rtb::Concurrency::Latch& doneWithSubscriptions,
 			rtb::Concurrency::Latch& doneWithExecution,
 			FlowControl& runCondition,
-			const std::string& osimFilename,
+			const std::vector<std::string>& markersNames,
 			const std::vector<std::string>& emgChannelNames,
 			const std::string& hostname = "127.0.0.1:801");
 
@@ -94,7 +93,7 @@ namespace rtosim {
 			rtb::Concurrency::Latch& doneWithSubscriptions,
 			rtb::Concurrency::Latch& doneWithExecution,
 			FlowControl& runCondition,
-			const std::string& osimFilename,
+			const std::vector<std::string>& markersNames,
 			const std::vector<std::string>& emgChannelNames,
 			const std::string& hostname = "127.0.0.1:801");
 
@@ -133,7 +132,7 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithExecution_;
         FlowControl& runCondition_;
         std::string hostName_;
-        std::vector<std::string> markerNamesFromModel_;
+        std::vector<std::string> markersToStream_;
         std::vector<std::string> forcePlateNames_;
 		std::vector<std::string> emgChannelNames_; //this are the names the user asks for
 		std::vector<std::string> enabledEmgChannelNames_; //this are the names required by the user that are also available

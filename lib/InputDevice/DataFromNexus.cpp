@@ -47,7 +47,7 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-        const std::string& osimFilename,
+		const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(true),
         outputMarkerSetQueue_(&outputMarkerSetQueue),
@@ -63,11 +63,11 @@ namespace rtosim {
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
 		emgSubSamples_(0),
+		markersToStream_(markersNames),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
     {
-        initialiseMarkerNames(osimFilename);
     }
 
 
@@ -76,7 +76,7 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-        const std::string& osimFilename,
+		const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(false),
         outputMarkerSetQueue_(nullptr),
@@ -92,11 +92,11 @@ namespace rtosim {
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
 		emgSubSamples_(0),
+		markersToStream_(markersNames),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
     {
-        initialiseMarkerNames(osimFilename);
     }
 
 
@@ -106,7 +106,7 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-        const std::string& osimFilename,
+		const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(true),
         outputMarkerSetQueue_(&outputMarkerSetQueue),
@@ -122,11 +122,12 @@ namespace rtosim {
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
 		emgSubSamples_(0),
+		markersToStream_(markersNames),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward)
     {
-        initialiseMarkerNames(osimFilename);
+        
     }
 
 	DataFromNexus::DataFromNexus(
@@ -162,7 +163,7 @@ namespace rtosim {
 		rtb::Concurrency::Latch& doneWithSubscriptions,
 		rtb::Concurrency::Latch& doneWithExecution,
 		FlowControl& runCondition,
-		const std::string& osimFilename,
+		const std::vector<std::string>& markersNames,
 		const std::vector<std::string>& emgChannelNames,
 		const std::string& hostname) :
 		useMarkerData_(true),
@@ -180,11 +181,11 @@ namespace rtosim {
 		lastFrameNumberOfTheLoop_(0),
 		previousFrameNumber_(0),
 		emgSubSamples_(0),
+		markersToStream_(markersNames),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward) {
 
-		initialiseMarkerNames(osimFilename);
 	}
 
 
@@ -195,7 +196,7 @@ namespace rtosim {
 		rtb::Concurrency::Latch& doneWithSubscriptions,
 		rtb::Concurrency::Latch& doneWithExecution,
 		FlowControl& runCondition,
-		const std::string& osimFilename,
+		const std::vector<std::string>& markersNames,
 		const std::vector<std::string>& emgChannelNames,
 		const std::string& hostname) :
 		useMarkerData_(true),
@@ -213,22 +214,12 @@ namespace rtosim {
 		lastFrameNumberOfTheLoop_(0),
 		previousFrameNumber_(0),
 		emgSubSamples_(0),
+		markersToStream_(markersNames),
 		xMapping_(VDS::Direction::Right),
 		yMapping_(VDS::Direction::Up),
 		zMapping_(VDS::Direction::Backward) {
-		initialiseMarkerNames(osimFilename);
 	}
 
-
-    void DataFromNexus::initialiseMarkerNames(const std::string& osimFilename) {
-
-        OpenSim::Model model(osimFilename);
-        OpenSim::Array<std::string> markerNamesArray;
-        const_cast<OpenSim::MarkerSet&>(model.getMarkerSet()).getMarkerNames(markerNamesArray);
-        rtosim::ArrayConverter::toStdVector(markerNamesArray, markerNamesFromModel_);
-        if (model.getLengthUnits().getType() == OpenSim::Units::Meters)
-            fromNexusToModelLengthConversion_ = 1. / 1000.;
-    }
 
     void DataFromNexus::connectToServer(VDS::Client& client) const {
         //connect to server
@@ -430,7 +421,7 @@ namespace rtosim {
             unsigned int markerCount = client.GetMarkerCount(subjectName).MarkerCount;
             MarkerSetFrame currentFrame;
 
-            currentFrame.data.resize(markerNamesFromModel_.size());
+            currentFrame.data.resize(markersToStream_.size());
             for (unsigned markerIndex{ 0 }; markerIndex < markerCount; ++markerIndex) {
 
                 string markerName = client.GetMarkerName(subjectName, markerIndex).MarkerName;
@@ -442,9 +433,9 @@ namespace rtosim {
                     );
                 marker.setOccluded(markerGlobalTranslation.Occluded);
                 //to change with a rtosim::Mapper
-                auto posIt = std::find(markerNamesFromModel_.begin(), markerNamesFromModel_.end(), markerName);
-                if (posIt != markerNamesFromModel_.end())
-                    currentFrame.data.at(std::distance(markerNamesFromModel_.begin(), posIt)) = marker;
+                auto posIt = std::find(markersToStream_.begin(), markersToStream_.end(), markerName);
+                if (posIt != markersToStream_.end())
+                    currentFrame.data.at(std::distance(markersToStream_.begin(), posIt)) = marker;
             } //end for markerIndex
 
             //TODO: change this time

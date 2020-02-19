@@ -37,9 +37,9 @@ namespace rtosim {
             rtb::Concurrency::Latch& subscriptionLatch,
             rtb::Concurrency::Latch& readyToWriteLatch,
             const std::vector<std::string>& columnLabels,
-            const std::string& outputDir,
-            const std::string& filename,
-            const std::string& extension = "sto");
+            std::string outputDir,
+            std::string filename,
+            std::string extension = "sto");
         ~QueueToFileLogger() = default;
         void operator()();
 		void setIsInDegrees(bool isInDegrees) { logger_.setIsInDegrees(isInDegrees); }

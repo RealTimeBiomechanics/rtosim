@@ -128,6 +128,7 @@ int main(int argc, char* argv[]) {
 
     //define the filter
     auto coordNames = getCoordinateNamesFromModel(osimModelFilename);
+	auto modelMarkerNames = getMarkerNamesFromModel(osimModelFilename);
     GeneralisedCoordinatesStateSpace gcFilt(fc, coordNames.size());
 
     //define the threads
@@ -137,7 +138,7 @@ int main(int argc, char* argv[]) {
         doneWithSubscriptions,
         doneWithExecution,
         runCondition,
-        osimModelFilename,
+		modelMarkerNames,
         hostname);
 
     //read from markerSetQueue, calculate IK, and save results in generalisedCoordinatesQueue
