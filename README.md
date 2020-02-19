@@ -112,11 +112,7 @@ limitations under the License.
 
 Contacts
 --------
-
-If you need help using RTOSIM, please ask your questions in the RTOSIM Public Forum, available from the SimTK project page: https://simtk.org/projects/rtosim, 
-or send an email to c.pizzolato@griffith.edu.au
-You can send RTOSIM bug reports to c.pizzolato@griffith.edu.au
-If you want to participate in developing RTOSIM, please send an email to c.pizzolato@griffith.edu.au
+Claudio Pizzolato c.pizzolato@griffith.edu.au
 
 Publications
 ------------
