@@ -18,13 +18,14 @@ RTOSIM depends on the following
     * [Simbody](https://github.com/simbody/simbody/tree/Simbody-3.5.3) versions 3.5.1 to 3.5.3
     * [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) versions 3.2 or 3.3
     * [Concurrency](https://github.com/RealTimeBiomechanics/Concurrency)
+    * [Filter](https://github.com/RealTimeBiomechanics/Filter)
 * Optional external libraries: 
     * [Vicon DataStream SDK](http://www.vicon.com/downloads) version 1.5+
 
 
 Install
 -------
-RTOSIM works on Windows, Mac, and Linux. Binary packages will be available for Windows.
+RTOSIM works on Windows, Mac, and Linux.
 
 Build
 -----
@@ -33,11 +34,12 @@ Build
 necessary to first [patch Simbody](#patch-simbody).
 2. Get and compile [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) 
 3. Get and compile [Concurrency](https://github.com/RealTimeBiomechanics/Concurrency)
-4. If you want to enable the real-time stream from Vicon Nexus you need to download and install [Vicon DataStream SDK](http://www.vicon.com/downloads)
+4. Get and compile [Filter](https://github.com/RealTimeBiomechanics/Filter)
+5. If you want to enable the real-time stream from Vicon Nexus you need to download and install [Vicon DataStream SDK](http://www.vicon.com/downloads)
     * Add the environmental variable VICONDATASTREAM\_INSTALL\_DIR that points to the installation directory of the Vicon DataStream SDK (must contain the file Client.h), as example
        c:\Program Files (x86)\Vicon\DataStream SDK\Win32\CPP
-5. Build your project using CMake.
-6. Run the examples using the [test data](#test-data).
+6. Build your project using CMake.
+7. Explore how to use RTOSIM APIs in your project using the provided [examples](rtosim/examples/) 
 
 Patch Simbody
 -------------
@@ -47,9 +49,10 @@ you need to patch Simbody first. To do this, get the files [IpLapackSolverInterf
 [IpLapackSolverInterface.hpp](https://github.com/cpizzolato/simbody/blob/fix-ipopt-issue175/SimTKmath/Optimizers/src/IpOpt/IpLapackSolverInterface.hpp) and use them to replace the corresponding 
 files in your Simbody distribution in the directory SimTKmath/Optimizers/src/IpOpt. Then, compile and install Simbody.
 
+<!---
 Test Data
 ---------
-
+**Test Data is currently unavailable, under maintenance**
 Get the [test data](https://drive.google.com/open?id=0BzMAK5L0QV2PUXk4SW9qcV9jSVU)
 
 1. Using text files (you may need to adapt the commands to your directory structure):
@@ -77,6 +80,7 @@ Get the [test data](https://drive.google.com/open?id=0BzMAK5L0QV2PUXk4SW9qcV9jSV
 
    * To close the execution of RTOSIM press any key followed by `enter`
    * For the available options execute `rtosim_ik_id_from_nexus -h`
+--->
 
 Adapt the software for your gait laboratory
 -------------------------------------------
