@@ -66,9 +66,35 @@ namespace rtosim {
         solverAccuracy,
         contraintWeight) {
 
-        ikTaskSetFilename_ = ikTaskSetFilename;
+        ikTaskSet_ = OpenSim::IKTaskSet(ikTaskSetFilename);
         useIkTaskSet_ = true;
     }
+
+	QueueToInverseKinematics::QueueToInverseKinematics(
+		MarkerSetQueue& inputMarkerSetQueue,
+		rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
+		rtb::Concurrency::Latch& doneWithSubscriptions,
+		rtb::Concurrency::Latch& doneWithExecution,
+		const std::string& osimModelFilename,
+		unsigned nThreads,
+		const OpenSim::IKTaskSet& ikTaskSet,
+		double solverAccuracy,
+		double contraintWeight) :
+		QueueToInverseKinematics(
+			inputMarkerSetQueue,
+			outputGeneralisedCoordinateQueue,
+			doneWithSubscriptions,
+			doneWithExecution,
+			osimModelFilename,
+			nThreads,
+			solverAccuracy,
+			contraintWeight) {
+
+		ikTaskSet_ = ikTaskSet;
+		useIkTaskSet_ = true;
+	}
+
+
 
     void QueueToInverseKinematics::operator()() {
 
@@ -92,7 +118,7 @@ namespace rtosim {
 
         if (useIkTaskSet_) {
             for (auto& it : ikSolvers)
-                it->setInverseKinematicsTaskSet(ikTaskSetFilename_);
+                it->setInverseKinematicsTaskSet(ikTaskSet_);
         }
 
         IKSequencer ikSequencer(ikOutputQueue, timeSequenceQueue, outputGeneralisedCoordinateQueue_, internalDoneWithSubscriptions, internalDoneWithexecution, nThreads_);

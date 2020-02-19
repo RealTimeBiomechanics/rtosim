@@ -54,6 +54,18 @@ namespace rtosim {
             const std::string& ikTaskSetFilename,
             double solverAccuracy = 1e-9,
             double contraintWeight = SimTK::Infinity);
+
+		QueueToInverseKinematics(
+			MarkerSetQueue& inputMarkerSetQueue,
+			rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
+			rtb::Concurrency::Latch& doneWithSubscriptions,
+			rtb::Concurrency::Latch& doneWithExecution,
+			const std::string& osimModelFilename,
+			unsigned nThreads,
+			const OpenSim::IKTaskSet& ikTaskSet,
+			double solverAccuracy = 1e-9,
+			double contraintWeight = SimTK::Infinity);
+
         void operator()();
 
         std::vector < StopWatch > getProcessingTimes() { return stopWatch_; }
@@ -64,7 +76,7 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithExecution_;
         unsigned nThreads_;
         std::string osimModelFilename_;
-        std::string ikTaskSetFilename_;
+        OpenSim::IKTaskSet ikTaskSet_;
         bool useIkTaskSet_;
         double solverAccuracy_;
         double contraintWeight_;

@@ -43,6 +43,7 @@ namespace rtosim {
         ~QueueToFileLogger() = default;
         void operator()();
 		void setIsInDegrees(bool isInDegrees) { logger_.setIsInDegrees(isInDegrees); }
+		void setConvertFromRadToDeg() { logger_.setConvertFromRadToDeg(); }
 
     private:
         QueueType& inputQueue_;

@@ -59,6 +59,7 @@ set(CMAKE_DEBUG_POSTFIX "_d")
 add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(examples)
+add_subdirectory(tests)
 
 # Create RTOSIMConfig.cmake
 set(ConfigPackageLocation ${CMAKE_INSTALL_LIBDIR}/RTOSIM)

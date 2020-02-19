@@ -32,7 +32,7 @@ namespace rtosim{
         inputQueue_(inputQueue),
         subscriptionLatch_(subscriptionLatch),
         readyToWriteLatch_(readyToWriteLatch),
-        logger_(columnLabels, filename + extension, outputDir)
+        logger_(columnLabels, filename + "." + extension, outputDir)
     {
 
         if (!logger_.printable()) {

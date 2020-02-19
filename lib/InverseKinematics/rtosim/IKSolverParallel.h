@@ -45,6 +45,7 @@ namespace rtosim{
             double contraintWeight = SimTK::Infinity
             );
         void setInverseKinematicsTaskSet(const std::string& ikTaskSetFilename);
+		void setInverseKinematicsTaskSet(const OpenSim::IKTaskSet& ikTaskSet);
         virtual ~IKSolverParallel();
         void operator()();
         StopWatch getProcessingTimes() const { return stopWatch_; }

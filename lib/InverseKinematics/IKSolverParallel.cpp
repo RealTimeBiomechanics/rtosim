@@ -75,23 +75,25 @@ namespace rtosim{
         //  const OpenSim::CoordinateSet& coordSet(model_.getCoordinateSet());
     }
 
+
+	void IKSolverParallel::setInverseKinematicsTaskSet(const OpenSim::IKTaskSet& ikTaskSet) {
+
+		for (size_t i(0); i < static_cast<size_t>(ikTaskSet.getSize()); ++i) {
+			std::string currentMarkerName(ikTaskSet.get(i).getName());
+			auto it = markerWeights_.find(currentMarkerName);
+			if (it != markerWeights_.end() && ikTaskSet.get(i).getApply()) {
+				markerWeights_[ikTaskSet.get(i).getName()] = ikTaskSet.get(i).getWeight();
+			}
+		}
+	}
+
     void IKSolverParallel::setInverseKinematicsTaskSet(const string& ikTaskSetFilename) {
 
         //this should be fixed
         OpenSim::Object* p = OpenSim::Object::makeObjectFromFile(ikTaskSetFilename);
         OpenSim::IKTaskSet ikTaskSet = *(dynamic_cast<OpenSim::IKTaskSet*>(p));
         delete p;
-
-        for (size_t i(0); i < static_cast<size_t>(ikTaskSet.getSize()); ++i) {
-            std::string currentMarkerName(ikTaskSet.get(i).getName());
-            auto it = markerWeights_.find(currentMarkerName);
-            if (it != markerWeights_.end() && ikTaskSet.get(i).getApply()) {
-                markerWeights_[ikTaskSet.get(i).getName()] = ikTaskSet.get(i).getWeight();
-      //          cout << currentMarkerName << "\t" << ikTaskSet.get(i).getWeight() << endl;
-            }
-       //     else
-       //         cout << currentMarkerName << "\tskip" << endl;
-        }
+		setInverseKinematicsTaskSet(ikTaskSet);
     }
 
     void IKSolverParallel::pushState(const SimTK::State& s) {

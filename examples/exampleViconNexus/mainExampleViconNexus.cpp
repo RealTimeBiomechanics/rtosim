@@ -31,7 +31,6 @@ You can now adjust the camera frequency in the left panel. You can now launch th
 //Stream markers only
 void streamMarkers(std::string hostname) {
 
-	std::string inputDir = std::string(BASE_DIR) + "/tests/testViconNexus/input";
 	std::string outputDir = std::string(BASE_DIR) + "/tests/testViconNexus/output";
 
 	// Create latches to ensure all threads have finished their initialisation
@@ -67,7 +66,7 @@ void streamMarkers(std::string hostname) {
 		doneWithExecution,
 		markersNames,
 		outputDir,
-		"markers", ".trc");
+		"markers", "trc");
 
 
 	// Send the shutdown message to `nexusReader` after 30 seconds
@@ -92,6 +91,9 @@ void streamMarkers(std::string hostname) {
 	);
 
 }
+
+
+
 
 int main() {
 	//You can connect to a different computer running Vicon Nexus by 

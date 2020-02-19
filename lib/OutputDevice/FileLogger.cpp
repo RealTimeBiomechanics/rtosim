@@ -27,7 +27,8 @@ namespace rtosim {
         columnLabels_(columnLabels),
         filename_(filename),
         outputDir_(outputDir),
-        sp_(separator)
+        sp_(separator),
+		conversion_(1.0)
     {    
         outputDir_ = FileSystem::concatenatePaths(outputDir_, "");
 		std::cout << "Logging files in " << outputDir_ << std::endl;
@@ -249,11 +250,19 @@ namespace rtosim {
             auto q(dataIt.data.getQ());
             auto qd(dataIt.data.getQd());
             auto qdd(dataIt.data.getQdd());
-
+			std::vector<std::string> translationKeywords{ "_tx", "_ty", "_tz" };
             for (unsigned i(0); i < dataIt.data.getNCoordinates(); ++i) {
-                *outFile_ << q[i] << sp_
-                    << qd[i] << sp_
-                    << qdd[i] << sp_;
+				if (std::any_of(std::begin(translationKeywords), std::end(translationKeywords), 
+					[&](const auto& str) {return columnLabels_[i].find(str) != std::string::npos; })) {
+					*outFile_ << q[i]  << sp_
+						<< qd[i] << sp_
+						<< qdd[i] << sp_;
+				}
+				else {
+					*outFile_ << q[i] * conversion_ << sp_
+						<< qd[i] * conversion_ << sp_
+						<< qdd[i] * conversion_ << sp_;
+				}
             }
             *outFile_ << std::endl;
         }
