@@ -47,7 +47,6 @@ else()
 endif()
 
 
-message(STATUS "OPENSIMSIMBODY_INCLUDE_DIRS: ${OPENSIMSIMBODY_INCLUDE_DIRS}")
 
 add_definitions(/DBASE_DIR="${CMAKE_CURRENT_LIST_DIR}")
 

@@ -159,8 +159,6 @@ find_path(OPENSIM_INCLUDE_DIR
     DOC ${OPENSIM_INCLUDE_DIR_DOC}
     )
 
-message(STATUS "OPENSIM_INCLUDE_DIR: ${OPENSIM_INCLUDE_DIR}")
-
 # This change is necessary for Simbody 3.4 and beyond, and is incompatible
 # with Simbody 3.3 and below.
 #set(OPENSIM_SIMBODY_INCLUDE_RELPATH "include")
@@ -222,8 +220,6 @@ endif()
 set(OPENSIM_LIB_DIR ${OPENSIM_ROOT_DIR}/${OPENSIM_PLATFORM_LIB_RELPATH})
 set(OPENSIM_BIN_DIR ${OPENSIM_ROOT_DIR}/bin)
 
-message(STATUS "OPENSIM_LIB_DIR: ${OPENSIM_LIB_DIR}")
-
 
 # OPENSIM_LIBRARIES and OPENSIMSIMBODY_LIBRARIES
 # ----------------------------------------------
@@ -246,9 +242,6 @@ foreach(LIB_NAME IN LISTS OPENSIM_LIBRARY_LIST)
         NO_DEFAULT_PATH)
     if(FOUND_LIB)
         list(APPEND OPENSIM_LIBRARY optimized ${FOUND_LIB})
-        message(STATUS "Found ${LIB_NAME}")
-    else()
-        message(STATUS "Failed to find ${LIB_NAME}")
     endif()
     unset(FOUND_LIB CACHE)
 
@@ -261,8 +254,6 @@ foreach(LIB_NAME IN LISTS OPENSIM_LIBRARY_LIST)
     unset(FOUND_LIB CACHE)
 endforeach()
 
-message(STATUS "OPENSIM_LIBRARY: ${OPENSIM_LIBRARY}")
-
 # Start off this list of libraries with the OpenSim libraries.
 set(OPENSIMSIMBODY_LIBRARY ${OPENSIM_LIBRARY})
 
@@ -272,9 +263,6 @@ foreach(LIB_NAME IN LISTS SIMBODY_LIBRARY_LIST)
         NO_DEFAULT_PATH)
     if(FOUND_LIB)
         list(APPEND OPENSIMSIMBODY_LIBRARY optimized ${FOUND_LIB})
-        message(STATUS "Found ${LIB_NAME}")
-    else()
-        message(STATUS "Failed to find ${LIB_NAME}")
     endif()
     unset(FOUND_LIB CACHE)
 
@@ -287,7 +275,6 @@ foreach(LIB_NAME IN LISTS SIMBODY_LIBRARY_LIST)
     unset(FOUND_LIB CACHE)
 endforeach()
 
-message(STATUS "OPENSIMSIMBODY_LIBRARY: ${OPENSIMSIMBODY_LIBRARY}")
 
 # Wrap up
 # -------
