@@ -159,6 +159,8 @@ find_path(OPENSIM_INCLUDE_DIR
     DOC ${OPENSIM_INCLUDE_DIR_DOC}
     )
 
+message(STATUS "OPENSIM_INCLUDE_DIR: ${OPENSIM_INCLUDE_DIR}")
+
 # This change is necessary for Simbody 3.4 and beyond, and is incompatible
 # with Simbody 3.3 and below.
 #set(OPENSIM_SIMBODY_INCLUDE_RELPATH "include")
@@ -175,10 +177,20 @@ elseif(EXISTS "${OPENSIM_INCLUDE_DIR}/SimTK/simbody" AND IS_DIRECTORY "${OPENSIM
         ${OPENSIM_INCLUDE_DIR}
         ${OPENSIM_INCLUDE_DIR}/SimTK/simbody
         )
+elseif(EXISTS "${OPENSIM_INCLUDE_DIR}/simbody" AND IS_DIRECTORY "${OPENSIM_INCLUDE_DIR}/simbody")
+    set(OPENSIMSIMBODY_INCLUDE_DIR
+            ${OPENSIM_INCLUDE_DIR}
+            ${OPENSIM_INCLUDE_DIR}/simbody
+            )
 else()
     set(OPENSIMSIMBODY_INCLUDE_DIR
         ${OPENSIM_INCLUDE_DIR}
        )
+endif()
+
+# In order to let includes of e.g. "<lepton/...>" succeed we also need to include the `include/OpenSim` directory itself
+if(EXISTS "${OPENSIM_INCLUDE_DIR}/OpenSim" AND IS_DIRECTORY "${OPENSIM_INCLUDE_DIR}/OpenSim")
+    list(APPEND OPENSIMSIMBODY_INCLUDE_DIR "${OPENSIM_INCLUDE_DIR}/OpenSim")
 endif()
 
 
