@@ -47,7 +47,7 @@ namespace rtosim {
         inputMarkerQueue_.subscribe();
         doneWithSubscriptions_.wait();
         while (localRunCondition)  {
-            MarkerSetFrame currentFrame = inputMarkerQueue_.pop();
+            MarkerSetFrame currentFrame = inputMarkerQueue_.pop().value();
             if (rtosim::EndOfData::isEod(currentFrame)) {
                 localRunCondition = false;
                 for (unsigned i = 0; i < noIkThreads_ - 1; ++i) {

@@ -45,31 +45,43 @@ namespace rtosim {
             model_.addForce(force);
         }
 
-        OpenSim::Array<string> muscleNames;
-        model_.getMuscles().getNames(muscleNames);
-        for (unsigned i(0); i < nMuscles_; ++i)
-            muscleActuators_.push_back((const_cast<OpenSim::Muscle*>(&model_.updForceSet().getMuscles().get(muscleNames.get(i)))));
-
-        const OpenSim::CoordinateSet& cs = model_.getCoordinateSet();
-        for (unsigned i(0); i < nCoordinates_; ++i) {
-            OpenSim::CoordinateActuator *actuator = new OpenSim::CoordinateActuator();
-            actuator->setCoordinate(&cs.get(i));
-            string actuatorName(cs.get(i).getName() + "_actuator_rtosim");
-            actuator->setName(actuatorName);
-            actuator->setOptimalForce(1);
-            actuator->setMaxControl(100000);
-            actuator->setMinControl(-100000);
-            model_.addForce(actuator);
-            coordinateActuators_.push_back(dynamic_cast<OpenSim::CoordinateActuator*>(&(model_.updForceSet().get(actuatorName))));
-        }
-
         idSolver_ = new OpenSim::InverseDynamicsSolver(model_);
 
         state_ = model_.initSystem();
-        for (auto c : coordinateActuators_)
-            c->overrideForce(state_, true);
-        for (auto m : muscleActuators_)
-            m->overrideForce(state_, true);
+
+        OpenSim::Set<OpenSim::Actuator>& acts = model_.updActuators();
+        for (int i = 0; i < acts.getSize(); i++) {
+            acts[i].setAppliesForce(state_, false);
+        }
+        OpenSim::Set<OpenSim::Muscle>& muscles = model_.updMuscles();
+        for (int i = 0; i < muscles.getSize(); i++) {
+            muscles[i].setAppliesForce(state_, false);
+        }
+
+
+        std::vector<std::string> coordNamesCIMTO, coordNamesOSSTD;
+        auto coords = model_.getCoordinatesInMultibodyTreeOrder();
+        for (auto& it : coords) {
+            coordNamesCIMTO.push_back(it->getName());
+        }
+
+        OpenSim::Array<std::string> coordNamesOS;
+        model_.getCoordinateSet().getNames(coordNamesOS);
+
+
+        for (int i = 0; i < coordNamesOS.size(); i++)
+        {
+            coordNamesOSSTD.push_back(coordNamesOS[i]);
+            auto result = std::find(coordNamesCIMTO.begin(), coordNamesCIMTO.end(), coordNamesOS[i]);
+            OrderCIMTO_.push_back(std::distance(coordNamesCIMTO.begin(), result));
+        }
+        std::cout << std::endl;
+
+        for (int i = 0; i < coordNamesCIMTO.size(); i++)
+        {
+            auto result = std::find(coordNamesOSSTD.begin(), coordNamesOSSTD.end(), coordNamesCIMTO[i]);
+            OrderSO_.push_back(std::distance(coordNamesOSSTD.begin(), result));
+        }
     }
 
     void JointContactFromOpensim::setTime(double time) {
@@ -135,9 +147,9 @@ namespace rtosim {
         const OpenSim::Joint& joint(model_.getJointSet().get(jointName));
         unsigned idx(model_.getJointSet().getIndex(joint.getName()));
         model_.getSimbodyEngine().transform(state_,
-            model_.getGroundBody(),
+            model_.getGround(),
             rForcesInG.get(idx),
-            joint.getBody(),
+            joint.getParentFrame(),
             forceOnChildInChild);
     }
 
@@ -202,20 +214,20 @@ namespace rtosim {
     void JointContactFromOpensim::disableMuscleActuators() {
 
         for (auto& m : muscleActuators_)
-            m->setDisabled(state_, true);
+            m->setAppliesForce(state_, false);
     }
 
     void JointContactFromOpensim::enableMuscleActuators() {
 
         for (auto& m : muscleActuators_)
-            m->setDisabled(state_, false);
+            m->setAppliesForce(state_, true);
     }
 
     void JointContactFromOpensim::setMuscleForcesToActuators(const SimTK::Vector& muscleForces) {
 
         for (size_t i(0); i < muscleActuators_.size(); ++i) {
-            muscleActuators_.at(i)->setOverrideForce(state_, true);
-            muscleActuators_.at(i)->setOverrideForce(state_, muscleForces[i]);
+            muscleActuators_.at(i)->setOverrideActuation(state_, true);
+            muscleActuators_.at(i)->setOverrideActuation(state_, muscleForces[i]);
         }
     }
 
@@ -227,8 +239,8 @@ namespace rtosim {
     void JointContactFromOpensim::calculateReactions(const SimTK::Vector& residualMobilityForces) {
 
         for (unsigned i(0); i < nCoordinates_; ++i) {
-            coordinateActuators_.at(i)->overrideForce(state_, true);
-            coordinateActuators_.at(i)->setOverrideForce(state_, residualMobilityForces.get(i));
+            coordinateActuators_.at(i)->overrideActuation(state_, true);
+            coordinateActuators_.at(i)->setOverrideActuation(state_, residualMobilityForces.get(i));
         }
         model_.getMultibodySystem().realize(state_, SimTK::Stage::Acceleration);
         model_.getSimbodyEngine().computeReactions(state_, rForcesInG_, rTorquesInG_);

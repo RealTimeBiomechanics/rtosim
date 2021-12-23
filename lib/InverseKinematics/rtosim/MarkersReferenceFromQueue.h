@@ -32,7 +32,7 @@ namespace rtosim{
     public:
         MarkersReferenceFromQueue(ThreadPoolJobs<MarkerSetFrame>& inputMarkerSetFrameQueue, const std::vector<std::string>& markerNames, const std::vector<double>& markerWeigths);
         virtual ~MarkersReferenceFromQueue() {}
-        virtual void getValues(const SimTK::State &s, SimTK::Array_<SimTK::Vec3> &values) const override;
+        virtual void getValues(const SimTK::State &s, SimTK::Array_<SimTK::Vec3> &values) const;
         virtual void getWeights(const SimTK::State &s, SimTK::Array_<double> &weights) const override;
         virtual const SimTK::Array_<std::string>& getNames() const override;
         double getCurrentTime() { return time_; }

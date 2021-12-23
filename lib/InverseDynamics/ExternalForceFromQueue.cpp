@@ -54,7 +54,7 @@ namespace rtosim {
         isSubscribed(false),
         runCondition_(true)
     {
-        ExternalForce::updateFromXMLNode(node);
+        ExternalForce::updateFromXMLNode(node, 4);
     }
 
     ExternalForceFromQueue::ExternalForceFromQueue(
@@ -82,7 +82,7 @@ namespace rtosim {
 
         SingleExternalForceFrame forceFrame;
         while (time > lastTime_ && runCondition_){
-            forceFrame = externalForceQueue_->pop();
+            forceFrame = externalForceQueue_->pop().value();
             if (EndOfData::isEod(forceFrame)) {
                 runCondition_ = false;
                 forceFrame.data.setForceVector(SimTK::Vec3(0.));
@@ -116,23 +116,24 @@ namespace rtosim {
 
             const OpenSim::SimbodyEngine& engine = getModel().getSimbodyEngine();
             SimTK::Vec3 transformedForce, transformedPosition, transformedTorque;
-            engine.transform(state, *forceExpressedInBody_, forceData.getForce(), engine.getGroundBody(), transformedForce);
+            transformedForce = forceExpressedInBody_->expressVectorInGround(state, forceData.getForce());
 
             if (forceData.getUseApplicationPoint()) {
                 //use COP + GRF + fre torque
-                torquesToApply = forceData.getTorque();
-                engine.transformPosition(state, *pointExpressedInBody_, forceData.getApplicationPoint(), *appliedToBody_, transformedPosition);
+                torquesToApply = forceExpressedInBody_->expressVectorInGround(state, forceData.getTorque());
+                transformedPosition = pointExpressedInBody_->findStationLocationInAnotherFrame(state, forceData.getApplicationPoint(), *appliedToBody_);
             }
             else {
                 //apply the grf and moments from the force plate directly to the body
-                pointExpressedInBody_->getMassCenter(transformedPosition);
+                if (get_force_expressed_in_body() != "ground")
+                {
+                    transformedPosition = getModel().getBodySet().get(get_force_expressed_in_body()).getMassCenter();
+                }
                 torquesToApply = forceData.getMoments();
             }
 
-            ExternalForce::applyForceToPoint(state, *appliedToBody_, transformedPosition, transformedForce, bodyForces);
-
-            engine.transform(state, *forceExpressedInBody_, torquesToApply, engine.getGroundBody(), transformedTorque);
-            ExternalForce::applyTorque(state, *appliedToBody_, transformedTorque, bodyForces);
+            applyForceToPoint(state, *appliedToBody_, transformedPosition, transformedForce, bodyForces);
+            applyTorque(state, *appliedToBody_, torquesToApply, bodyForces);
         }
     }
 

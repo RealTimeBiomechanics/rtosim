@@ -19,6 +19,7 @@
 #include "rtosim/ArrayConverter.h"
 
 #include <OpenSim/OpenSim.h>
+#include <OpenSim/Common/MarkerData.h>
 #include <chrono>
 #include <thread>
 #include <string>

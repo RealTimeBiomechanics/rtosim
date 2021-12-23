@@ -76,6 +76,8 @@ namespace rtosim {
         SimTK::Vector_<SimTK::Vec3> rForcesInG_, rTorquesInG_;
         SimTK::Vector_<SimTK::Vec3> intForcesInG_, jrForcesInG_;;
         SimTK::Vector_<SimTK::Real> qdd_;
+        std::vector<size_t> OrderCIMTO_;
+        std::vector<size_t> OrderSO_;
 
         std::vector<OpenSim::Muscle*> muscleActuators_;
         std::vector<OpenSim::CoordinateActuator*> coordinateActuators_;

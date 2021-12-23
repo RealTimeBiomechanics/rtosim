@@ -93,7 +93,7 @@ namespace rtosim {
 
             bool runCondition(true);
             do {
-                QueueData<std::vector<ExternalForceData>> forces(inputExternalForcesQueue_.pop());
+                QueueData<std::vector<ExternalForceData>> forces(inputExternalForcesQueue_.pop().value());
                 if (forces.time < std::numeric_limits<double>::infinity()) {
                     for (size_t i(0); i < forces.data.size(); ++i) {
                         QueueData<ExternalForceData> currentForce;
