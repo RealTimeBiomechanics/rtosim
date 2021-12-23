@@ -29,7 +29,7 @@ namespace rtosim {
 
             typename T::type frame;
             do {
-                frame = queue.pop();
+                frame = queue.pop().value();
             } while (frame.time < t && !EndOfData::isEod(frame));
             return frame;
         }
@@ -37,7 +37,7 @@ namespace rtosim {
         template<typename A1, typename... Args>
         auto sync(A1& queue1, Args&... queues) -> decltype(std::make_tuple(queue1.pop(), queues.pop()...)) {
 
-            auto frame1(queue1.pop());
+            auto frame1(queue1.pop().value());
             return std::make_tuple(frame1, syncToTime(frame1.time, queues)...);
         }
 

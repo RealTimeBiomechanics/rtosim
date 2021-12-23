@@ -110,10 +110,15 @@ namespace rtosim {
         doneWithSubscriptions_.wait();
 
         while (runCondition) {
+
             auto frames(QueuesSync::sync(inputMarkerSetQueue_, inputExternalForcesQueue_));
-            MultipleExternalForcesFrame extForcesFrame;
-            MarkerSetFrame markerSetFrame;
-            std::tie(markerSetFrame, extForcesFrame) = frames;
+            std::optional<MultipleExternalForcesFrame> extForcesFrame_opt;
+            std::optional<MarkerSetFrame> markerSetFrame_opt;
+            std::tie(markerSetFrame_opt, extForcesFrame_opt) = frames;
+            // frames is a tuple of two optional types
+
+            MultipleExternalForcesFrame extForcesFrame = extForcesFrame_opt.value();
+            MarkerSetFrame markerSetFrame = markerSetFrame_opt.value();
 
             if (EndOfData::isEod(markerSetFrame) ||
                 EndOfData::isEod(extForcesFrame))

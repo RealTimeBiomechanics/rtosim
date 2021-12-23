@@ -36,7 +36,7 @@ namespace rtosim {
         qIn_.subscribe();
         doneWithSubscriptions_.wait();
         while (localRunCondition) {
-            auto frame(qIn_.pop());
+            auto frame(qIn_.pop().value());
             if (rtosim::EndOfData::isEod(frame)) {
                 localRunCondition = false;
                 qOut_.push(rtosim::EndOfData::get<typename Qout::type>());
