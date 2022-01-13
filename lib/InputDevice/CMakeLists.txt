@@ -18,7 +18,7 @@ set(InputDevice_SOURCES
     ExternalForcesFromX.cpp
     ExternalForcesFromStorageFile.cpp
     GeneralisedCoordinatesFromX.cpp
-	GeneralisedCoordinatesFromStorageFile.cpp
+    GeneralisedCoordinatesFromStorageFile.cpp
     )
 
 set(InputDevice_HEADERS
@@ -28,7 +28,7 @@ set(InputDevice_HEADERS
     rtosim/ExternalForcesFromStorageFile.h
     rtosim/GeneralisedCoordinatesFromX.h
     rtosim/GeneralisedCoordinatesFromStorageFile.h
-	)
+    )
 
 
 set(InputDevice_Nexus_HEADERS

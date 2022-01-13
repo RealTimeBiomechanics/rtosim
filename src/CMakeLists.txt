@@ -27,8 +27,8 @@ set(targetsToExport rtosim_ik_from_file rtosim_id_from_file rtosim_ik_id_from_fi
 if(${VICONSDK_FOUND})
     add_executable(rtosim_ik_id_from_nexus mainInverseKinematicsInverseDynamicsFromNexus.cpp)
     target_link_libraries(rtosim_ik_id_from_nexus rtosim)
-	list(APPEND targetsToExport rtosim_ik_id_from_nexus)
-	
+    list(APPEND targetsToExport rtosim_ik_id_from_nexus)
+
 endif(${VICONSDK_FOUND})
 
 install(TARGETS ${targetsToExport}

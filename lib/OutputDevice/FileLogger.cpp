@@ -28,10 +28,10 @@ namespace rtosim {
         filename_(filename),
         outputDir_(outputDir),
         sp_(separator),
-		conversion_(1.0)
+        conversion_(1.0)
     {    
         outputDir_ = FileSystem::concatenatePaths(outputDir_, "");
-		std::cout << "Logging files in " << outputDir_ << std::endl;
+        std::cout << "Logging files in " << outputDir_ << std::endl;
     }
 
     template<typename DataType>
@@ -118,11 +118,11 @@ namespace rtosim {
     void FileLogger<DataType>::initFile() {
 
         *outFile_ << "rtosim output" << std::endl;
-		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "version=1" << std::endl;
         *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
         *outFile_ << "nColumns=" << dataToWrite_.back().data.size() + 1 << std::endl;
-		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
-		*outFile_ << "endheader" << std::endl;
+        *outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+        *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
             *outFile_ << it << sp_;
@@ -134,10 +134,10 @@ namespace rtosim {
     {
 
         *outFile_ << "rtosim output" << std::endl;
-		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "version=1" << std::endl;
         *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
         *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
-		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+        *outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -145,30 +145,30 @@ namespace rtosim {
         *outFile_ << std::endl;
     }
 
-	template<>
-	void FileLogger<MarkerSetData>::initFile()
-	{
+    template<>
+    void FileLogger<MarkerSetData>::initFile()
+    {
 
-		*outFile_ << "rtosim output" << std::endl;
-		*outFile_ << "version=1" << std::endl;
-		*outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
-		*outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
-		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
-		*outFile_ << "endheader" << std::endl;
-		*outFile_ << "time" + sp_;
-		for (auto& it : columnLabels_)
-			*outFile_ << it << "_x" << sp_ << it << "_y" << sp_ << it << "_z" << sp_;
-		*outFile_ << std::endl;
-	}
+        *outFile_ << "rtosim output" << std::endl;
+        *outFile_ << "version=1" << std::endl;
+        *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
+        *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 3 + 1 << std::endl;
+        *outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+        *outFile_ << "endheader" << std::endl;
+        *outFile_ << "time" + sp_;
+        for (auto& it : columnLabels_)
+            *outFile_ << it << "_x" << sp_ << it << "_y" << sp_ << it << "_z" << sp_;
+        *outFile_ << std::endl;
+    }
 
     template<>
     void FileLogger<GeneralisedCoordinatesData>::initFile()
     {
         *outFile_ << "rtosim output" << std::endl;
-		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "version=1" << std::endl;
         *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
         *outFile_ << "nColumns=" << dataToWrite_.back().data.getNCoordinates() * 3 + 1 << std::endl;
-		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+        *outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -180,10 +180,10 @@ namespace rtosim {
     void FileLogger<MultipleExternalForcesData>::initFile()
     {
         *outFile_ << "rtosim output" << std::endl;
-		*outFile_ << "version=1" << std::endl;
+        *outFile_ << "version=1" << std::endl;
         *outFile_ << "nRows=" << dataToWrite_.size() << std::endl;
         *outFile_ << "nColumns=" << dataToWrite_.back().data.size() * 12 + 1 << std::endl;
-		*outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
+        *outFile_ << "inDegrees=" << (isInDegrees_ ? "yes" : "no") << std::endl;
         *outFile_ << "endheader" << std::endl;
         *outFile_ << "time" + sp_;
         for (auto& it : columnLabels_)
@@ -229,18 +229,18 @@ namespace rtosim {
         }
     }
 
-	template<>
-	void FileLogger<MarkerSetData>::writeToFile() {
+    template<>
+    void FileLogger<MarkerSetData>::writeToFile() {
 
-		for (auto& dataIt : dataToWrite_) {
-			*outFile_ << dataIt.time << sp_;
-			for (auto& sampleIt : dataIt.data)
-				*outFile_ << sampleIt.getCoordinates()[0] << sp_
-				<< sampleIt.getCoordinates()[1] << sp_
-				<< sampleIt.getCoordinates()[2] << sp_;
-			*outFile_ << std::endl;
-		}
-	}
+        for (auto& dataIt : dataToWrite_) {
+            *outFile_ << dataIt.time << sp_;
+            for (auto& sampleIt : dataIt.data)
+                *outFile_ << sampleIt.getCoordinates()[0] << sp_
+                << sampleIt.getCoordinates()[1] << sp_
+                << sampleIt.getCoordinates()[2] << sp_;
+            *outFile_ << std::endl;
+        }
+    }
 
     template<>
     void FileLogger<GeneralisedCoordinatesData>::writeToFile() {
@@ -250,19 +250,19 @@ namespace rtosim {
             auto q(dataIt.data.getQ());
             auto qd(dataIt.data.getQd());
             auto qdd(dataIt.data.getQdd());
-			std::vector<std::string> translationKeywords{ "_tx", "_ty", "_tz" };
+            std::vector<std::string> translationKeywords{ "_tx", "_ty", "_tz" };
             for (unsigned i(0); i < dataIt.data.getNCoordinates(); ++i) {
-				if (std::any_of(std::begin(translationKeywords), std::end(translationKeywords), 
-					[&](const auto& str) {return columnLabels_[i].find(str) != std::string::npos; })) {
-					*outFile_ << q[i]  << sp_
-						<< qd[i] << sp_
-						<< qdd[i] << sp_;
-				}
-				else {
-					*outFile_ << q[i] * conversion_ << sp_
-						<< qd[i] * conversion_ << sp_
-						<< qdd[i] * conversion_ << sp_;
-				}
+                if (std::any_of(std::begin(translationKeywords), std::end(translationKeywords),
+                    [&](const auto& str) {return columnLabels_[i].find(str) != std::string::npos; })) {
+                    *outFile_ << q[i]  << sp_
+                        << qd[i] << sp_
+                        << qdd[i] << sp_;
+                }
+                else {
+                    *outFile_ << q[i] * conversion_ << sp_
+                        << qd[i] * conversion_ << sp_
+                        << qdd[i] * conversion_ << sp_;
+                }
             }
             *outFile_ << std::endl;
         }

@@ -20,6 +20,6 @@
 #include "rtosim/ExternalForcesFromStorageFile.h"
 #include "rtosim/GeneralisedCoordinatesFromStorageFile.h"
 #ifdef INCLUDEVICONSDK
-	#include "rtosim/DataFromNexus.h"
+    #include "rtosim/DataFromNexus.h"
 #endif
 #endif

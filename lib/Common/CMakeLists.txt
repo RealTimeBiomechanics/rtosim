@@ -34,7 +34,7 @@ set(Common_QUEUES_HEADERS
     rtosim/queue/ExternalTorquesQueue.h
     rtosim/queue/ScalarVectorQueue.h
     rtosim/queue/SingleExternalForceQueue.h
-    rtosim/queue/EmgQueue.h	
+    rtosim/queue/EmgQueue.h
 ) 
     
 

@@ -40,10 +40,10 @@ find_package(Filter REQUIRED)
 find_package(OpenSim REQUIRED)
 find_package(ViconSDK QUIET)
 if(${VICONSDK_FOUND})
-	message(STATUS "ViconSDK found")
-	add_definitions(-DINCLUDEVICONSDK)
+    message(STATUS "ViconSDK found")
+    add_definitions(-DINCLUDEVICONSDK)
 else()
-	message(STATUS "ViconSDK not found")
+    message(STATUS "ViconSDK not found")
 endif()
 
 

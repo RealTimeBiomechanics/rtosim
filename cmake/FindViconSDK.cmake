@@ -14,8 +14,8 @@
 # --------------------------------------------------------------------------#
 
 set(ViconSDK_POSSIBLE_DIRECTORIES 
-	$ENV{VICONDATASTREAM_DIR}
-	)
+    $ENV{VICONDATASTREAM_DIR}
+    )
 
 find_path(ViconSDK_INCLUDE_DIRS DataStreamClient.h
           PATHS ${ViconSDK_POSSIBLE_DIRECTORIES}

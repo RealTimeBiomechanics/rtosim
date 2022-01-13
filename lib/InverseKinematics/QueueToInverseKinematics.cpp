@@ -70,29 +70,29 @@ namespace rtosim {
         useIkTaskSet_ = true;
     }
 
-	QueueToInverseKinematics::QueueToInverseKinematics(
-		MarkerSetQueue& inputMarkerSetQueue,
-		rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-		rtb::Concurrency::Latch& doneWithSubscriptions,
-		rtb::Concurrency::Latch& doneWithExecution,
-		const std::string& osimModelFilename,
-		unsigned nThreads,
-		const OpenSim::IKTaskSet& ikTaskSet,
-		double solverAccuracy,
-		double contraintWeight) :
-		QueueToInverseKinematics(
-			inputMarkerSetQueue,
-			outputGeneralisedCoordinateQueue,
-			doneWithSubscriptions,
-			doneWithExecution,
-			osimModelFilename,
-			nThreads,
-			solverAccuracy,
-			contraintWeight) {
+    QueueToInverseKinematics::QueueToInverseKinematics(
+        MarkerSetQueue& inputMarkerSetQueue,
+        rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
+        const std::string& osimModelFilename,
+        unsigned nThreads,
+        const OpenSim::IKTaskSet& ikTaskSet,
+        double solverAccuracy,
+        double contraintWeight) :
+        QueueToInverseKinematics(
+            inputMarkerSetQueue,
+            outputGeneralisedCoordinateQueue,
+            doneWithSubscriptions,
+            doneWithExecution,
+            osimModelFilename,
+            nThreads,
+            solverAccuracy,
+            contraintWeight) {
 
-		ikTaskSet_ = ikTaskSet;
-		useIkTaskSet_ = true;
-	}
+        ikTaskSet_ = ikTaskSet;
+        useIkTaskSet_ = true;
+    }
 
 
 

@@ -76,16 +76,16 @@ namespace rtosim{
     }
 
 
-	void IKSolverParallel::setInverseKinematicsTaskSet(const OpenSim::IKTaskSet& ikTaskSet) {
+    void IKSolverParallel::setInverseKinematicsTaskSet(const OpenSim::IKTaskSet& ikTaskSet) {
 
-		for (size_t i(0); i < static_cast<size_t>(ikTaskSet.getSize()); ++i) {
-			std::string currentMarkerName(ikTaskSet.get(i).getName());
-			auto it = markerWeights_.find(currentMarkerName);
-			if (it != markerWeights_.end() && ikTaskSet.get(i).getApply()) {
-				markerWeights_[ikTaskSet.get(i).getName()] = ikTaskSet.get(i).getWeight();
-			}
-		}
-	}
+        for (size_t i(0); i < static_cast<size_t>(ikTaskSet.getSize()); ++i) {
+            std::string currentMarkerName(ikTaskSet.get(i).getName());
+            auto it = markerWeights_.find(currentMarkerName);
+            if (it != markerWeights_.end() && ikTaskSet.get(i).getApply()) {
+                markerWeights_[ikTaskSet.get(i).getName()] = ikTaskSet.get(i).getWeight();
+            }
+        }
+    }
 
     void IKSolverParallel::setInverseKinematicsTaskSet(const string& ikTaskSetFilename) {
 
@@ -93,7 +93,7 @@ namespace rtosim{
         OpenSim::Object* p = OpenSim::Object::makeObjectFromFile(ikTaskSetFilename);
         OpenSim::IKTaskSet ikTaskSet = *(dynamic_cast<OpenSim::IKTaskSet*>(p));
         delete p;
-		setInverseKinematicsTaskSet(ikTaskSet);
+        setInverseKinematicsTaskSet(ikTaskSet);
     }
 
     void IKSolverParallel::pushState(const SimTK::State& s) {
