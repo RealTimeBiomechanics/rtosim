@@ -57,9 +57,8 @@ source_group("Sources" FILES ${Common_SOURCES} ${Common_TEMPLATE_IMPLEMENTATION}
 # Define target
 add_library(Common ${Common_SOURCES} ${Common_HEADERS} ${Common_QUEUES_HEADERS} ${Common_TEMPLATE_IMPLEMENTATION})
 set_target_properties(Common PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(Common rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
-target_include_directories(Common  PRIVATE ${OPENSIMSIMBODY_INCLUDE_DIRS}
-                                   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+target_link_libraries(Common rtb::Concurrency osimTools)
+target_include_directories(Common  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 install(FILES ${Common_HEADERS} ${Common_TEMPLATE_IMPLEMENTATION}

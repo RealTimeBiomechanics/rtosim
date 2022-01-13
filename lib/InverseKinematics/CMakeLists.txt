@@ -45,10 +45,9 @@ add_library(InverseKinematics
   ${InverseKinematics_SOURCES}
   ${InverseKinematics_HEADERS}
   ${InverseKinematics_TEMPLATE_IMPLEMENTATION})
-target_link_libraries(InverseKinematics Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
+target_link_libraries(InverseKinematics Common Utilities rtb::Concurrency osimTools)
 target_include_directories(InverseKinematics PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                             ${OPENSIMSIMBODY_INCLUDE_DIRS})
+                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 if(WIN32)
     target_compile_definitions(InverseKinematics PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
 endif()
