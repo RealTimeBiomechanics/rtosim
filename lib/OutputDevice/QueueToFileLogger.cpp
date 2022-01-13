@@ -51,7 +51,7 @@ namespace rtosim{
 	std::cout << "Ready to log\n";
         bool runCondition(true);
         while (runCondition) {
-            FrameType currentFrame = inputQueue_.pop().value();
+            FrameType currentFrame = inputQueue_.pop();
             if (EndOfData::isEod(currentFrame)) runCondition = false;
             if (runCondition) {
                 logger_.logFrame(currentFrame);

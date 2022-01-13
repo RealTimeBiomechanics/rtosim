@@ -238,7 +238,7 @@ namespace rtosim {
         initialise(); //reset the initial time point
         bool runCondition(true);
         while (runCondition) {
-            auto frame(queue_.pop().value());
+            auto frame(queue_.pop());
             if (!EndOfData::isEod(frame))
                 logCurrentTime(frame.time);
             else

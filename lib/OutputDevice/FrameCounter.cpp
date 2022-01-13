@@ -37,7 +37,7 @@ namespace rtosim {
         queueIn_.pop();
         stopWatch_.init();
         while (localRunCondition) {
-            if (rtosim::EndOfData::isEod(queueIn_.pop().value()))
+            if (rtosim::EndOfData::isEod(queueIn_.pop()))
                 localRunCondition = false;
             stopWatch_.log();
         }

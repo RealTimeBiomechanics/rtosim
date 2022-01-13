@@ -66,7 +66,7 @@ namespace rtosim {
 
         while (runCondition) {
 
-            GeneralisedCoordinatesFrame generalisedCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop().value());
+            GeneralisedCoordinatesFrame generalisedCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
 
             if (EndOfData::isEod(generalisedCoordinatesFrame))
                 runCondition = false;

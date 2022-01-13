@@ -82,7 +82,7 @@ namespace rtosim {
 
         SingleExternalForceFrame forceFrame;
         while (time > lastTime_ && runCondition_){
-            forceFrame = externalForceQueue_->pop().value();
+            forceFrame = externalForceQueue_->pop();
             if (EndOfData::isEod(forceFrame)) {
                 runCondition_ = false;
                 forceFrame.data.setForceVector(SimTK::Vec3(0.));

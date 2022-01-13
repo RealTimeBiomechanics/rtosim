@@ -58,7 +58,7 @@ namespace rtosim{
 		model_.getVisualizer().show(s);
         while (localRunCondition) {
 
-            rtosim::GeneralisedCoordinatesFrame currentCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop().value());
+            rtosim::GeneralisedCoordinatesFrame currentCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
             if (rtosim::EndOfData::isEod(currentCoordinatesFrame))
                 localRunCondition = false;
             else {
