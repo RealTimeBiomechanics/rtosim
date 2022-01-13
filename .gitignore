@@ -1,0 +1,10 @@
+# Build output
+build/
+Debug/
+Release/
+cmake-build-*/
+tmp/
+
+# IDE stuff
+.idea
+.vs

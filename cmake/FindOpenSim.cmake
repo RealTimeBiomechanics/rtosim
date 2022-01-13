@@ -155,7 +155,7 @@ set(OPENSIMSIMBODY_INCLUDE_DIR_DOC
 find_path(OPENSIM_INCLUDE_DIR
     NAMES "OpenSim/OpenSim.h"
     HINTS ${OPENSIM_SEARCH_PATHS}
-    PATH_SUFFIXES "sdk/include" "opensim/sdk/include" "OpenSim/sdk/include"
+    PATH_SUFFIXES "include" "sdk/include" "opensim/sdk/include" "OpenSim/sdk/include"
     DOC ${OPENSIM_INCLUDE_DIR_DOC}
     )
 
@@ -175,10 +175,20 @@ elseif(EXISTS "${OPENSIM_INCLUDE_DIR}/SimTK/simbody" AND IS_DIRECTORY "${OPENSIM
         ${OPENSIM_INCLUDE_DIR}
         ${OPENSIM_INCLUDE_DIR}/SimTK/simbody
         )
+elseif(EXISTS "${OPENSIM_INCLUDE_DIR}/simbody" AND IS_DIRECTORY "${OPENSIM_INCLUDE_DIR}/simbody")
+    set(OPENSIMSIMBODY_INCLUDE_DIR
+            ${OPENSIM_INCLUDE_DIR}
+            ${OPENSIM_INCLUDE_DIR}/simbody
+            )
 else()
     set(OPENSIMSIMBODY_INCLUDE_DIR
         ${OPENSIM_INCLUDE_DIR}
        )
+endif()
+
+# In order to let includes of e.g. "<lepton/...>" succeed we also need to include the `include/OpenSim` directory itself
+if(EXISTS "${OPENSIM_INCLUDE_DIR}/OpenSim" AND IS_DIRECTORY "${OPENSIM_INCLUDE_DIR}/OpenSim")
+    list(APPEND OPENSIMSIMBODY_INCLUDE_DIR "${OPENSIM_INCLUDE_DIR}/OpenSim")
 endif()
 
 
@@ -186,7 +196,19 @@ endif()
 # ----------------
 # Back out the root installation directory.
 get_filename_component(OPENSIM_SDK_DIR "${OPENSIM_INCLUDE_DIR}" PATH)
-get_filename_component(OPENSIM_ROOT_DIR "${OPENSIM_SDK_DIR}" PATH)
+get_filename_component(OPENSIM_SDK_DIR_PARENT "${OPENSIM_SDK_DIR}" PATH)
+
+if(EXISTS "${OPENSIM_SDK_DIR_PARENT}/sdk" AND IS_DIRECTORY "${OPENSIM_INCLUDE_DIR}/sdk")
+    # There really is the sdk/ directory
+    set(OPENSIM_ROOT_DIR ${OPENSIM_SDK_DIR_PARENT})
+else()
+    # OpenSim 4.3 doesn't have the sdk directory anymore, so make root equal to the sdk directory
+    set(OPENSIM_ROOT_DIR ${OPENSIM_SDK_DIR})
+endif()
+
+
+message(STATUS "OPENSIM_SDK_DIR: ${OPENSIM_SDK_DIR}")
+message(STATUS "OPENSIM_ROOT_DIR: ${OPENSIM_ROOT_DIR}")
 
 # OPENSIM_LIB_DIR and OPENSIM_BIN_DIR
 # -----------------------------------

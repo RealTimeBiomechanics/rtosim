@@ -12,17 +12,17 @@ inline void assert_(bool cond, std::string file = "", int line = -1, std::string
 }
 
 void checkStorageAgainstStandard(
-	OpenSim::Storage& result, 
-	OpenSim::Storage& standard, 
-	OpenSim::Array<double> tolerances, 
-	std::string testFile, int testFileLine, 
+	OpenSim::Storage& result,
+	OpenSim::Storage& standard,
+	OpenSim::Array<double> tolerances,
+	std::string testFile, int testFileLine,
 	std::string errorMessage)
 {
-	OpenSim::Array<std::string> columnsUsed;
-	OpenSim::Array<double> comparisons;
+	std::vector<std::string> columnsUsed;
+	std::vector<double> comparisons;
 	result.compareWithStandard(standard, columnsUsed, comparisons);
 
-	int columns = columnsUsed.getSize();
+	int columns = columnsUsed.size();
 
 	assert_(columns > 0, testFile, testFileLine, errorMessage + "- no common columns to compare!");
 
@@ -76,10 +76,10 @@ std::string runRtosimInverseKinematics(std::string dataDir,std::string ikSetupFi
 	std::string outputFilename("rtosim_ik_j" + std::to_string(nThreads));
 	std::vector<std::string> columnLabels = rtosim::getCoordinateNamesFromModel(modelFilename);
 	rtosim::QueueToFileLogger<rtosim::GeneralisedCoordinatesData> coordinateLogger(
-		generalisedCoordinatesQueue, 
-		doneWithSubscription, 
-		doneWithExecution, 
-		columnLabels, 
+		generalisedCoordinatesQueue,
+		doneWithSubscription,
+		doneWithExecution,
+		columnLabels,
 		dataDir, outputFilename, "mot");
 	coordinateLogger.setConvertFromRadToDeg();
 	doneWithSubscription.setCount(3);

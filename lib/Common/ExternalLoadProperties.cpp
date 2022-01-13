@@ -14,14 +14,14 @@
  * -------------------------------------------------------------------------- */
 
 #include "rtosim/ExternalLoadProperties.h"
-using SimTK::Xml;
+
 
 namespace rtosim {
 
     ExternalLoadProperties::ExternalLoadProperties(const std::string& xmlFilename)
         :xmlFilename_(xmlFilename) {
 
-        SimTK::Xml extLoadXml(xmlFilename_);
+        SimTK::Xml::Document extLoadXml(xmlFilename_);
         parseXml(extLoadXml.getRootElement());
         datafile_ = getCorrectFilePath(datafile_);
         external_loads_model_kinematics_file_ = getCorrectFilePath(external_loads_model_kinematics_file_);
@@ -38,20 +38,20 @@ namespace rtosim {
         return file;
     }
 
-    void ExternalLoadProperties::parseXml(Xml::Element elt) {
+    void ExternalLoadProperties::parseXml(SimTK::Xml::Element elt) {
 
         SimTK::Xml::element_iterator eIt(elt.element_begin());
         if (eIt->getElementTag() == "ExternalLoads")
             parseExternalLoads(*eIt);
     }
 
-    void ExternalLoadProperties::parseExternalLoads(Xml::Element elt) {
+    void ExternalLoadProperties::parseExternalLoads(SimTK::Xml::Element elt) {
 
-        Xml::attribute_iterator ap = elt.attribute_begin();
+        SimTK::Xml::attribute_iterator ap = elt.attribute_begin();
         if (ap->getName() == "name")
             name_ = ap->getValue();
 
-        Xml::element_iterator eIt(elt.element_begin());
+        SimTK::Xml::element_iterator eIt(elt.element_begin());
         for (eIt; eIt != elt.element_end(); ++eIt) {
             if (eIt->getElementTag() == "objects") parseObjects(*eIt);
             if (eIt->getElementTag() == "datafile") datafile_ = eIt->getValue();
@@ -60,8 +60,8 @@ namespace rtosim {
         }
     }
 
-    void ExternalLoadProperties::parseObjects(Xml::Element elt) {
-        Xml::element_iterator eIt(elt.element_begin());
+    void ExternalLoadProperties::parseObjects(SimTK::Xml::Element elt) {
+        SimTK::Xml::element_iterator eIt(elt.element_begin());
         for (eIt; eIt != elt.element_end(); ++eIt) {
             if (eIt->getElementTag() == "ExternalForce") {
                 ExternalForceProperties extForce(*eIt);
