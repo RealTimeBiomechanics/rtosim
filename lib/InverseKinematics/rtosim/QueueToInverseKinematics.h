@@ -34,7 +34,7 @@ namespace rtosim {
 
     class QueueToInverseKinematics {
     public:
-		QueueToInverseKinematics(
+        QueueToInverseKinematics(
             MarkerSetQueue& inputMarkerSetQueue,
             rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
             rtb::Concurrency::Latch& doneWithSubscriptions,
@@ -55,16 +55,16 @@ namespace rtosim {
             double solverAccuracy = 1e-9,
             double contraintWeight = SimTK::Infinity);
 
-		QueueToInverseKinematics(
-			MarkerSetQueue& inputMarkerSetQueue,
-			rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
-			rtb::Concurrency::Latch& doneWithSubscriptions,
-			rtb::Concurrency::Latch& doneWithExecution,
-			const std::string& osimModelFilename,
-			unsigned nThreads,
-			const OpenSim::IKTaskSet& ikTaskSet,
-			double solverAccuracy = 1e-9,
-			double contraintWeight = SimTK::Infinity);
+        QueueToInverseKinematics(
+            MarkerSetQueue& inputMarkerSetQueue,
+            rtosim::GeneralisedCoordinatesQueue& outputGeneralisedCoordinateQueue,
+            rtb::Concurrency::Latch& doneWithSubscriptions,
+            rtb::Concurrency::Latch& doneWithExecution,
+            const std::string& osimModelFilename,
+            unsigned nThreads,
+            const OpenSim::IKTaskSet& ikTaskSet,
+            double solverAccuracy = 1e-9,
+            double contraintWeight = SimTK::Infinity);
 
         void operator()();
 

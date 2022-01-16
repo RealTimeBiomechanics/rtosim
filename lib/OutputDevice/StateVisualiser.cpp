@@ -55,7 +55,7 @@ namespace rtosim{
         auto start = std::chrono::steady_clock::now();
         int frameCounter = 0;
         bool localRunCondition(true);
-		model_.getVisualizer().show(s);
+        model_.getVisualizer().show(s);
         while (localRunCondition) {
 
             rtosim::GeneralisedCoordinatesFrame currentCoordinatesFrame(inputGeneralisedCoordinatesQueue_.pop());
@@ -68,7 +68,7 @@ namespace rtosim{
                     s.updQ()[i] = q[i];
             }
 
-			model_.getVisualizer().show(s);
+            model_.getVisualizer().show(s);
             frameCounter++;
 
             if ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start)) > std::chrono::milliseconds(1000)) {

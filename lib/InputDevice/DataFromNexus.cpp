@@ -47,14 +47,14 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-		const std::vector<std::string>& markersNames,
+        const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(true),
         outputMarkerSetQueue_(&outputMarkerSetQueue),
         useGrfData_(false),
         outputGrfQueue_(nullptr),
-		useEmgData_(false),
-		outputEmgQueue_(nullptr),
+        useEmgData_(false),
+        outputEmgQueue_(nullptr),
         doneWithSubscriptions_(doneWithSubscriptions),
         doneWithExecution_(doneWithExecution),
         runCondition_(runCondition),
@@ -62,11 +62,11 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
-		emgSubSamples_(0),
-		markersToStream_(markersNames),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward)
+        emgSubSamples_(0),
+        markersToStream_(markersNames),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward)
     {
     }
 
@@ -76,14 +76,14 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-		const std::vector<std::string>& markersNames,
+        const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(false),
         outputMarkerSetQueue_(nullptr),
         useGrfData_(true),
         outputGrfQueue_(&outputGrfQueue),
-		useEmgData_(false),
-		outputEmgQueue_(nullptr),
+        useEmgData_(false),
+        outputEmgQueue_(nullptr),
         doneWithSubscriptions_(doneWithSubscriptions),
         doneWithExecution_(doneWithExecution),
         runCondition_(runCondition),
@@ -91,11 +91,11 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
-		emgSubSamples_(0),
-		markersToStream_(markersNames),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward)
+        emgSubSamples_(0),
+        markersToStream_(markersNames),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward)
     {
     }
 
@@ -106,14 +106,14 @@ namespace rtosim {
         rtb::Concurrency::Latch& doneWithSubscriptions,
         rtb::Concurrency::Latch& doneWithExecution,
         FlowControl& runCondition,
-		const std::vector<std::string>& markersNames,
+        const std::vector<std::string>& markersNames,
         const std::string& hostname) :
         useMarkerData_(true),
         outputMarkerSetQueue_(&outputMarkerSetQueue),
         useGrfData_(true),
         outputGrfQueue_(&outputGrfQueue),
-		useEmgData_(false),
-		outputEmgQueue_(nullptr),
+        useEmgData_(false),
+        outputEmgQueue_(nullptr),
         doneWithSubscriptions_(doneWithSubscriptions),
         doneWithExecution_(doneWithExecution),
         runCondition_(runCondition),
@@ -121,104 +121,104 @@ namespace rtosim {
         fromNexusToModelLengthConversion_(1.),
         lastFrameNumberOfTheLoop_(0),
         previousFrameNumber_(0),
-		emgSubSamples_(0),
-		markersToStream_(markersNames),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward)
+        emgSubSamples_(0),
+        markersToStream_(markersNames),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward)
     {
         
     }
 
-	DataFromNexus::DataFromNexus(
-		EmgQueue& outputEmgQueue,
-		rtb::Concurrency::Latch& doneWithSubscriptions,
-		rtb::Concurrency::Latch& doneWithExecution,
-		FlowControl& runCondition,
-		const std::vector<std::string>& emgChannelNames,
-		const std::string& hostname) :
-		useMarkerData_(false),
-		outputMarkerSetQueue_(nullptr),
-		useGrfData_(false),
-		outputGrfQueue_(nullptr),
-		useEmgData_(true),
-		outputEmgQueue_(&outputEmgQueue),
-		doneWithSubscriptions_(doneWithSubscriptions),
-		doneWithExecution_(doneWithExecution),
-		emgChannelNames_(emgChannelNames),
-		runCondition_(runCondition),
-		hostName_(hostname),
-		fromNexusToModelLengthConversion_(1.),
-		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0),
-		emgSubSamples_(0),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward) {}
+    DataFromNexus::DataFromNexus(
+        EmgQueue& outputEmgQueue,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
+        FlowControl& runCondition,
+        const std::vector<std::string>& emgChannelNames,
+        const std::string& hostname) :
+        useMarkerData_(false),
+        outputMarkerSetQueue_(nullptr),
+        useGrfData_(false),
+        outputGrfQueue_(nullptr),
+        useEmgData_(true),
+        outputEmgQueue_(&outputEmgQueue),
+        doneWithSubscriptions_(doneWithSubscriptions),
+        doneWithExecution_(doneWithExecution),
+        emgChannelNames_(emgChannelNames),
+        runCondition_(runCondition),
+        hostName_(hostname),
+        fromNexusToModelLengthConversion_(1.),
+        lastFrameNumberOfTheLoop_(0),
+        previousFrameNumber_(0),
+        emgSubSamples_(0),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward) {}
 
 
-	DataFromNexus::DataFromNexus(
-		MarkerSetQueue& outputMarkerSetQueue,
-		EmgQueue& outputEmgQueue,
-		rtb::Concurrency::Latch& doneWithSubscriptions,
-		rtb::Concurrency::Latch& doneWithExecution,
-		FlowControl& runCondition,
-		const std::vector<std::string>& markersNames,
-		const std::vector<std::string>& emgChannelNames,
-		const std::string& hostname) :
-		useMarkerData_(true),
-		outputMarkerSetQueue_(&outputMarkerSetQueue),
-		useGrfData_(false),
-		outputGrfQueue_(nullptr),
-		useEmgData_(true),
-		outputEmgQueue_(&outputEmgQueue),
-		doneWithSubscriptions_(doneWithSubscriptions),
-		doneWithExecution_(doneWithExecution),
-		emgChannelNames_(emgChannelNames),
-		runCondition_(runCondition),
-		hostName_(hostname),
-		fromNexusToModelLengthConversion_(1.),
-		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0),
-		emgSubSamples_(0),
-		markersToStream_(markersNames),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward) {
+    DataFromNexus::DataFromNexus(
+        MarkerSetQueue& outputMarkerSetQueue,
+        EmgQueue& outputEmgQueue,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
+        FlowControl& runCondition,
+        const std::vector<std::string>& markersNames,
+        const std::vector<std::string>& emgChannelNames,
+        const std::string& hostname) :
+        useMarkerData_(true),
+        outputMarkerSetQueue_(&outputMarkerSetQueue),
+        useGrfData_(false),
+        outputGrfQueue_(nullptr),
+        useEmgData_(true),
+        outputEmgQueue_(&outputEmgQueue),
+        doneWithSubscriptions_(doneWithSubscriptions),
+        doneWithExecution_(doneWithExecution),
+        emgChannelNames_(emgChannelNames),
+        runCondition_(runCondition),
+        hostName_(hostname),
+        fromNexusToModelLengthConversion_(1.),
+        lastFrameNumberOfTheLoop_(0),
+        previousFrameNumber_(0),
+        emgSubSamples_(0),
+        markersToStream_(markersNames),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward) {
 
-	}
+    }
 
 
-	DataFromNexus::DataFromNexus(
-		MarkerSetQueue& outputMarkerSetQueue,
-		MultipleExternalForcesQueue& outputGrfQueue,
-		EmgQueue& outputEmgQueue,
-		rtb::Concurrency::Latch& doneWithSubscriptions,
-		rtb::Concurrency::Latch& doneWithExecution,
-		FlowControl& runCondition,
-		const std::vector<std::string>& markersNames,
-		const std::vector<std::string>& emgChannelNames,
-		const std::string& hostname) :
-		useMarkerData_(true),
-		outputMarkerSetQueue_(&outputMarkerSetQueue),
-		useGrfData_(true),
-		outputGrfQueue_(&outputGrfQueue),
-		useEmgData_(true),
-		outputEmgQueue_(&outputEmgQueue),
-		doneWithSubscriptions_(doneWithSubscriptions),
-		doneWithExecution_(doneWithExecution),
-		emgChannelNames_(emgChannelNames),
-		runCondition_(runCondition),
-		hostName_(hostname),
-		fromNexusToModelLengthConversion_(1.),
-		lastFrameNumberOfTheLoop_(0),
-		previousFrameNumber_(0),
-		emgSubSamples_(0),
-		markersToStream_(markersNames),
-		xMapping_(VDS::Direction::Right),
-		yMapping_(VDS::Direction::Up),
-		zMapping_(VDS::Direction::Backward) {
-	}
+    DataFromNexus::DataFromNexus(
+        MarkerSetQueue& outputMarkerSetQueue,
+        MultipleExternalForcesQueue& outputGrfQueue,
+        EmgQueue& outputEmgQueue,
+        rtb::Concurrency::Latch& doneWithSubscriptions,
+        rtb::Concurrency::Latch& doneWithExecution,
+        FlowControl& runCondition,
+        const std::vector<std::string>& markersNames,
+        const std::vector<std::string>& emgChannelNames,
+        const std::string& hostname) :
+        useMarkerData_(true),
+        outputMarkerSetQueue_(&outputMarkerSetQueue),
+        useGrfData_(true),
+        outputGrfQueue_(&outputGrfQueue),
+        useEmgData_(true),
+        outputEmgQueue_(&outputEmgQueue),
+        doneWithSubscriptions_(doneWithSubscriptions),
+        doneWithExecution_(doneWithExecution),
+        emgChannelNames_(emgChannelNames),
+        runCondition_(runCondition),
+        hostName_(hostname),
+        fromNexusToModelLengthConversion_(1.),
+        lastFrameNumberOfTheLoop_(0),
+        previousFrameNumber_(0),
+        emgSubSamples_(0),
+        markersToStream_(markersNames),
+        xMapping_(VDS::Direction::Right),
+        yMapping_(VDS::Direction::Up),
+        zMapping_(VDS::Direction::Backward) {
+    }
 
 
     void DataFromNexus::connectToServer(VDS::Client& client) const {
@@ -257,8 +257,8 @@ namespace rtosim {
             waitForCompleteFrame(client);
         if (useGrfData_)
             waitForForcePlates(client);
-		if (useEmgData_)
-			waitForEmgs(client);
+        if (useEmgData_)
+            waitForEmgs(client);
     }
 
     void DataFromNexus::waitForForcePlates(VDS::Client& client) {
@@ -272,9 +272,9 @@ namespace rtosim {
             }
         }
         cout << "Found " << forcePlateCount_ << " force plates" << endl;
-		if (forcePlateCount_ != forcePlatePositions_.size()) {
-			cout << "Warning: Found a different number of force plates than the provided plate locations" << endl;
-		}
+        if (forcePlateCount_ != forcePlatePositions_.size()) {
+            cout << "Warning: Found a different number of force plates than the provided plate locations" << endl;
+        }
         for (unsigned i(0); i < client.GetDeviceCount().DeviceCount; ++i)
             if (client.GetDeviceName(i).DeviceType == VDS::DeviceType::ForcePlate) {
                 std::string fpName = client.GetDeviceName(i).DeviceName;
@@ -308,56 +308,56 @@ namespace rtosim {
     }
 
 
-	void DataFromNexus::waitForEmgs(VDS::Client& client) {
-		cout << "EMG device initialisation" << endl;
-		while (client.GetFrame().Result != VDS::Result::Success) {
-			//       client.GetFrame();
-			cout << "Wait for EMG devices..." << endl;
-			//   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-		}
+    void DataFromNexus::waitForEmgs(VDS::Client& client) {
+        cout << "EMG device initialisation" << endl;
+        while (client.GetFrame().Result != VDS::Result::Success) {
+            //       client.GetFrame();
+            cout << "Wait for EMG devices..." << endl;
+            //   std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
 
-		while (client.GetDeviceCount().DeviceCount < 1) {
-			client.GetFrame();
-		}
-		unsigned nDevices(client.GetDeviceCount().DeviceCount);
-		for (unsigned i(0); i < nDevices; ++i) {
-			string name(client.GetDeviceName(i).DeviceName);
-			cout << "Device... " << name << endl;
-			std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-			if (name.find("emg") != std::string::npos || name.find("dts") != std::string::npos) {
-				emgDeviceName_ = client.GetDeviceName(i).DeviceName;
-				unsigned nChannels(client.GetDeviceOutputCount(emgDeviceName_).DeviceOutputCount);
-				vector<string> emgChannelNamesFromNexus;
-				cout << "EMG channel names available in Nexus:\n";
-				for (unsigned ch(0); ch < nChannels; ++ch) {
-					string chName{ client.GetDeviceOutputName(emgDeviceName_, ch).DeviceOutputName };
-					if (chName == "v")
-						chName = "EMG" + std::to_string(ch);
-					cout << "#" << ch << chName << endl;
-					emgChannelNamesFromNexus.push_back(chName);
-				}
+        while (client.GetDeviceCount().DeviceCount < 1) {
+            client.GetFrame();
+        }
+        unsigned nDevices(client.GetDeviceCount().DeviceCount);
+        for (unsigned i(0); i < nDevices; ++i) {
+            string name(client.GetDeviceName(i).DeviceName);
+            cout << "Device... " << name << endl;
+            std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+            if (name.find("emg") != std::string::npos || name.find("dts") != std::string::npos) {
+                emgDeviceName_ = client.GetDeviceName(i).DeviceName;
+                unsigned nChannels(client.GetDeviceOutputCount(emgDeviceName_).DeviceOutputCount);
+                vector<string> emgChannelNamesFromNexus;
+                cout << "EMG channel names available in Nexus:\n";
+                for (unsigned ch(0); ch < nChannels; ++ch) {
+                    string chName{ client.GetDeviceOutputName(emgDeviceName_, ch).DeviceOutputName };
+                    if (chName == "v")
+                        chName = "EMG" + std::to_string(ch);
+                    cout << "#" << ch << chName << endl;
+                    emgChannelNamesFromNexus.push_back(chName);
+                }
 
-				cout << "Found EMG device: " << emgDeviceName_ << endl;
-				cout << "Output: " << endl;
-				//if I don't specity any emg, I just get them all
-				if (emgChannelNames_.empty())
-					emgChannelNames_ = emgChannelNamesFromNexus;
-				for (auto v : emgChannelNames_) {
-					cout << v << " ... ";
-					//otherwise I just use the channels specified by the user
-					if (std::find(emgChannelNamesFromNexus.begin(), emgChannelNamesFromNexus.end(), v) != emgChannelNamesFromNexus.end()) {
-						enabledEmgChannelNames_.push_back(v);
-						cout << "enabled" << endl;
-					}
-					else
-						cout << "disabled" << endl;
-				}
-			}
-		}
-		
-		emgSubSamples_ = client.GetDeviceOutputSubsamples(emgDeviceName_, 
-			client.GetDeviceOutputName(emgDeviceName_, 0).DeviceOutputName).DeviceOutputSubsamples;
-	}
+                cout << "Found EMG device: " << emgDeviceName_ << endl;
+                cout << "Output: " << endl;
+                //if I don't specity any emg, I just get them all
+                if (emgChannelNames_.empty())
+                    emgChannelNames_ = emgChannelNamesFromNexus;
+                for (auto v : emgChannelNames_) {
+                    cout << v << " ... ";
+                    //otherwise I just use the channels specified by the user
+                    if (std::find(emgChannelNamesFromNexus.begin(), emgChannelNamesFromNexus.end(), v) != emgChannelNamesFromNexus.end()) {
+                        enabledEmgChannelNames_.push_back(v);
+                        cout << "enabled" << endl;
+                    }
+                    else
+                        cout << "disabled" << endl;
+                }
+            }
+        }
+
+        emgSubSamples_ = client.GetDeviceOutputSubsamples(emgDeviceName_,
+            client.GetDeviceOutputName(emgDeviceName_, 0).DeviceOutputName).DeviceOutputSubsamples;
+    }
 
     void DataFromNexus::getFrame(VDS::Client& client) {
 
@@ -451,13 +451,13 @@ namespace rtosim {
             outputMarkerSetQueue_->push(EndOfData::get<MarkerSetFrame>());
         if (useGrfData_)
             outputGrfQueue_->push(EndOfData::get<MultipleExternalForcesFrame>());
-		if (useEmgData_)
-			outputEmgQueue_->push(EndOfData::get<EmgFrame>());
+        if (useEmgData_)
+            outputEmgQueue_->push(EndOfData::get<EmgFrame>());
     }
-	  
+
     void DataFromNexus::pushForcePlateData(VDS::Client& client) {
 
-	    auto rate = client.GetFrameRate();
+        auto rate = client.GetFrameRate();
         //Force Plates
         // Output the force plate information.
         const unsigned forcePlateSubsamples = client.GetForcePlateSubsamples(0).ForcePlateSubsamples;
@@ -517,11 +517,11 @@ namespace rtosim {
     }
 
 
-	void DataFromNexus::setAxisMapping(VDS::Direction::Enum x, VDS::Direction::Enum y, VDS::Direction::Enum z) {
-		xMapping_ = x;
-		yMapping_ = y;
-		zMapping_ = z;
-	}
+    void DataFromNexus::setAxisMapping(VDS::Direction::Enum x, VDS::Direction::Enum y, VDS::Direction::Enum z) {
+        xMapping_ = x;
+        yMapping_ = y;
+        zMapping_ = z;
+    }
 
 
     void DataFromNexus::setAxisMapping(VDS::Client& client) const {
@@ -529,22 +529,22 @@ namespace rtosim {
         //map axis, try Backward, right, up for subject walking against the y direction of the lab..
         //this is HARDCODED for the GU Undercroft Lab.. also, the mapping makes no sense IMO,
         //I've used try and error approach to get the right one
-		client.SetAxisMapping(xMapping_, yMapping_, zMapping_);
+        client.SetAxisMapping(xMapping_, yMapping_, zMapping_);
     }
 
-	void DataFromNexus::pushEmgData(VDS::Client& client) {
+    void DataFromNexus::pushEmgData(VDS::Client& client) {
 
-		auto rate = client.GetFrameRate();
-		for (unsigned int ssIdx = 0; ssIdx < emgSubSamples_; ++ssIdx) {
+        auto rate = client.GetFrameRate();
+        for (unsigned int ssIdx = 0; ssIdx < emgSubSamples_; ++ssIdx) {
 
-			EmgData currentEmgs;
-			for (auto& ch : enabledEmgChannelNames_)
-				currentEmgs.emplace_back(client.GetDeviceOutputValue(emgDeviceName_, ch, ssIdx).Value);
-			double currentTime(1. / rate.FrameRateHz*(frameNumber_ + 1. / emgSubSamples_ * ssIdx));
+            EmgData currentEmgs;
+            for (auto& ch : enabledEmgChannelNames_)
+                currentEmgs.emplace_back(client.GetDeviceOutputValue(emgDeviceName_, ch, ssIdx).Value);
+            double currentTime(1. / rate.FrameRateHz*(frameNumber_ + 1. / emgSubSamples_ * ssIdx));
 
-			outputEmgQueue_->push({ currentTime, currentEmgs });
-		}
-	}
+            outputEmgQueue_->push({ currentTime, currentEmgs });
+        }
+    }
 
 
     void DataFromNexus::operator()(){
@@ -570,8 +570,8 @@ namespace rtosim {
                 pushMarkerData(client);
             if (useGrfData_)
                 pushForcePlateData(client);
-			if (useEmgData_)
-				pushEmgData(client);
+            if (useEmgData_)
+                pushEmgData(client);
         }
 
         pushEndOfData(client);

@@ -42,8 +42,8 @@ namespace rtosim {
             std::string extension = "sto");
         ~QueueToFileLogger() = default;
         void operator()();
-		void setIsInDegrees(bool isInDegrees) { logger_.setIsInDegrees(isInDegrees); }
-		void setConvertFromRadToDeg() { logger_.setConvertFromRadToDeg(); }
+        void setIsInDegrees(bool isInDegrees) { logger_.setIsInDegrees(isInDegrees); }
+        void setConvertFromRadToDeg() { logger_.setConvertFromRadToDeg(); }
 
     private:
         QueueType& inputQueue_;

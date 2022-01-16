@@ -48,8 +48,8 @@ namespace rtosim {
         void clearData();
         bool print();
         bool printable();
-		void setIsInDegrees(bool isInDegrees) { isInDegrees_ = isInDegrees; }
-		void setConvertFromRadToDeg() { conversion_ = SimTK::convertRadiansToDegrees(1); }
+        void setIsInDegrees(bool isInDegrees) { isInDegrees_ = isInDegrees; }
+        void setConvertFromRadToDeg() { conversion_ = SimTK::convertRadiansToDegrees(1); }
     private:
         bool createFile();
         void initFile();
@@ -60,8 +60,8 @@ namespace rtosim {
         std::string filename_;
         std::shared_ptr<std::ofstream> outFile_;
         std::list< FrameType > dataToWrite_;
-		bool isInDegrees_;
-		double conversion_;
+        bool isInDegrees_;
+        double conversion_;
     };
 }
 

@@ -15,7 +15,7 @@
 
 if(${VICONSDK_FOUND})
     add_executable(exampleViconNexus mainExampleViconNexus.cpp)
-	target_link_libraries(exampleViconNexus rtosim)
+    target_link_libraries(exampleViconNexus rtosim)
 endif(${VICONSDK_FOUND})
 
 
