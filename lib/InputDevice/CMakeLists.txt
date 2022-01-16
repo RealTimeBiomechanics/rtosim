@@ -53,10 +53,9 @@ add_library(InputDevice
     ${InputDevice_HEADERS})
 
 target_include_directories(InputDevice PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                       ${OPENSIMSIMBODY_INCLUDE_DIRS})
+                                       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(InputDevice Common Utilities ${IKExtended_LIBRARIES} ${OPENSIMSIMBODY_LIBRARIES})
+target_link_libraries(InputDevice Common Utilities ${IKExtended_LIBRARIES} osimTools)
 if(WIN32)
     target_compile_definitions(InputDevice PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
 endif()

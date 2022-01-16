@@ -36,11 +36,10 @@ add_library(InverseDynamics
   ${InverseDynamics_HEADERS})
 
 target_include_directories(InverseDynamics PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                                  ${OPENSIMSIMBODY_INCLUDE_DIRS})
+                                                  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 
-target_link_libraries(InverseDynamics Common Utilities rtb::Concurrency ${OPENSIMSIMBODY_LIBRARIES})
+target_link_libraries(InverseDynamics Common Utilities rtb::Concurrency osimTools)
 if(WIN32)
     target_compile_definitions(InverseDynamics PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
 endif()

@@ -35,10 +35,9 @@ source_group("Sources" FILES ${Utilities_SOURCES})
 
 # Define target
 add_library(Utilities ${Utilities_SOURCES} ${Utilities_HEADERS})
-target_link_libraries(Utilities PUBLIC ${OPENSIMSIMBODY_LIBRARIES} )
+target_link_libraries(Utilities PUBLIC osimTools )
 target_include_directories(Utilities PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
                                             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-                                            ${OPENSIMSIMBODY_INCLUDE_DIRS}
                                             ${IKExtended_INCLUDE_DIRS})
 if(WIN32)
     target_compile_definitions(Utilities PUBLIC WIN32) #Hack to get OpenSim 3.3 to work
