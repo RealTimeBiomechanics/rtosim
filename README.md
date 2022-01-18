@@ -15,13 +15,15 @@ RTOSIM depends on the following
     * [gcc](http://gcc.gnu.org/) 4.8.1 or later (typically on Linux) 
     * [Clang](http://clang.llvm.org/) 3.4 or later (typically on Mac, possibly through Xcode)
 * Required external libraries:
-    * [Simbody](https://github.com/simbody/simbody/tree/Simbody-3.5.3) versions 3.5.1 to 3.5.3
-    * [OpenSim](https://github.com/opensim-org/opensim-core/tree/v3.2.0/OpenSim) versions 3.2 or 3.3
+    * [Simbody](https://github.com/simbody/simbody) versions 3.7 or higher
+    * [OpenSim](https://github.com/opensim-org/opensim-core) versions 4.1 or higher
     * [Concurrency](https://github.com/RealTimeBiomechanics/Concurrency)
     * [Filter](https://github.com/RealTimeBiomechanics/Filter)
 * Optional external libraries: 
     * [Vicon DataStream SDK](http://www.vicon.com/downloads) version 1.5+
 
+The latest version of RTOSIM works with OpenSim 4.3. The superbuild of OpenSim will install Simbody and other requirements automatically.  
+For earlier versions of OpenSim you can use earlier editions of RTOSIM.
 
 Install
 -------
